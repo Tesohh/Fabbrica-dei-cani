@@ -160,8 +160,16 @@ while not finished:
     bananaF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
 
     if bananaT.colliderect(bananaF):
-        print("Asgarraa")
+        print("Asgarraa FABBRICA")
+        daDove = "fabbrica"
+        Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
+        Trasporto.x += 2
 
+    if bananaT.colliderect(bananaC):
+        print("Asgarraa CASA")
+        daDove = "casa"
+        Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
+        Trasporto.x -= 2
     pygame.display.flip() #aggiorna lo schermo
     
     
