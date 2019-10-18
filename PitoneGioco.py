@@ -69,6 +69,26 @@ class Veicolo(Sprite):
 class Edificio(Sprite):
     def impostaCapienza(self, capienzaCasa=5):
         self.capienzaCasa = abs(capienzaCasa)
+
+class text:
+    """CLASSE PER CREARE DEL TESTOH"""
+    def __init__(self, font, x, y, size, color, string):
+
+
+        self.x = x
+        self.y = y
+        self.size = size
+        self.color = color
+        self.string = string
+    
+        
+        self.font = pygame.font.Font(font, size)
+
+
+        self.testoh = font.render(string, True, color) 
+        self.testohRect = self.testoh.get_rect()
+
+
     
 
 
