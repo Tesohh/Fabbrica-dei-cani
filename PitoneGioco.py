@@ -1,8 +1,22 @@
+
 #============================================================================================
 #MODULI
 #============================================================================================
 import pygame
 import time
+
+#============================================================================================
+#PRELIMINARI
+#============================================================================================
+pygame.init() #inizializziamo pygame
+
+pygame.display.set_caption("Fabbrica dei cani") #impostiamo il titolo ad ASGARRA
+
+screen = pygame.display.set_mode((600,600)) #impostiamo le dimensioni della finestra
+
+font = pygame.font.Font('Cascadia.ttf', 28)
+
+
 
 #============================================================================================
 #VARIABILI
@@ -13,6 +27,7 @@ colore2 = (120,50,100)
 background = pygame.image.load(r"sfondo.jpg")
 background = pygame.transform.scale(background, (600,600))
 
+
 # banana = pygame.image.load(r"banana.png")
 
 black = (0,0,0)
@@ -21,6 +36,9 @@ frame = pygame.time.Clock()
 fabbricaRaggiunta = False
 casaRaggiunta = False
 daDove = "casa"
+tutorialSlide = 0
+
+
 
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
@@ -70,23 +88,18 @@ class Edificio(Sprite):
     def impostaCapienza(self, capienzaCasa=5):
         self.capienzaCasa = abs(capienzaCasa)
 
-class text:
+class Text:
     """CLASSE PER CREARE DEL TESTOH"""
-    def __init__(self, font, x, y, size, color, string):
-
+    def __init__(self, x, y, size, color, string):
+        
 
         self.x = x
         self.y = y
         self.size = size
         self.color = color
-        self.string = string
-    
+        self.string = str(string)
+
         
-        self.font = pygame.font.Font(font, size)
-
-
-        self.testoh = font.render(string, True, color) 
-        self.testohRect = self.testoh.get_rect()
 
 
     
@@ -101,13 +114,14 @@ Fabbrica = Edificio(50, 290, 120, 120, r"fabbrica.png")
 Casa = Edificio(430, 290, 120, 120, r"casa_base.png")
 
 Trasporto = Veicolo(360, 370, 70, 34, r"veicolo_base.png")
+
+
+TestoTutorial = Text(0,0,32,black,"Benvenuto! Premi K per continuare")
+TestoCasa = Text(480,410,32,black,"")
                                                  
 #==========================================================================================
-pygame.init() #inizializziamo pygame
-pygame.display.set_caption("Fabbrica dei cani") #impostiamo il titolo ad ASGARRA
 
 
-screen = pygame.display.set_mode((600,600)) #impostiamo le dimensioni della finestra
 
 finished = False
 
@@ -125,6 +139,11 @@ while not finished:
     screen.blit(Casa.sprite, (Casa.x, Casa.y))#aggiungiamo l'immagine allo schermo (x, y)
     screen.blit(Fabbrica.sprite, (Fabbrica.x, Fabbrica.y)) #aggiungiamo l'immagine allo schermo (x, y)
 
+    testoTutorial = font.render(TestoTutorial.string, True, TestoTutorial.color) 
+    testoTutorialRect = testoTutorial.get_rect()
+    testoCasa = font.render(TestoCasa.string, True, TestoCasa.color) 
+    testoCasaRect = testoCasa.get_rect()
+    
 
     pressedKeys = pygame.key.get_pressed()
         
@@ -136,34 +155,25 @@ while not finished:
     if pressedKeys[pygame.K_g] == 1:
         Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
         time.sleep(0.1)
-        
-    
-    # @todo fixare sta roba
-    # print(fabbricaRaggiunta)
-    # if Trasporto.x < Fabbrica.x + 100:
-    #     fabbricaRaggiunta = True
-    # else:
-    #     fabbricaRaggiunta = False
+    if pressedKeys[pygame.K_k] == 1:
+        if tutorialSlide != 10:
+            print("prossimo")
+            tutorialSlide += 1
+            time.sleep(0.3)
+            if tutorialSlide == 1:
+                TestoTutorial.string = "In questo gioco dovrai ottenere"
+            if tutorialSlide == 2:
+                TestoTutorial.string = "100 cani di cui 5 perfetti,"
+            if tutorialSlide == 3:
+                TestoTutorial.string = "quindi con tutti gli stat"
+            if tutorialSlide == 4:
+                TestoTutorial.string = "maggiori di 8."
+            if tutorialSlide == 5:
+                TestoTutorial.string = "Iniziamo!!!"
+            if tutorialSlide == 6:
+                TestoCasa.string = "2"
+                TestoTutorial.string = "Adesso hai due cani"
 
-    # if fabbricaRaggiunta:
-        
-    #     Trasporto.x += 20
-    #     #pygame.display.flip()
-    #     time.sleep(2)
-
-        # daDove = "fabbrica"
-        
-
-    # if Trasporto.x < Casa.x:
-    #     casaRaggiunta = True
-    # else:
-    #     casaRaggiunta = False
-
-    # if casaRaggiunta: #cambia direzione
-    #     time.sleep(2)
-    #     Trasporto.x -= 20
-    #     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
-    #     daDove = "casa"
         
         
         
@@ -178,6 +188,8 @@ while not finished:
     bananaT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
     bananaC = pygame.draw.rect(screen, (255,0,0), Casa.hitbox,1)
     bananaF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
+    screen.blit(testoTutorial, testoTutorialRect)
+    screen.blit(testoCasa, (TestoCasa.x,TestoCasa.y))
 
     if bananaT.colliderect(bananaF):
         print("Asgarraa FABBRICA")
