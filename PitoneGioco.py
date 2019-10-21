@@ -49,11 +49,21 @@ giocoIniziato = False
 caniTrasportati = False
 quantitaTrasporto = 0
 numeroRandom = 0
+hitboxC = ""
+hitboxT = ""
+hitboxF = ""
 
 #============================================================================================
 #funzioni
 #============================================================================================
 def blitta():
+    #sprite
+    
+    screen.blit(background, (0, 0))
+    screen.blit(Trasporto.sprite, (Trasporto.x, Trasporto.y))
+    screen.blit(Casa.sprite, (Casa.x, Casa.y))
+    screen.blit(Fabbrica.sprite, (Fabbrica.x, Fabbrica.y)) 
+
     #hitbox
     hitboxT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
     hitboxC = pygame.draw.rect(screen, (255,0,0), Casa.hitbox,1)
@@ -171,19 +181,10 @@ while not finished:
         if event.type == pygame.QUIT: #quando si preme la X
             finished = True           #chiudi
 
-    # aggiungere gli sprite al gioco
-    screen.blit(background, (0, 0))
-    screen.blit(Trasporto.sprite, (Trasporto.x, Trasporto.y))
-    screen.blit(Casa.sprite, (Casa.x, Casa.y))#aggiungiamo l'immagine allo schermo (x, y)
-    screen.blit(Fabbrica.sprite, (Fabbrica.x, Fabbrica.y)) #aggiungiamo l'immagine allo schermo (x, y)
-
-    testoTutorial = font.render(TestoTutorial.string, True, TestoTutorial.color) 
-    testoTutorialRect = testoTutorial.get_rect()
-    testoCasa = font.render(str(caniInCasa), True, TestoCasa.color) 
-    testoFabbrica = font.render(str(producendo), True, TestoFabbrica.color) 
-    testoTrasporto = font.render(TestoTrasporto.string, True, TestoTrasporto.color) 
     
 
+
+    blitta()
     pressedKeys = pygame.key.get_pressed()
         
     if pressedKeys[pygame.K_SPACE] == 1:
@@ -246,22 +247,7 @@ while not finished:
         
         
 
-    #muove le hitbox
-    Trasporto.hitbox = (Trasporto.x, Trasporto.y, Trasporto.larghezza, Trasporto.altezza)
-    Casa.hitbox = (Casa.x, Casa.y, Casa.larghezza, Casa.altezza)
-    Fabbrica.hitbox = (Fabbrica.x, Fabbrica.y, Fabbrica.larghezza, Fabbrica.altezza)
-
-    #disegna le hitbox
     
-    hitboxT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
-    hitboxC = pygame.draw.rect(screen, (255,0,0), Casa.hitbox,1)
-    hitboxF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
-
-    #disegna il testo
-    screen.blit(testoTutorial, testoTutorialRect)
-    screen.blit(testoCasa, (TestoCasa.x,TestoCasa.y))
-    screen.blit(testoFabbrica, (TestoFabbrica.x,TestoFabbrica.y))
-    screen.blit(testoTrasporto, (TestoTrasporto.x,TestoTrasporto.y))
 
     #muovi il testo del veicol
     TestoTrasporto.x = Trasporto.x
