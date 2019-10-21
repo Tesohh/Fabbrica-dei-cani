@@ -4,6 +4,7 @@
 #============================================================================================
 import pygame
 import time
+import random
 
 #============================================================================================
 #PRELIMINARI
@@ -24,7 +25,7 @@ font = pygame.font.Font('Cascadia.ttf', 28)
 rosso = (255,0,0) #R, G, B
 colore2 = (120,50,100)
 
-background = pygame.image.load(r"sfondo.jpg")
+background = pygame.image.load(r"prova sfondo 1.png")
 background = pygame.transform.scale(background, (600,600))
 
 
@@ -32,11 +33,20 @@ background = pygame.transform.scale(background, (600,600))
 
 black = (0,0,0)
 white = (255,255,255)
+red = (255,0,0)
+green = (0, 255, 0)
+
 frame = pygame.time.Clock()
 fabbricaRaggiunta = False
 casaRaggiunta = False
 daDove = "casa"
 tutorialSlide = 0
+caniInCasa = 2
+producendo = "Fermo"
+giocoIniziato = False
+caniTrasportati = False
+quantitaTrasporto = 0
+numeroRandom = 0
 
 
 
@@ -118,6 +128,8 @@ Trasporto = Veicolo(360, 370, 70, 34, r"veicolo_base.png")
 
 TestoTutorial = Text(0,0,32,black,"Benvenuto! Premi K per continuare")
 TestoCasa = Text(480,410,32,black,"")
+TestoFabbrica = Text(70,410,32,red,"")
+TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,32,green,"")
                                                  
 #==========================================================================================
 
@@ -141,22 +153,41 @@ while not finished:
 
     testoTutorial = font.render(TestoTutorial.string, True, TestoTutorial.color) 
     testoTutorialRect = testoTutorial.get_rect()
-    testoCasa = font.render(TestoCasa.string, True, TestoCasa.color) 
-    testoCasaRect = testoCasa.get_rect()
+    testoCasa = font.render(str(caniInCasa), True, TestoCasa.color) 
+    testoFabbrica = font.render(str(producendo), True, TestoFabbrica.color) 
+    testoTrasporto = font.render(TestoTrasporto.string, True, TestoTrasporto.color) 
     
 
     pressedKeys = pygame.key.get_pressed()
         
     if pressedKeys[pygame.K_SPACE] == 1:
-        if daDove == "casa":
-            Trasporto.x -= 1
-        if daDove == "fabbrica":
-            Trasporto.x += 1
-    if pressedKeys[pygame.K_g] == 1:
-        Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
-        time.sleep(0.1)
+        if giocoIniziato:
+            if not caniTrasportati:
+                if daDove == "casa":
+                    TestoTrasporto.string = "..."
+                    time.sleep(1)
+                    quantitaTrasporto = 2
+                    TestoTrasporto.string = str(quantitaTrasporto)
+                    caniTrasportati = True
+                    caniInCasa -= 2
+                if daDove == "fabbrica":
+                    TestoTrasporto.string = "..."
+                    TestoFabbrica.color = green
+                    TestoFabbrica.string = "Producendo"
+                    time.sleep(3) #@todo fixare che la pausa non fa cambiare i testi
+                    TestoFabbrica.color = red
+                    TestoFabbrica.string = "Fermo"
+                    caniTrasportati = True
+                    numeroRandom = random.randint(1,3)
+                    quantitaTrasporto += 2+numeroRandom
+
+            if daDove == "casa":
+                Trasporto.x -= 1
+            if daDove == "fabbrica":
+                Trasporto.x += 1
+    #tutorial
     if pressedKeys[pygame.K_k] == 1:
-        if tutorialSlide != 10:
+        if tutorialSlide != 7:
             print("prossimo")
             tutorialSlide += 1
             time.sleep(0.3)
@@ -172,8 +203,15 @@ while not finished:
                 TestoTutorial.string = "Iniziamo!!!"
             if tutorialSlide == 6:
                 TestoCasa.string = "2"
-                TestoTutorial.string = "Adesso hai due cani"
-
+                TestoTutorial.string = "Adesso hai due cani."
+            if tutorialSlide == 7:
+                TestoTutorial.string = "Portali alla fabbrica con [SPAZIO]" 
+                giocoIniziato = True  
+    if pressedKeys[pygame.K_p] == 1:
+        if tutorialSlide != 7:
+            tutorialSlide = 6
+            print("Premi K per completare il saltamento")
+            time.sleep(0.1)
         
         
         
@@ -185,19 +223,30 @@ while not finished:
 
     #disegna le hitbox
     
-    bananaT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
-    bananaC = pygame.draw.rect(screen, (255,0,0), Casa.hitbox,1)
-    bananaF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
+    hitboxT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
+    hitboxC = pygame.draw.rect(screen, (255,0,0), Casa.hitbox,1)
+    hitboxF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
+
+    #disegna il testo
     screen.blit(testoTutorial, testoTutorialRect)
     screen.blit(testoCasa, (TestoCasa.x,TestoCasa.y))
+    screen.blit(testoFabbrica, (TestoFabbrica.x,TestoFabbrica.y))
+    screen.blit(testoTrasporto, (TestoTrasporto.x,TestoTrasporto.y))
 
-    if bananaT.colliderect(bananaF):
+    #muovi il testo del veicol
+    TestoTrasporto.x = Trasporto.x
+    TestoTrasporto.y = Trasporto.y - 30
+
+
+
+    if hitboxT.colliderect(hitboxF):
         print("Asgarraa FABBRICA")
         daDove = "fabbrica"
         Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
         Trasporto.x += 2
+        caniTrasportati = False
 
-    if bananaT.colliderect(bananaC):
+    if hitboxT.colliderect(hitboxC):
         print("Asgarraa CASA")
         daDove = "casa"
         Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
