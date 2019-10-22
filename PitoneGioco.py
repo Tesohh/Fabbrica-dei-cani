@@ -51,6 +51,7 @@ numeroRandom = 0
 #============================================================================================
 #funzioni
 #============================================================================================
+
 def blittaTutto():
     #hitbox
     hitboxT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
@@ -84,17 +85,39 @@ def blitBox(who):
     elif who == "fabbrica":
         hitboxF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
 
-def moveBox(who):
-    """MUOVI UNA HITBOX"""
-    if who == "camion":
-        Trasporto.hitbox = (Trasporto.x, Trasporto.y, Trasporto.larghezza, Trasporto.altezza)
-        
-    elif who == "casa":
-        Casa.hitbox = (Casa.x, Casa.y, Casa.larghezza, Casa.altezza)
-        
-    elif who == "fabbrica":
-        Fabbrica.hitbox = (Fabbrica.x, Fabbrica.y, Fabbrica.larghezza, Fabbrica.altezza)
-        
+def mostraTutorial(boolean):
+    """ Valori accettati (0,1) """
+    global tutorialSlide, giocoIniziato
+    if boolean:
+        if pressedKeys[pygame.K_k] == 1:
+            if tutorialSlide != 7:
+                print("prossimo")
+                tutorialSlide += 1
+                time.sleep(0.3)
+                if tutorialSlide == 1:
+                    TestoTutorial.string = "In questo gioco dovrai ottenere"
+                if tutorialSlide == 2:
+                    TestoTutorial.string = "100 cani di cui 5 perfetti,"
+                if tutorialSlide == 3:
+                    TestoTutorial.string = "quindi con tutti gli stat"
+                if tutorialSlide == 4:
+                    TestoTutorial.string = "maggiori di 8."
+                if tutorialSlide == 5:
+                    TestoTutorial.string = "Iniziamo!!!"
+                if tutorialSlide == 6:
+                    TestoCasa.string = "2"
+                    TestoTutorial.string = "Adesso hai due cani."
+                if tutorialSlide == 7:
+                    TestoTutorial.string = "Portali alla fabbrica con [SPAZIO]" 
+                    giocoIniziato = True  
+        if pressedKeys[pygame.K_p] == 1:
+            if tutorialSlide != 7:
+                tutorialSlide = 6
+                print("Premi K per completare il saltamento")
+                time.sleep(0.1)  
+    else:
+        giocoIniziato = True
+    return giocoIniziato
         
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
@@ -185,7 +208,6 @@ TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,32,green,"")
 #==========================================================================================
 
 
-
 finished = False
 
 
@@ -210,8 +232,12 @@ while not finished:
     
 
     pressedKeys = pygame.key.get_pressed()
-        
+
+    # decidi se mostrare o no il tutorial bool 0 / 1
+    mostraTutorial(1)
+    
     if pressedKeys[pygame.K_SPACE] == 1:
+        
         if giocoIniziato:
             if not caniTrasportati:
                 if daDove == "casa":
@@ -239,33 +265,7 @@ while not finished:
                 Trasporto.x -= 1
             if daDove == "fabbrica":
                 Trasporto.x += 1
-    #tutorial
-    if pressedKeys[pygame.K_k] == 1:
-        if tutorialSlide != 7:
-            print("prossimo")
-            tutorialSlide += 1
-            time.sleep(0.3)
-            if tutorialSlide == 1:
-                TestoTutorial.string = "In questo gioco dovrai ottenere"
-            if tutorialSlide == 2:
-                TestoTutorial.string = "100 cani di cui 5 perfetti,"
-            if tutorialSlide == 3:
-                TestoTutorial.string = "quindi con tutti gli stat"
-            if tutorialSlide == 4:
-                TestoTutorial.string = "maggiori di 8."
-            if tutorialSlide == 5:
-                TestoTutorial.string = "Iniziamo!!!"
-            if tutorialSlide == 6:
-                TestoCasa.string = "2"
-                TestoTutorial.string = "Adesso hai due cani."
-            if tutorialSlide == 7:
-                TestoTutorial.string = "Portali alla fabbrica con [SPAZIO]" 
-                giocoIniziato = True  
-    if pressedKeys[pygame.K_p] == 1:
-        if tutorialSlide != 7:
-            tutorialSlide = 6
-            print("Premi K per completare il saltamento")
-            time.sleep(0.1)
+
         
         
         
@@ -285,29 +285,27 @@ while not finished:
     # screen.blit(testoFabbrica, (TestoFabbrica.x,TestoFabbrica.y))
     # screen.blit(testoTrasporto, (TestoTrasporto.x,TestoTrasporto.y))
 
-    #muove le hitbox
-    moveBox("trasporto")
-    moveBox("casa")
-    moveBox("fabbrica")
-
+    #muove la hitbox del camion
+    Trasporto.hitbox = (Trasporto.x, Trasporto.y, Trasporto.larghezza, Trasporto.altezza)
+    
     #muovi il testo del veicol
     TestoTrasporto.x = Trasporto.x
     TestoTrasporto.y = Trasporto.y - 30
 
 
 
-    if hitboxT.colliderect(hitboxF):
-        print("Asgarraa FABBRICA")
-        daDove = "fabbrica"
-        Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
-        Trasporto.x += 2
-        caniTrasportati = False
+    # if hitboxT.colliderect(hitboxF):
+    #     print("Asgarraa FABBRICA")
+    #     daDove = "fabbrica"
+    #     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
+    #     Trasporto.x += 2
+    #     caniTrasportati = False
 
-    if hitboxT.colliderect(hitboxC):
-        print("Asgarraa CASA")
-        daDove = "casa"
-        Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
-        Trasporto.x -= 2
+    # if hitboxT.colliderect(hitboxC):
+    #     print("Asgarraa CASA")
+    #     daDove = "casa"
+    #     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
+    #     Trasporto.x -= 2
     pygame.display.flip() #aggiorna lo schermo
     
     
