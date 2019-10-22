@@ -72,6 +72,17 @@ def blittaTutto():
 
     #refresh
     pygame.display.flip()
+
+def blitBox(who):
+    if who == "camion":
+        hitboxT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
+        
+    elif who == "casa":
+        hitboxC = pygame.draw.rect(screen, (255,0,0), Casa.hitbox,1)
+        
+    elif who == "fabbrica":
+        hitboxF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
+        
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
 #============================================================================================
@@ -97,6 +108,8 @@ class Sprite:
             self.livello = abs(livello) #trasformiamo in positivo
         
 
+    def blittaggio(self):
+        screen.blit(self.sprite, (self.x,self.y))
 
     def printaggio(self):
         print(self.x, self.y)
@@ -130,6 +143,9 @@ class Text:
         self.size = size
         self.color = color
         self.string = str(string)
+        self.testoh = font.render(self.string, True, self.color)
+    def blitText(self):
+        screen.blit(self.testoh, (self.x,self.y))
 
         
 
@@ -187,6 +203,7 @@ while not finished:
             if not caniTrasportati:
                 if daDove == "casa":
                     TestoTrasporto.string = "..."
+                    blittaTutto()
                     time.sleep(1)
                     quantitaTrasporto = 2
                     TestoTrasporto.string = str(quantitaTrasporto)
