@@ -48,7 +48,30 @@ quantitaTrasporto = 0
 numeroRandom = 0
 
 
+#============================================================================================
+#funzioni
+#============================================================================================
+def blittaTutto():
+    #hitbox
+    hitboxT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
+    hitboxC = pygame.draw.rect(screen, (255,0,0), Casa.hitbox,1)
+    hitboxF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
 
+    #testo: cambia il contenuto e il colore
+    testoTutorial = font.render(TestoTutorial.string, True, TestoTutorial.color) 
+    testoTutorialRect = testoTutorial.get_rect()
+    testoCasa = font.render(str(caniInCasa), True, TestoCasa.color) 
+    testoFabbrica = font.render(str(producendo), True, TestoFabbrica.color) 
+    testoTrasporto = font.render(TestoTrasporto.string, True, TestoTrasporto.color)
+
+    #testo: aggiungi allo schermo
+    screen.blit(testoTutorial, testoTutorialRect)
+    screen.blit(testoCasa, (TestoCasa.x,TestoCasa.y))
+    screen.blit(testoFabbrica, (TestoFabbrica.x,TestoFabbrica.y))
+    screen.blit(testoTrasporto, (TestoTrasporto.x,TestoTrasporto.y))
+
+    #refresh
+    pygame.display.flip()
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
 #============================================================================================
@@ -172,13 +195,15 @@ while not finished:
                 if daDove == "fabbrica":
                     TestoTrasporto.string = "..."
                     TestoFabbrica.color = green
-                    TestoFabbrica.string = "Producendo"
+                    producendo = " ..."
+                    blittaTutto()
                     time.sleep(3) #@todo fixare che la pausa non fa cambiare i testi
                     TestoFabbrica.color = red
-                    TestoFabbrica.string = "Fermo"
+                    producendo = "Fermo"
                     caniTrasportati = True
                     numeroRandom = random.randint(1,3)
                     quantitaTrasporto += 2+numeroRandom
+                    TestoTrasporto.string = str(quantitaTrasporto)
 
             if daDove == "casa":
                 Trasporto.x -= 1
