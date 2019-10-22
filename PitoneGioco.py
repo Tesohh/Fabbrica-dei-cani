@@ -121,7 +121,14 @@ def mostraTutorial(boolean):
     else:
         giocoIniziato = True
     return giocoIniziato
-        
+
+
+def mostraTesto(target, colore, testo ):
+    
+    if target == "Fabbrica":
+    TestoFabbrica.color = colore
+    TestoFabbrica.string = testo
+    TestoFabbrica.blitText()
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
 #============================================================================================
@@ -184,6 +191,7 @@ class Text:
     def blitText(self):
         self.testoh = font.render(self.string, True, self.color)
         screen.blit(self.testoh, (self.x,self.y))
+        
 
         
 
@@ -204,7 +212,7 @@ Trasporto = Veicolo(360, 370, 70, 34, r"veicolo_base.png")
 
 TestoTutorial = Text(0,0,32,black,"Benvenuto! Premi K per continuare")
 TestoCasa = Text(480,410,32,black,"")
-TestoFabbrica = Text(70,410,32,red,"")
+TestoFabbrica = Text(70,410,32,red,"Fermo")
 TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,32,green,"")
                                                  
 #==========================================================================================
@@ -255,21 +263,37 @@ while not finished:
             if not caniTrasportati:
                 if daDove == "casa":
                     TestoTrasporto.string = "..."
-                    blittaTutto()
+
+                    TestoFabbrica.blitText()
+                    TestoCasa.blitText()
+                    TestoTrasporto.blitText()
+                    pygame.display.flip()
+
                     time.sleep(1)
+
                     quantitaTrasporto = 2
                     TestoTrasporto.string = str(quantitaTrasporto)
                     caniTrasportati = True
                     caniInCasa -= 2
+
                 if daDove == "fabbrica":
                     TestoTrasporto.string = "..."
+
+
                     TestoFabbrica.color = green
                     TestoFabbrica.string = " ..."
-                    blittaTutto()
+                    TestoFabbrica.blitText()
+
+                    TestoCasa.blitText()
+                    TestoTrasporto.blitText()
+                    pygame.display.flip()
+
                     time.sleep(3) #@todo fixare che la pausa non fa cambiare i testi
+
                     TestoFabbrica.color = red
                     TestoFabbrica.string = "Fermo"
                     caniTrasportati = True
+                    
                     numeroRandom = random.randint(1,3)
                     quantitaTrasporto += 2+numeroRandom
                     TestoTrasporto.string = str(quantitaTrasporto)
