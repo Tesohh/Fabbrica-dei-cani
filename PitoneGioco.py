@@ -78,12 +78,15 @@ def blitBox(who):
     """BLITTA UNA HITBOX"""
     if who == "camion":
         hitboxT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
+        return hitboxT
         
     elif who == "casa":
         hitboxC = pygame.draw.rect(screen, (255,0,0), Casa.hitbox,1)
+        return hitboxC
         
     elif who == "fabbrica":
         hitboxF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
+        return hitboxF
 
 def mostraTutorial(boolean):
     """ Valori accettati (0,1) """
@@ -236,6 +239,9 @@ while not finished:
     # decidi se mostrare o no il tutorial bool 0 / 1
     mostraTutorial(1)
     
+    blittabileCamion = blitBox("camion")
+    blittabileCasa = blitBox("casa")
+    blittabileFabbrica = blitBox("fabbrica")
     if pressedKeys[pygame.K_SPACE] == 1:
         
         if giocoIniziato:
@@ -261,19 +267,34 @@ while not finished:
                     quantitaTrasporto += 2+numeroRandom
                     TestoTrasporto.string = str(quantitaTrasporto)
 
+
             if daDove == "casa":
                 Trasporto.x -= 1
+                if blittabileCamion.colliderect(blittabileFabbrica):
+                    # print("Asgarraa FABBRICA")
+                    Trasporto.x += 2
+                    daDove = "fabbrica"
+                    print(Trasporto.x)
+                    Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
+                    caniTrasportati = False
             if daDove == "fabbrica":
                 Trasporto.x += 1
+                if blittabileCamion.colliderect(blittabileCasa):
+                    # print("Asgarraa CASA")
+                    daDove = "casa"
+                    print(daDove)
+                    Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
+                    Trasporto.x -= 2
+
 
         
         
-        
     #disegna le hitbox
-    blitBox("camion")
-    blitBox("casa")
-    blitBox("fabbrica")
+    # blitBox("camion")
+    # blitBox("casa")
+    # blitBox("fabbrica")
     
+
     
     # hitboxT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
     # hitboxC = pygame.draw.rect(screen, (255,0,0), Casa.hitbox,1)
@@ -294,18 +315,7 @@ while not finished:
 
 
 
-    # if hitboxT.colliderect(hitboxF):
-    #     print("Asgarraa FABBRICA")
-    #     daDove = "fabbrica"
-    #     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
-    #     Trasporto.x += 2
-    #     caniTrasportati = False
 
-    # if hitboxT.colliderect(hitboxC):
-    #     print("Asgarraa CASA")
-    #     daDove = "casa"
-    #     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
-    #     Trasporto.x -= 2
     pygame.display.flip() #aggiorna lo schermo
     
     
