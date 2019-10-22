@@ -62,7 +62,7 @@ def blittaTutto():
     testoTutorial = font.render(TestoTutorial.string, True, TestoTutorial.color) 
     testoTutorialRect = testoTutorial.get_rect()
     testoCasa = font.render(str(caniInCasa), True, TestoCasa.color) 
-    testoFabbrica = font.render(str(producendo), True, TestoFabbrica.color) 
+    testoFabbrica = font.render(str(TestoFabbrica.string), True, TestoFabbrica.color) 
     testoTrasporto = font.render(TestoTrasporto.string, True, TestoTrasporto.color)
 
     #testo: aggiungi allo schermo
@@ -175,15 +175,14 @@ class Edificio(Sprite):
 class Text:
     """CLASSE PER CREARE DEL TESTOH"""
     def __init__(self, x, y, size, color, string):
-        
-
         self.x = x
         self.y = y
         self.size = size
         self.color = color
         self.string = str(string)
-        self.testoh = font.render(self.string, True, self.color)
+        
     def blitText(self):
+        self.testoh = font.render(self.string, True, self.color)
         screen.blit(self.testoh, (self.x,self.y))
 
         
@@ -223,25 +222,33 @@ while not finished:
 
     # aggiungere gli sprite al gioco
     screen.blit(background, (0, 0))
-    screen.blit(Trasporto.sprite, (Trasporto.x, Trasporto.y))
-    screen.blit(Casa.sprite, (Casa.x, Casa.y))#aggiungiamo l'immagine allo schermo (x, y)
-    screen.blit(Fabbrica.sprite, (Fabbrica.x, Fabbrica.y)) #aggiungiamo l'immagine allo schermo (x, y)
+    Fabbrica.blittaggio()
+    Casa.blittaggio()
+    Trasporto.blittaggio()
 
-    testoTutorial = font.render(TestoTutorial.string, True, TestoTutorial.color) 
-    testoTutorialRect = testoTutorial.get_rect()
-    testoCasa = font.render(str(caniInCasa), True, TestoCasa.color) 
-    testoFabbrica = font.render(str(producendo), True, TestoFabbrica.color) 
-    testoTrasporto = font.render(TestoTrasporto.string, True, TestoTrasporto.color) 
-    
+    # screen.blit(Trasporto.sprite, (Trasporto.x, Trasporto.y))
+    # screen.blit(Casa.sprite, (Casa.x, Casa.y))#aggiungiamo l'immagine allo schermo (x, y)
+    # screen.blit(Fabbrica.sprite, (Fabbrica.x, Fabbrica.y)) #aggiungiamo l'immagine allo schermo (x, y)
 
     pressedKeys = pygame.key.get_pressed()
 
     # decidi se mostrare o no il tutorial bool 0 / 1
-    mostraTutorial(1)
+    mostraTutorial(0)
     
     blittabileCamion = blitBox("camion")
     blittabileCasa = blitBox("casa")
     blittabileFabbrica = blitBox("fabbrica")
+    
+
+    #tiene testocasa.string sempre alla quantita dei cani
+    TestoCasa.string = str(caniInCasa)
+    
+    
+    TestoTrasporto.blitText()
+    TestoFabbrica.blitText()
+    TestoCasa.blitText()
+    TestoTutorial.blitText()
+    
     if pressedKeys[pygame.K_SPACE] == 1:
         
         if giocoIniziato:
@@ -257,11 +264,11 @@ while not finished:
                 if daDove == "fabbrica":
                     TestoTrasporto.string = "..."
                     TestoFabbrica.color = green
-                    producendo = " ..."
+                    TestoFabbrica.string = " ..."
                     blittaTutto()
                     time.sleep(3) #@todo fixare che la pausa non fa cambiare i testi
                     TestoFabbrica.color = red
-                    producendo = "Fermo"
+                    TestoFabbrica.string = "Fermo"
                     caniTrasportati = True
                     numeroRandom = random.randint(1,3)
                     quantitaTrasporto += 2+numeroRandom
@@ -271,36 +278,26 @@ while not finished:
             if daDove == "casa":
                 Trasporto.x -= 1
                 if blittabileCamion.colliderect(blittabileFabbrica):
-                    # print("Asgarraa FABBRICA")
                     Trasporto.x += 2
                     daDove = "fabbrica"
-                    print(Trasporto.x)
                     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
                     caniTrasportati = False
             if daDove == "fabbrica":
                 Trasporto.x += 1
                 if blittabileCamion.colliderect(blittabileCasa):
-                    # print("Asgarraa CASA")
                     daDove = "casa"
-                    print(daDove)
                     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
                     Trasporto.x -= 2
 
 
         
         
-    #disegna le hitbox
-    # blitBox("camion")
-    # blitBox("casa")
-    # blitBox("fabbrica")
+    
     
 
     
-    # hitboxT = pygame.draw.rect(screen, (255,0,0), Trasporto.hitbox,1)
-    # hitboxC = pygame.draw.rect(screen, (255,0,0), Casa.hitbox,1)
-    # hitboxF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
-
-    # #disegna il testo
+    
+    # disegna il testo
     # screen.blit(testoTutorial, testoTutorialRect)
     # screen.blit(testoCasa, (TestoCasa.x,TestoCasa.y))
     # screen.blit(testoFabbrica, (TestoFabbrica.x,TestoFabbrica.y))
@@ -313,6 +310,9 @@ while not finished:
     TestoTrasporto.x = Trasporto.x
     TestoTrasporto.y = Trasporto.y - 30
 
+
+
+    
 
 
 
