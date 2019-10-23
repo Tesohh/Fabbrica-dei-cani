@@ -217,9 +217,9 @@ while not finished:
     # decidi se mostrare o no il tutorial bool 0 / 1
     mostraTutorial(0)
     
-    blittabileCamion = blitBox("camion")
-    blittabileCasa = blitBox("casa")
-    blittabileFabbrica = blitBox("fabbrica")
+    hitboxCamion = blitBox("camion")
+    hitboxCasa = blitBox("casa")
+    hitboxFabbrica = blitBox("fabbrica")
     
 
     #tiene testocasa.string sempre alla quantita dei cani
@@ -232,17 +232,55 @@ while not finished:
     TestoTutorial.blitText()
     
     if pressedKeys[pygame.K_SPACE] == 1:
-        
-        if giocoIniziato:
-            if not caniTrasportati:
-                if daDove == "casa":
-                    print(daDove, "1")
+
+            if daDove == "casa":
+                Trasporto.x -= 1
+
+
+                #se la hitbox del camion tocca quello della fabbrica
+                if hitboxCamion.colliderect(hitboxFabbrica): 
+                    Trasporto.x += 2
+                    daDove = "fabbrica"
+
+                    #gira il camion
+                    Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False) 
+                    caniTrasportati = False
+
+                    # cambia il testo del trasporto
                     TestoTrasporto.string = "..."
 
+                    # cambia il testo e il colore del TestoFabbrica
+                    TestoFabbrica.color = green
+                    TestoFabbrica.string = " .b.."
+
+                    time.sleep(3) #@todo fixare che la pausa non fa cambiare i testi
+
+                    # cambia il testo e il colore del TestoFabbrica
+                    TestoFabbrica.color = red
+                    TestoFabbrica.string = "Fermo"
+
+                    caniTrasportati = True
+                    
                     TestoFabbrica.blitText()
-                    TestoCasa.blitText()
-                    TestoTrasporto.blitText()
-                    pygame.display.flip()
+                    
+                    # crea un numero random, assegnalo a quantita trasporto e cambia il testo di TestoTRasporto
+                    numeroRandom = random.randint(1,3)
+                    quantitaTrasporto += 2+numeroRandom
+                    TestoTrasporto.string = str(quantitaTrasporto)
+            
+            # se sto arrivando dalla fabbrica
+            if daDove == "fabbrica":
+                Trasporto.x += 1
+                
+                #se la hitbox del camion tocca quello della casa
+                if hitboxCamion.colliderect(hitboxCasa):
+                    daDove = "casa"
+
+                    #gira il camion
+                    Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
+                    Trasporto.x -= 2
+
+                    TestoTrasporto.string = "..."
 
                     time.sleep(1)
 
@@ -251,69 +289,10 @@ while not finished:
                     caniTrasportati = True
                     caniInCasa -= 2
 
-                if daDove == "fabbrica":
-                    print(daDove, "2")
-                    TestoTrasporto.string = "..."
-
-
-                    TestoFabbrica.color = green
-                    TestoFabbrica.string = " .b.."
-                    print("1:" , TestoFabbrica.string)
-                    
-                    # mostro il testo
-                    TestoFabbrica.blitText()
-                    
-                    TestoCasa.blitText()
-                    TestoTrasporto.blitText()
-                    pygame.display.flip()
-
-                    # time.sleep(3) #@todo fixare che la pausa non fa cambiare i testi
-
-                    # TestoFabbrica.color = red
-                    # TestoFabbrica.string = "Fermo"
-                    print("2:" , TestoFabbrica.string)
-                    caniTrasportati = True
-                    
-                    
-                    TestoFabbrica.blitText()
-                    
-                    
-                    numeroRandom = random.randint(1,3)
-                    quantitaTrasporto += 2+numeroRandom
-                    TestoTrasporto.string = str(quantitaTrasporto)
-
-
-            if daDove == "casa":
-                print(daDove, "3")
-                Trasporto.x -= 1
-                if blittabileCamion.colliderect(blittabileFabbrica):
-                    Trasporto.x += 2
-                    daDove = "fabbrica"
-                    print(daDove, "4")
-                    Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
-                    caniTrasportati = False
-            if daDove == "fabbrica":
-                print(daDove, "5")
-                Trasporto.x += 1
-                if blittabileCamion.colliderect(blittabileCasa):
-                    daDove = "casa"
-                    print(daDove, "6")
-                    Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
-                    Trasporto.x -= 2
-
-
-        
-        
-    
-    
-
-    
-    
-    # disegna il testo
-    # screen.blit(testoTutorial, testoTutorialRect)
-    # screen.blit(testoCasa, (TestoCasa.x,TestoCasa.y))
-    # screen.blit(testoFabbrica, (TestoFabbrica.x,TestoFabbrica.y))
-    # screen.blit(testoTrasporto, (TestoTrasporto.x,TestoTrasporto.y))
+    TestoFabbrica.blitText()
+    TestoCasa.blitText()
+    TestoTrasporto.blitText()
+    pygame.display.flip()
 
     #muove la hitbox del camion
     Trasporto.hitbox = (Trasporto.x, Trasporto.y, Trasporto.larghezza, Trasporto.altezza)
@@ -322,14 +301,6 @@ while not finished:
     TestoTrasporto.x = Trasporto.x
     TestoTrasporto.y = Trasporto.y - 30
 
-
-
-    
-
-
-
     pygame.display.flip() #aggiorna lo schermo
     
-    
     frame.tick(1000)
-
