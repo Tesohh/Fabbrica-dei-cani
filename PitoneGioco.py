@@ -40,10 +40,10 @@ fabbricaRaggiunta = False
 casaRaggiunta = False
 daDove = "casa"
 tutorialSlide = 0
-caniInCasa = 2
+caniInCasa = 0
 giocoIniziato = False
 caniTrasportati = False
-quantitaTrasporto = 0
+quantitaTrasporto = 2
 numeroRandom = 0
 
 
@@ -102,11 +102,7 @@ def mostraTutorial(boolean):
         giocoIniziato = True
     return giocoIniziato
 
-def mostraTesto(target, colore, testo):
-    if target == "Fabbrica":
-        TestoFabbrica.color = colore
-        TestoFabbrica.string = testo
-        TestoFabbrica.blitText()
+
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
 #============================================================================================
@@ -230,43 +226,42 @@ while not finished:
     TestoFabbrica.blitText()
     TestoCasa.blitText()
     TestoTutorial.blitText()
-    
+
     if pressedKeys[pygame.K_SPACE] == 1:
 
             if daDove == "casa":
                 Trasporto.x -= 1
 
+                # cambia il testo del trasporto
+                TestoTrasporto.string = str(quantitaTrasporto)
 
                 #se la hitbox del camion tocca quello della fabbrica
                 if hitboxCamion.colliderect(hitboxFabbrica): 
+                    TestoFabbrica.color = green
+                    TestoFabbrica.string = "..."
+                    TestoFabbrica.blitText()
+                    TestoCasa.blitText()
+                    TestoTrasporto.blitText()
+                    pygame.display.flip()
+
+
                     Trasporto.x += 2
+                    time.sleep(3)
+                    TestoFabbrica.color = red
+                    TestoFabbrica.string = "Fermo"
                     daDove = "fabbrica"
 
                     #gira il camion
                     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False) 
                     caniTrasportati = False
 
-                    # cambia il testo del trasporto
-                    TestoTrasporto.string = "..."
-
-                    # cambia il testo e il colore del TestoFabbrica
-                    TestoFabbrica.color = green
-                    TestoFabbrica.string = " .b.."
-
-                    time.sleep(3) #@todo fixare che la pausa non fa cambiare i testi
-
-                    # cambia il testo e il colore del TestoFabbrica
-                    TestoFabbrica.color = red
-                    TestoFabbrica.string = "Fermo"
-
                     caniTrasportati = True
-                    
-                    TestoFabbrica.blitText()
                     
                     # crea un numero random, assegnalo a quantita trasporto e cambia il testo di TestoTRasporto
                     numeroRandom = random.randint(1,3)
-                    quantitaTrasporto += 2+numeroRandom
+                    quantitaTrasporto += 2 + numeroRandom
                     TestoTrasporto.string = str(quantitaTrasporto)
+
             
             # se sto arrivando dalla fabbrica
             if daDove == "fabbrica":
@@ -280,14 +275,13 @@ while not finished:
                     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
                     Trasporto.x -= 2
 
-                    TestoTrasporto.string = "..."
-
                     time.sleep(1)
+                    caniTrasportati = True
 
+                    caniInCasa += quantitaTrasporto - 2
                     quantitaTrasporto = 2
                     TestoTrasporto.string = str(quantitaTrasporto)
-                    caniTrasportati = True
-                    caniInCasa -= 2
+
 
     TestoFabbrica.blitText()
     TestoCasa.blitText()
