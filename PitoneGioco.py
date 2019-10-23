@@ -14,7 +14,7 @@ pygame.display.set_caption("Fabbrica dei cani") #impostiamo il titolo ad ASGARRA
 
 screen = pygame.display.set_mode((600,600)) #impostiamo le dimensioni della finestra
 
-font = pygame.font.Font('Cascadia.ttf', 28)
+font = pygame.font.Font(r"Font\/Cascadia.ttf", 28)
 
 
 
@@ -24,7 +24,7 @@ font = pygame.font.Font('Cascadia.ttf', 28)
 rosso = (255,0,0) #R, G, B
 colore2 = (120,50,100)
 
-background = pygame.image.load(r"prova sfondo 1.png")
+background = pygame.image.load(r"Immagini\/prova sfondo 1.png")
 background = pygame.transform.scale(background, (600,600))
 
 
@@ -41,7 +41,6 @@ casaRaggiunta = False
 daDove = "casa"
 tutorialSlide = 0
 caniInCasa = 2
-producendo = "Fermo"
 giocoIniziato = False
 caniTrasportati = False
 quantitaTrasporto = 0
@@ -76,20 +75,22 @@ def mostraTutorial(boolean):
                 print("prossimo")
                 tutorialSlide += 1
                 time.sleep(0.3)
+
+                # cambia il testo del tutorial
                 if tutorialSlide == 1:
                     TestoTutorial.string = "In questo gioco dovrai ottenere"
-                if tutorialSlide == 2:
+                elif tutorialSlide == 2:
                     TestoTutorial.string = "100 cani di cui 5 perfetti,"
-                if tutorialSlide == 3:
+                elif tutorialSlide == 3:
                     TestoTutorial.string = "quindi con tutti gli stat"
-                if tutorialSlide == 4:
+                elif tutorialSlide == 4:
                     TestoTutorial.string = "maggiori di 8."
-                if tutorialSlide == 5:
+                elif tutorialSlide == 5:
                     TestoTutorial.string = "Iniziamo!!!"
-                if tutorialSlide == 6:
+                elif tutorialSlide == 6:
                     TestoCasa.string = "2"
                     TestoTutorial.string = "Adesso hai due cani."
-                if tutorialSlide == 7:
+                elif tutorialSlide == 7:
                     TestoTutorial.string = "Portali alla fabbrica con [SPAZIO]" 
                     giocoIniziato = True  
         if pressedKeys[pygame.K_p] == 1:
@@ -101,20 +102,19 @@ def mostraTutorial(boolean):
         giocoIniziato = True
     return giocoIniziato
 
-
-def mostraTesto(target, colore, testo ):
-    
+def mostraTesto(target, colore, testo):
     if target == "Fabbrica":
-    TestoFabbrica.color = colore
-    TestoFabbrica.string = testo
-    TestoFabbrica.blitText()
+        TestoFabbrica.color = colore
+        TestoFabbrica.string = testo
+        TestoFabbrica.blitText()
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
 #============================================================================================
 
 class Sprite:
     """NUOVO SPRITE ASGARRA
-    argomenti: x, y, velocità"""
+    argomenti: x, y, larghezza, altezza, costume, livello = 0"""
+
     def __init__(self, x, y, larghezza, altezza, costume, livello = 0):
         self.x = x
         self.y = y
@@ -123,23 +123,20 @@ class Sprite:
         self.larghezza = larghezza
         self.sprite = pygame.transform.scale(self.costume, (larghezza, altezza))
         self.hitbox = (self.x, self.y, larghezza,altezza)
-        # self.banana = pygame.draw.rect(screen, (255,0,0), self.hitbox,1)
-
-
-        # self.sprite = self.sprite.get_rect()
         if livello >= 0:
             self.livello = livello
         else:
             self.livello = abs(livello) #trasformiamo in positivo
         
-
     def blittaggio(self):
         screen.blit(self.sprite, (self.x,self.y))
 
     def printaggio(self):
         print(self.x, self.y)
+
     def upgrade(self):
         self.livello += 1
+
     def downgrade(self):
         if self.livello: #controlla se livello non è 0
             self.livello -= 1 
@@ -150,9 +147,7 @@ class Veicolo(Sprite):
     def impostaVelocità(self, velocità=1):
         self.velocità = abs(velocità)
     def girati(self, orizzontale, verticale):
-        self.sprite = pygame.transform.flip(self.sprite, orizzontale, verticale) #orizzontale, verticale
-    
-
+        self.sprite = pygame.transform.flip(self.sprite, orizzontale, verticale) #orizzontale, verticale 
 
 class Edificio(Sprite):
     def impostaCapienza(self, capienzaCasa=5):
@@ -183,10 +178,10 @@ class Text:
 # ISPANZE ---------------------------------------------------------------------------------
 #==========================================================================================
 
-Fabbrica = Edificio(50, 290, 120, 120, r"fabbrica.png")
-Casa = Edificio(430, 290, 120, 120, r"casa_base.png")
+Fabbrica = Edificio(50, 290, 120, 120, r"Immagini\/fabbrica.png")
+Casa = Edificio(430, 290, 120, 120, r"Immagini\/casa_base.png")
 
-Trasporto = Veicolo(360, 370, 70, 34, r"veicolo_base.png")
+Trasporto = Veicolo(360, 370, 70, 34, r"Immagini\/veicolo_base.png")
 
 
 TestoTutorial = Text(0,0,32,black,"Benvenuto! Premi K per continuare")
@@ -241,6 +236,7 @@ while not finished:
         if giocoIniziato:
             if not caniTrasportati:
                 if daDove == "casa":
+                    print(daDove, "1")
                     TestoTrasporto.string = "..."
 
                     TestoFabbrica.blitText()
@@ -256,22 +252,31 @@ while not finished:
                     caniInCasa -= 2
 
                 if daDove == "fabbrica":
+                    print(daDove, "2")
                     TestoTrasporto.string = "..."
 
 
                     TestoFabbrica.color = green
-                    TestoFabbrica.string = " ..."
+                    TestoFabbrica.string = " .b.."
+                    print("1:" , TestoFabbrica.string)
+                    
+                    # mostro il testo
                     TestoFabbrica.blitText()
-
+                    
                     TestoCasa.blitText()
                     TestoTrasporto.blitText()
                     pygame.display.flip()
 
-                    time.sleep(3) #@todo fixare che la pausa non fa cambiare i testi
+                    # time.sleep(3) #@todo fixare che la pausa non fa cambiare i testi
 
-                    TestoFabbrica.color = red
-                    TestoFabbrica.string = "Fermo"
+                    # TestoFabbrica.color = red
+                    # TestoFabbrica.string = "Fermo"
+                    print("2:" , TestoFabbrica.string)
                     caniTrasportati = True
+                    
+                    
+                    TestoFabbrica.blitText()
+                    
                     
                     numeroRandom = random.randint(1,3)
                     quantitaTrasporto += 2+numeroRandom
@@ -279,16 +284,20 @@ while not finished:
 
 
             if daDove == "casa":
+                print(daDove, "3")
                 Trasporto.x -= 1
                 if blittabileCamion.colliderect(blittabileFabbrica):
                     Trasporto.x += 2
                     daDove = "fabbrica"
+                    print(daDove, "4")
                     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
                     caniTrasportati = False
             if daDove == "fabbrica":
+                print(daDove, "5")
                 Trasporto.x += 1
                 if blittabileCamion.colliderect(blittabileCasa):
                     daDove = "casa"
+                    print(daDove, "6")
                     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
                     Trasporto.x -= 2
 
