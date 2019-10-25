@@ -75,7 +75,6 @@ def mostraTutorial(boolean):
                 print("prossimo")
                 tutorialSlide += 1
                 time.sleep(0.3)
-
                 # cambia il testo del tutorial
                 if tutorialSlide == 1:
                     TestoTutorial.string = "In questo gioco dovrai ottenere"
@@ -161,7 +160,22 @@ class Text:
     def blitText(self):
         self.testoh = font.render(self.string, True, self.color)
         screen.blit(self.testoh, (self.x,self.y))
-        
+
+class Rectangle:
+    def __init__(self, x,y,larghezza,altezza,color):
+        self.x = x
+        self.y = y
+        self.larghezza = larghezza
+        self.altezza = altezza
+        self.color = color
+        self.rect = pygame.Rect(self.x,self.y,self.larghezza,self.altezza)
+
+    def blittaggio(self):
+        self.drawRect = pygame.draw.rect(screen, self.color, self.rect)
+
+
+
+
 
         
 
@@ -184,6 +198,7 @@ TestoTutorial = Text(0,0,32,black,"Benvenuto! Premi K per continuare")
 TestoCasa = Text(480,410,32,black,"")
 TestoFabbrica = Text(70,410,32,red,"Fermo")
 TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,32,green,"")
+CopriTestoF = Rectangle(48, 408, 122, 35, white)
                                                  
 #==========================================================================================
 
@@ -203,6 +218,7 @@ while not finished:
     Fabbrica.blittaggio()
     Casa.blittaggio()
     Trasporto.blittaggio()
+    
 
     # screen.blit(Trasporto.sprite, (Trasporto.x, Trasporto.y))
     # screen.blit(Casa.sprite, (Casa.x, Casa.y))#aggiungiamo l'immagine allo schermo (x, y)
@@ -227,6 +243,8 @@ while not finished:
     TestoCasa.blitText()
     TestoTutorial.blitText()
 
+    
+
     if pressedKeys[pygame.K_SPACE] == 1:
 
             if daDove == "casa":
@@ -238,7 +256,8 @@ while not finished:
                 #se la hitbox del camion tocca quello della fabbrica
                 if hitboxCamion.colliderect(hitboxFabbrica): 
                     TestoFabbrica.color = green
-                    TestoFabbrica.string = "..."
+                    TestoFabbrica.string = " ..."
+                    CopriTestoF.blittaggio()
                     TestoFabbrica.blitText()
                     TestoCasa.blitText()
                     TestoTrasporto.blitText()
@@ -283,9 +302,7 @@ while not finished:
                     TestoTrasporto.string = str(quantitaTrasporto)
 
 
-    TestoFabbrica.blitText()
-    TestoCasa.blitText()
-    TestoTrasporto.blitText()
+    
     pygame.display.flip()
 
     #muove la hitbox del camion
