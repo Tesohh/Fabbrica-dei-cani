@@ -10,7 +10,11 @@ import random
 #============================================================================================
 pygame.init() #inizializziamo pygame
 
+
+icona = pygame.image.load(r"Immagini\/icona.ico")
+
 pygame.display.set_caption("Fabbrica dei cani") #impostiamo il titolo ad ASGARRA
+pygame.display.set_icon(icona)
 
 screen = pygame.display.set_mode((600,600)) #impostiamo le dimensioni della finestra
 
@@ -34,6 +38,7 @@ black = (0,0,0)
 white = (255,255,255)
 red = (255,0,0)
 green = (0, 255, 0)
+orange = (255,165,0)
 
 frame = pygame.time.Clock()
 fabbricaRaggiunta = False
@@ -250,12 +255,13 @@ while not finished:
             if daDove == "casa":
                 Trasporto.x -= 1
 
+
                 # cambia il testo del trasporto
                 TestoTrasporto.string = str(quantitaTrasporto)
 
                 #se la hitbox del camion tocca quello della fabbrica
                 if hitboxCamion.colliderect(hitboxFabbrica): 
-                    TestoFabbrica.color = green
+                    TestoFabbrica.color = orange
                     TestoFabbrica.string = " ..."
                     CopriTestoF.blittaggio()
                     TestoFabbrica.blitText()
@@ -266,8 +272,8 @@ while not finished:
 
                     Trasporto.x += 2
                     time.sleep(3)
-                    TestoFabbrica.color = red
-                    TestoFabbrica.string = "Fermo"
+                    TestoFabbrica.color = green
+                    TestoFabbrica.string = "Fatto!"
                     daDove = "fabbrica"
 
                     #gira il camion
@@ -281,11 +287,17 @@ while not finished:
                     quantitaTrasporto += 2 + numeroRandom
                     TestoTrasporto.string = str(quantitaTrasporto)
 
+                
+
             
             # se sto arrivando dalla fabbrica
-            if daDove == "fabbrica":
+            elif daDove == "fabbrica":
                 Trasporto.x += 1
                 
+                if not hitboxCamion.colliderect(hitboxCasa) and not hitboxCamion.colliderect(hitboxCasa):
+                    TestoFabbrica.string = "Fermo"
+                    TestoFabbrica.color = red 
+
                 #se la hitbox del camion tocca quello della casa
                 if hitboxCamion.colliderect(hitboxCasa):
                     daDove = "casa"
@@ -301,6 +313,9 @@ while not finished:
                     quantitaTrasporto = 2
                     TestoTrasporto.string = str(quantitaTrasporto)
 
+             
+
+                
 
     
     pygame.display.flip()
