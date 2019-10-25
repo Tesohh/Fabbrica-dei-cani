@@ -4,11 +4,20 @@
 import pygame
 import time
 import random
+import pandas
+import random
+from genera_nome_cane import generaNome
 
 #============================================================================================
 #PRELIMINARI
 #============================================================================================
 pygame.init() #inizializziamo pygame
+
+pygame.mixer.init(44100)
+pygame.mixer.pre_init(44100, 16, 2, 4096)
+musica = pygame.mixer.music.load(r"Suoni\/flauteggiamento.wav")
+pygame.mixer.music.play(-1)
+
 
 
 icona = pygame.image.load(r"Immagini\/icona.ico")
@@ -30,6 +39,9 @@ colore2 = (120,50,100)
 
 background = pygame.image.load(r"Immagini\/prova sfondo 1.png")
 background = pygame.transform.scale(background, (600,600))
+
+        
+
 
 
 # banana = pygame.image.load(r"banana.png")
@@ -180,9 +192,40 @@ class Rectangle:
 
 
 
+class Cane:
+    """ CLASSE PER FARE UN NUOVO CANE"""
+    def __init__(self, qualita):
+        self.speed = random.randint(1,10) + qualita
 
+        if self.speed > 10:
+            self.speed = 10
 
+        self.furriness = random.randint(1,10) + qualita
+
+        if self.furriness > 10:
+            self.furriness = 10
         
+        self.barkiness = random.randint(1,10)+ qualita
+
+        if self.barkiness > 10:
+            self.barkiness = 10
+
+        self.awwness = random.randint(1,10)+ qualita
+
+        if self.awwness > 10:
+            self.awwness = 10
+
+
+        if self.speed >= 8 and self.furriness >= 8 and self.furriness >= 8 and self.awwness >= 8:
+            self.perfect = True
+            self.name = input("Complimenti! Hai trovato un cane perfetto. Che nome vuoi dargli?\n")
+            print("Wow! Bel nome!!!!\n")
+        else:
+            self.perfect = False
+            self.name = generaNome()
+        
+        self.age = 0
+
 
 
     
