@@ -13,12 +13,9 @@ from genera_nome_cane import generaNome
 #============================================================================================
 pygame.init() #inizializziamo pygame
 
-pygame.mixer.init(44100)
-pygame.mixer.pre_init(44100, 16, 2, 4096)
 musica = pygame.mixer.music.load(r"Suoni\/flauteggiamento.wav")
+pygame.mixer.music.set_volume(0.1)
 pygame.mixer.music.play(-1)
-
-
 
 icona = pygame.image.load(r"Immagini\/icona.ico")
 
@@ -62,7 +59,15 @@ giocoIniziato = False
 caniTrasportati = False
 quantitaTrasporto = 2
 numeroRandom = 0
+starting = False
 
+
+woof = pygame.mixer.Sound(r"Suoni\/woof.wav")
+microWoof = pygame.mixer.Sound(r"Suoni\/woofHigh.wav")
+camionStart = pygame.mixer.Sound(r"Suoni\/camionStart.wav")
+camionGo = pygame.mixer.Sound(r"Suoni\/camion.wav")
+
+pygame.mixer.Sound.set_volume(camionStart, 0.2)
 
 #============================================================================================
 #funzioni
@@ -261,6 +266,13 @@ while not finished:
         if event.type == pygame.QUIT: #quando si preme la X
             finished = True           #chiudi
 
+    # hitbox
+    hitboxCamion = blitBox("camion")
+    hitboxCasa = blitBox("casa")
+    hitboxFabbrica = blitBox("fabbrica")
+
+
+
     # aggiungere gli sprite al gioco
     screen.blit(background, (0, 0))
     Fabbrica.blittaggio()
@@ -277,9 +289,7 @@ while not finished:
     # decidi se mostrare o no il tutorial bool 0 / 1
     mostraTutorial(0)
     
-    hitboxCamion = blitBox("camion")
-    hitboxCasa = blitBox("casa")
-    hitboxFabbrica = blitBox("fabbrica")
+    
     
 
     #tiene testocasa.string sempre alla quantita dei cani
@@ -294,6 +304,12 @@ while not finished:
     
 
     if pressedKeys[pygame.K_SPACE] == 1:
+
+
+            if starting == False:
+                pygame.mixer.Sound.play(camionStart) 
+                starting = True
+
 
             if daDove == "casa":
                 Trasporto.x -= 1
@@ -311,9 +327,11 @@ while not finished:
                     TestoCasa.blitText()
                     TestoTrasporto.blitText()
                     pygame.display.flip()
+                    pygame.mixer.Sound.play(woof)
 
 
                     Trasporto.x += 2
+                    
                     time.sleep(3)
                     TestoFabbrica.color = green
                     TestoFabbrica.string = "Fatto!"
@@ -322,6 +340,11 @@ while not finished:
                     #gira il camion
                     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False) 
                     caniTrasportati = False
+                    #pygame.mixer.Sound.play(woof)
+                    
+                    pygame.mixer.Sound.play(microWoof)
+
+                    
 
                     caniTrasportati = True
                     
@@ -340,6 +363,7 @@ while not finished:
                 if not hitboxCamion.colliderect(hitboxCasa) and not hitboxCamion.colliderect(hitboxCasa):
                     TestoFabbrica.string = "Fermo"
                     TestoFabbrica.color = red 
+                    
 
                 #se la hitbox del camion tocca quello della casa
                 if hitboxCamion.colliderect(hitboxCasa):
@@ -349,12 +373,15 @@ while not finished:
                     Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
                     Trasporto.x -= 2
 
+
+                    
                     time.sleep(1)
                     caniTrasportati = True
 
                     caniInCasa += quantitaTrasporto - 2
                     quantitaTrasporto = 2
                     TestoTrasporto.string = str(quantitaTrasporto)
+                    
 
              
 
