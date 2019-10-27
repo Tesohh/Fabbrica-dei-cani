@@ -37,6 +37,11 @@ colore2 = (120,50,100)
 background = pygame.image.load(r"Immagini\/prova sfondo 1.png")
 background = pygame.transform.scale(background, (600,600))
 
+microDog = pygame.image.load(r"Immagini\/microdog.png")
+cuccioli = pygame.image.load(r"Immagini\/cuccioli.png")
+jack = pygame.image.load(r"Immagini\/jack.png")
+banana = pygame.image.load(r"Immagini\/bananaboy.png")
+jimmy = pygame.image.load(r"Immagini\/jimmyneutron.png")
         
 
 
@@ -60,6 +65,7 @@ caniTrasportati = False
 quantitaTrasporto = 2
 numeroRandom = 0
 starting = False
+primaVolta = True
 
 
 woof = pygame.mixer.Sound(r"Suoni\/woof.wav")
@@ -88,32 +94,68 @@ def blitBox(who):
         hitboxF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
         return hitboxF
 
+
+def mostraProfilo():
+    global primaVolta
+    
+    if primaVolta:
+        numeroRandom = random.randint(1,5)
+        if numeroRandom == 1:
+            TestoTutorial.string = "    DogLover"
+            Profilo.costume = microDog
+            Profilo.cambiaCostume()
+        if numeroRandom == 2:
+            TestoTutorial.string = "    Doggo"
+            Profilo.costume = jack
+            Profilo.cambiaCostume()
+        if numeroRandom == 3:
+            TestoTutorial.string = "    DogBreeder3000"
+            Profilo.costume = cuccioli
+            Profilo.cambiaCostume()
+        if numeroRandom == 4:
+            TestoTutorial.string = "    BananaBoy"
+            Profilo.costume = banana
+            Profilo.cambiaCostume()
+        if numeroRandom == 5:
+            TestoTutorial.string = "    Jimmy"
+            Profilo.costume = jimmy 
+            Profilo.cambiaCostume()
+        primaVolta = False
+    Profilo.blittaggio()
+
 def mostraTutorial(boolean):
     """ Valori accettati (0,1) """
     global tutorialSlide, giocoIniziato
     if boolean:
         if pressedKeys[pygame.K_k] == 1:
-            if tutorialSlide != 7:
+            if tutorialSlide != 7 and tutorialSlide != 8:
                 print("prossimo")
                 tutorialSlide += 1
                 time.sleep(0.3)
                 # cambia il testo del tutorial
-                if tutorialSlide == 1:
-                    TestoTutorial.string = "In questo gioco dovrai ottenere"
-                elif tutorialSlide == 2:
-                    TestoTutorial.string = "100 cani di cui 5 perfetti,"
-                elif tutorialSlide == 3:
-                    TestoTutorial.string = "quindi con tutti gli stat"
-                elif tutorialSlide == 4:
-                    TestoTutorial.string = "maggiori di 8."
-                elif tutorialSlide == 5:
-                    TestoTutorial.string = "Iniziamo!!!"
-                elif tutorialSlide == 6:
-                    TestoCasa.string = "2"
-                    TestoTutorial.string = "Adesso hai due cani."
-                elif tutorialSlide == 7:
-                    TestoTutorial.string = "Portali alla fabbrica con [SPAZIO]" 
-                    giocoIniziato = True  
+        if tutorialSlide == 1:
+            TestoTutorial.string = "In questo gioco dovrai ottenere"
+        elif tutorialSlide == 2:
+            TestoTutorial.string = "100 cani di cui 5 perfetti,"
+        elif tutorialSlide == 3:
+            TestoTutorial.string = "quindi con tutti gli stat"
+        elif tutorialSlide == 4:
+            TestoTutorial.string = "maggiori di 8."
+        elif tutorialSlide == 5:
+            TestoTutorial.string = "Iniziamo!!!"
+        elif tutorialSlide == 6:
+            TestoCasa.string = "2"
+            TestoTutorial.string = "Adesso hai due cani."
+        elif tutorialSlide == 7:
+            TestoTutorial.string = "Portali alla fabbrica con [SPAZIO]" 
+            giocoIniziato = True  
+        elif tutorialSlide == 8:
+            TestoTutorial.string = "Portali in casa con [SPAZIO]"
+        elif tutorialSlide == 9:
+            TestoTutorial.string = "Bravo! Adesso ti lascio. CIAO! [k]"
+        elif tutorialSlide == 10:
+            mostraProfilo()
+
         if pressedKeys[pygame.K_p] == 1:
             if tutorialSlide != 7:
                 tutorialSlide = 6
@@ -121,7 +163,10 @@ def mostraTutorial(boolean):
                 time.sleep(0.1)  
     else:
         giocoIniziato = True
+        
+        mostraProfilo()
     return giocoIniziato
+    
 
 
 #============================================================================================
@@ -147,6 +192,9 @@ class Sprite:
         
     def blittaggio(self):
         screen.blit(self.sprite, (self.x,self.y))
+
+    def cambiaCostume(self):
+        self.sprite = pygame.transform.scale(self.costume, (self.larghezza, self.altezza))
 
     def printaggio(self):
         print(self.x, self.y)
@@ -246,12 +294,16 @@ Casa = Edificio(430, 290, 120, 120, r"Immagini\/casa_base.png")
 
 Trasporto = Veicolo(360, 370, 70, 34, r"Immagini\/veicolo_base.png")
 
+Profilo = Sprite(0,0,60,60,r"Immagini\/profilo.png")
+
 
 TestoTutorial = Text(0,0,32,black,"Benvenuto! Premi K per continuare")
 TestoCasa = Text(480,410,32,black,"")
 TestoFabbrica = Text(70,410,32,red,"Fermo")
 TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,32,green,"")
 CopriTestoF = Rectangle(48, 408, 122, 35, white)
+
+
                                                  
 #==========================================================================================
 
@@ -304,7 +356,7 @@ while not finished:
     
 
     if pressedKeys[pygame.K_SPACE] == 1:
-
+        if giocoIniziato:
 
             if starting == False:
                 pygame.mixer.Sound.play(camionStart) 
@@ -353,6 +405,9 @@ while not finished:
                     quantitaTrasporto += 2 + numeroRandom
                     TestoTrasporto.string = str(quantitaTrasporto)
 
+                    if primaVolta:
+                        tutorialSlide = 8
+                        
                 
 
             
@@ -381,7 +436,9 @@ while not finished:
                     caniInCasa += quantitaTrasporto - 2
                     quantitaTrasporto = 2
                     TestoTrasporto.string = str(quantitaTrasporto)
-                    
+
+                    if primaVolta:
+                        tutorialSlide = 9
 
              
 
