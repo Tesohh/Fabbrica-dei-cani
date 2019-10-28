@@ -7,6 +7,8 @@ import random
 import pandas
 import random
 from genera_nome_cane import generaNome
+from tkinter import filedialog
+from tkinter import Tk
 
 #============================================================================================
 #PRELIMINARI
@@ -37,10 +39,7 @@ colore2 = (120,50,100)
 background = pygame.image.load(r"Immagini\/prova sfondo 1.png")
 background = pygame.transform.scale(background, (600,600))
 
-microDog = pygame.image.load(r"Immagini\/microdog.png")
-cuccioli = pygame.image.load(r"Immagini\/cuccioli.png")
-jack = pygame.image.load(r"Immagini\/jack.png")
-banana = pygame.image.load(r"Immagini\/bananaboy.png")
+
 jimmy = pygame.image.load(r"Immagini\/jimmyneutron.png")
 easteregg = pygame.image.load(r"Immagini\/easteregg.png")
         
@@ -104,25 +103,6 @@ def blitBox(who):
 
 def mostraProfilo():
     global primaVolta, schei, finished
-    
-    if primaVolta:
-        numeroRandom = random.randint(1,5)
-        if numeroRandom == 1:
-            Profilo.costume = microDog
-            Profilo.cambiaCostume()
-        if numeroRandom == 2:
-            Profilo.costume = jack
-            Profilo.cambiaCostume()
-        if numeroRandom == 3:
-            Profilo.costume = cuccioli
-            Profilo.cambiaCostume()
-        if numeroRandom == 4:
-            Profilo.costume = banana
-            Profilo.cambiaCostume()
-        if numeroRandom == 5:
-            Profilo.costume = jimmy 
-            Profilo.cambiaCostume()
-        primaVolta = False
 
     if TestoNome.string == "flexegg":
         Profilo.costume = easteregg 
@@ -378,6 +358,15 @@ while not finished:
                     if len(TestoNome.string)>0:
                         print(TestoNome.string)
                         scrivendoNome = False
+                        root = Tk()
+                        root.filename =  filedialog.askopenfilename(initialdir = ".",title = "Scegli una foto",filetypes = (("foto",".png"),("foto",".jpg")))
+                        path = root.filename
+                        if len(path) == 0:
+                            path = r"Immagini\/profilo.png"
+                        jimmy = pygame.image.load(path)
+                        Profilo.costume = jimmy
+                        Profilo.cambiaCostume()
+                        root.destroy()
                     else:
                         TestoNome.string = "metti qualcosa"
                         TestoNome.blitText()
