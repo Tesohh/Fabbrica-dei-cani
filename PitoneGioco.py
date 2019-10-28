@@ -24,7 +24,7 @@ pygame.display.set_icon(icona)
 
 screen = pygame.display.set_mode((600,600)) #impostiamo le dimensioni della finestra
 
-font = pygame.font.Font(r"Font\/Cascadia.ttf", 28)
+font = pygame.font.Font(r"Font\/noto.ttf", 28)
 
 
 
@@ -53,6 +53,7 @@ white = (255,255,255)
 red = (255,0,0)
 green = (0, 255, 0)
 orange = (255,165,0)
+yellow = (255,255,0)
 
 frame = pygame.time.Clock()
 fabbricaRaggiunta = False
@@ -66,6 +67,8 @@ quantitaTrasporto = 2
 numeroRandom = 0
 starting = False
 primaVolta = True
+schei = 1
+dogOverflow = 0
 
 
 woof = pygame.mixer.Sound(r"Suoni\/woof.wav")
@@ -101,27 +104,30 @@ def mostraProfilo():
     if primaVolta:
         numeroRandom = random.randint(1,5)
         if numeroRandom == 1:
-            TestoTutorial.string = "    DogLover"
+            TestoTutorial.string = "         DogLover"
             Profilo.costume = microDog
             Profilo.cambiaCostume()
         if numeroRandom == 2:
-            TestoTutorial.string = "    Doggo"
+            TestoTutorial.string = "         Doggo"
             Profilo.costume = jack
             Profilo.cambiaCostume()
         if numeroRandom == 3:
-            TestoTutorial.string = "    DogBreeder3000"
+            TestoTutorial.string = "         DogBreeder3000"
             Profilo.costume = cuccioli
             Profilo.cambiaCostume()
         if numeroRandom == 4:
-            TestoTutorial.string = "    BananaBoy"
+            TestoTutorial.string = "         BananaBoy"
             Profilo.costume = banana
             Profilo.cambiaCostume()
         if numeroRandom == 5:
-            TestoTutorial.string = "    Jimmy"
+            TestoTutorial.string = "         Jimmy"
             Profilo.costume = jimmy 
             Profilo.cambiaCostume()
         primaVolta = False
     Profilo.blittaggio()
+    TestoSchei.blitText()
+    TestoSchei.string = str(schei)
+    Coin.blittaggio()
 
 def mostraTutorial(boolean):
     """ Valori accettati (0,1) """
@@ -295,12 +301,15 @@ Casa = Edificio(430, 290, 120, 120, r"Immagini\/casa_base.png")
 Trasporto = Veicolo(360, 370, 70, 34, r"Immagini\/veicolo_base.png")
 
 Profilo = Sprite(0,0,60,60,r"Immagini\/profilo.png")
+Coin = Sprite(100,34,30,30,r"Immagini\/dogecoin.png")
 
 
 TestoTutorial = Text(0,0,32,black,"Benvenuto! Premi K per continuare")
 TestoCasa = Text(480,410,32,black,"")
 TestoFabbrica = Text(70,410,32,red,"Fermo")
 TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,32,green,"")
+TestoSchei = Text(70,30,32,black,schei)
+
 CopriTestoF = Rectangle(48, 408, 122, 35, white)
 
 
@@ -373,7 +382,7 @@ while not finished:
                 #se la hitbox del camion tocca quello della fabbrica
                 if hitboxCamion.colliderect(hitboxFabbrica): 
                     TestoFabbrica.color = orange
-                    TestoFabbrica.string = " ..."
+                    TestoFabbrica.string = "   . . ."
                     CopriTestoF.blittaggio()
                     TestoFabbrica.blitText()
                     TestoCasa.blitText()
@@ -439,6 +448,17 @@ while not finished:
 
                     if primaVolta:
                         tutorialSlide = 9
+
+                    if Casa.livello == 0 and caniInCasa >= 5: #basta copiare 
+                        TestoCasa.color = red
+                        dogOverflow = caniInCasa - 5
+                        print(dogOverflow)
+                        caniInCasa = 5
+                        quantitaTrasporto += dogOverflow
+                        TestoTrasporto.string = str(quantitaTrasporto)
+                    else:
+                        TestoCasa.color = black
+
 
              
 
