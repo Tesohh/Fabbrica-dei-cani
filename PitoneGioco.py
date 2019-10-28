@@ -42,6 +42,7 @@ cuccioli = pygame.image.load(r"Immagini\/cuccioli.png")
 jack = pygame.image.load(r"Immagini\/jack.png")
 banana = pygame.image.load(r"Immagini\/bananaboy.png")
 jimmy = pygame.image.load(r"Immagini\/jimmyneutron.png")
+easteregg = pygame.image.load(r"Immagini\/easteregg.png")
         
 
 
@@ -69,7 +70,10 @@ starting = False
 primaVolta = True
 schei = 1
 dogOverflow = 0
+possibilitaDiScrivere = False
 
+caratteri = "abcdefghijklmnopqrstuvwxyz1234567890"
+scrivendoNome = False
 
 woof = pygame.mixer.Sound(r"Suoni\/woof.wav")
 microWoof = pygame.mixer.Sound(r"Suoni\/woofHigh.wav")
@@ -99,46 +103,71 @@ def blitBox(who):
 
 
 def mostraProfilo():
-    global primaVolta
+    global primaVolta, schei, finished
     
     if primaVolta:
         numeroRandom = random.randint(1,5)
         if numeroRandom == 1:
-            TestoTutorial.string = "         DogLover"
             Profilo.costume = microDog
             Profilo.cambiaCostume()
         if numeroRandom == 2:
-            TestoTutorial.string = "         Doggo"
             Profilo.costume = jack
             Profilo.cambiaCostume()
         if numeroRandom == 3:
-            TestoTutorial.string = "         DogBreeder3000"
             Profilo.costume = cuccioli
             Profilo.cambiaCostume()
         if numeroRandom == 4:
-            TestoTutorial.string = "         BananaBoy"
             Profilo.costume = banana
             Profilo.cambiaCostume()
         if numeroRandom == 5:
-            TestoTutorial.string = "         Jimmy"
             Profilo.costume = jimmy 
             Profilo.cambiaCostume()
         primaVolta = False
+
+    if TestoNome.string == "flexegg":
+        Profilo.costume = easteregg 
+        Profilo.cambiaCostume()
+    if TestoNome.string == "flexeggbanana":
+        schei += 1
+    if TestoNome.string == "flexeggbananaasgarra":
+        schei += 1000000000000000000000000000000000000
+        TestoSchei.string = "           INFINITI"
+    if TestoNome.string == "crash":
+        TestoNome.string = "Crash tra 3..."
+        TestoNome.blitText()
+        pygame.display.flip()
+        time.sleep(1)
+        TestoNome.string = "Crash tra 3...2..."
+        TestoNome.blitText()
+        pygame.display.flip()
+        time.sleep(1)
+        TestoNome.string = "Crash tra 3...2...1..."
+        TestoNome.blitText()
+        pygame.display.flip()
+        time.sleep(1)
+        background = pygame.image.load(r"Immagini\/bsod.png")
+        screen.blit(background, (0, 0))
+        pygame.display.flip()
+        
+        finished = True
+    
     Profilo.blittaggio()
     TestoSchei.blitText()
     TestoSchei.string = str(schei)
     Coin.blittaggio()
+    return finished
 
 def mostraTutorial(boolean):
     """ Valori accettati (0,1) """
-    global tutorialSlide, giocoIniziato
+    global tutorialSlide, giocoIniziato, scrivendoNome, possibilitaDiScrivere
     if boolean:
-        if pressedKeys[pygame.K_k] == 1:
-            if tutorialSlide != 7 and tutorialSlide != 8:
-                print("prossimo")
-                tutorialSlide += 1
-                time.sleep(0.3)
-                # cambia il testo del tutorial
+        if tutorialSlide != 10:
+            if pressedKeys[pygame.K_k] == 1:
+                if tutorialSlide != 7 and tutorialSlide != 8:
+                    print("prossimo")
+                    tutorialSlide += 1
+                    time.sleep(0.3)
+                    # cambia il testo del tutorial
         if tutorialSlide == 1:
             TestoTutorial.string = "In questo gioco dovrai ottenere"
         elif tutorialSlide == 2:
@@ -161,16 +190,24 @@ def mostraTutorial(boolean):
             TestoTutorial.string = "Bravo! Adesso ti lascio. CIAO! [k]"
         elif tutorialSlide == 10:
             mostraProfilo()
-
-        if pressedKeys[pygame.K_p] == 1:
-            if tutorialSlide != 7:
-                tutorialSlide = 6
-                print("Premi K per completare il saltamento")
-                time.sleep(0.1)  
+            if not possibilitaDiScrivere:
+                scrivendoNome = True
+                possibilitaDiScrivere = True
+            
+        
+        if tutorialSlide < 6:
+            if pressedKeys[pygame.K_p] == 1:
+                if tutorialSlide != 7:
+                    tutorialSlide = 6
+                    print("Premi K per completare il saltamento")
+                    time.sleep(0.1)  
     else:
         giocoIniziato = True
-        
+        tutorialSlide = 10
         mostraProfilo()
+        if not possibilitaDiScrivere:
+            scrivendoNome = True
+            possibilitaDiScrivere = True
     return giocoIniziato
     
 
@@ -236,6 +273,10 @@ class Text:
     def blitText(self):
         self.testoh = font.render(self.string, True, self.color)
         screen.blit(self.testoh, (self.x,self.y))
+
+    def aggiungiCarattere(self, char):
+        if char in caratteri:
+            self.string += char
 
 class Rectangle:
     def __init__(self, x,y,larghezza,altezza,color):
@@ -309,6 +350,7 @@ TestoCasa = Text(480,410,32,black,"")
 TestoFabbrica = Text(70,410,32,red,"Fermo")
 TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,32,green,"")
 TestoSchei = Text(70,30,32,black,schei)
+TestoNome = Text(70,0,32,black,"")
 
 CopriTestoF = Rectangle(48, 408, 122, 35, white)
 
@@ -326,7 +368,22 @@ while not finished:
         # print(event)
         if event.type == pygame.QUIT: #quando si preme la X
             finished = True           #chiudi
+        if scrivendoNome:
+            if event.type == pygame.KEYDOWN:
+                TestoNome.aggiungiCarattere(pygame.key.name(event.key)) 
+                if event.key == pygame.K_BACKSPACE:
+                    TestoNome.string = TestoNome.string[:-1]
 
+                if event.key == pygame.K_RETURN:
+                    if len(TestoNome.string)>0:
+                        print(TestoNome.string)
+                        scrivendoNome = False
+                    else:
+                        TestoNome.string = "metti qualcosa"
+                        TestoNome.blitText()
+                        pygame.display.flip()
+                        time.sleep(1)
+                        TestoNome.string = ""
     # hitbox
     hitboxCamion = blitBox("camion")
     hitboxCasa = blitBox("casa")
@@ -360,7 +417,11 @@ while not finished:
     TestoTrasporto.blitText()
     TestoFabbrica.blitText()
     TestoCasa.blitText()
-    TestoTutorial.blitText()
+
+    if tutorialSlide != 10:
+        TestoTutorial.blitText()
+    else:
+        TestoNome.blitText()
 
     
 
@@ -449,7 +510,7 @@ while not finished:
                     if primaVolta:
                         tutorialSlide = 9
 
-                    if Casa.livello == 0 and caniInCasa >= 5: #basta copiare 
+                    if Casa.livello == 0 and caniInCasa >= 5: #basta copiare per i prossimi livelli
                         TestoCasa.color = red
                         dogOverflow = caniInCasa - 5
                         print(dogOverflow)
