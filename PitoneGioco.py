@@ -78,8 +78,13 @@ woof = pygame.mixer.Sound(r"Suoni\/woof.wav")
 microWoof = pygame.mixer.Sound(r"Suoni\/woofHigh.wav")
 camionStart = pygame.mixer.Sound(r"Suoni\/camionStart.wav")
 camionGo = pygame.mixer.Sound(r"Suoni\/camion.wav")
+success = pygame.mixer.Sound(r"Suoni\/success.wav")
+error = pygame.mixer.Sound(r"Suoni\/error.wav")
 
 pygame.mixer.Sound.set_volume(camionStart, 0.2)
+pygame.mixer.Sound.set_volume(success, 0.4)
+pygame.mixer.Sound.set_volume(error, 5)
+
 
 #============================================================================================
 #funzioni
@@ -356,6 +361,7 @@ while not finished:
 
                 if event.key == pygame.K_RETURN:
                     if len(TestoNome.string)>0:
+                        pygame.mixer.Sound.play(success)
                         print(TestoNome.string)
                         scrivendoNome = False
                         root = Tk()
@@ -363,12 +369,16 @@ while not finished:
                         path = root.filename
                         if len(path) == 0:
                             path = r"Immagini\/profilo.png"
+                            pygame.mixer.Sound.play(error)
                         jimmy = pygame.image.load(path)
                         Profilo.costume = jimmy
                         Profilo.cambiaCostume()
                         root.destroy()
+                        if path != r"Immagini\/profilo.png":
+                            pygame.mixer.Sound.play(success)
                     else:
                         TestoNome.string = "metti qualcosa"
+                        pygame.mixer.Sound.play(error)
                         TestoNome.blitText()
                         pygame.display.flip()
                         time.sleep(1)
