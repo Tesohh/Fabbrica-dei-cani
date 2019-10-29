@@ -67,9 +67,10 @@ quantitaTrasporto = 2
 numeroRandom = 0
 starting = False
 primaVolta = True
-schei = 0
+schei = 1
 dogOverflow = 0
 possibilitaDiScrivere = False
+nome = ""
 
 caratteri = "abcdefghijklmnopqrstuvwxyz1234567890"
 scrivendoNome = False
@@ -111,7 +112,7 @@ def blitBox(who):
 
 
 def mostraProfilo():
-    global primaVolta, schei, finished
+    global primaVolta, schei, finished, nome
 
     if TestoNome.string == "filviegg":
         Profilo.costume = easteregg 
@@ -148,6 +149,7 @@ def mostraProfilo():
             screen.blit(background, (0, 0))
             pygame.display.flip()
             TestoNome.blitText()
+            nome = TestoNome.string
             pygame.display.flip()
             time.sleep(5)
             finished = True
@@ -246,11 +248,42 @@ class Sprite:
         print(self.x, self.y)
 
     def upgrade(self):
-        global schei
+        global schei, nome
         if self.livello == 0 and schei >=1:
             schei -= 1
-            print("UPGRADE AL LV 1")
-        self.livello += 1
+            pygame.mixer.Sound.play(success)
+            self.livello += 1
+        
+        elif self.livello == 1 and schei >=2:
+            schei -= 1
+            pygame.mixer.Sound.play(success)
+            print("UPGRADE AL LV 2")
+            self.livello += 1
+        
+        elif self.livello == 2 and schei >=3:
+            schei -= 1
+            pygame.mixer.Sound.play(success)
+            print("UPGRADE AL LV 3")
+            self.livello += 1
+        
+        elif self.livello == 3 and schei >=5:
+            pygame.mixer.Sound.play(success)
+            schei -= 1
+            print("UPGRADE AL LV 4")
+            self.livello += 1
+
+        elif self.livello == 4 and schei >=10:
+            schei -= 1
+            pygame.mixer.Sound.play(success)
+            print("UPGRADE AL LV 5")
+            self.livello += 1
+        else:
+            pygame.mixer.Sound.play(error)
+            
+
+        
+        
+        
         
         
 
@@ -363,7 +396,7 @@ TestoNome = Text(70,0,32,black,"")
 
 CopriTestoF = Rectangle(48, 408, 122, 35, white)
 
-BottoneCasa = Sprite(540,0,60,60,r"Immagini\/casa_base_upgrade.png")
+BottoneCasa = Sprite(530,0,60,60,r"Immagini\/casa_base_upgrade.png")
 
 
                                                  
@@ -390,6 +423,7 @@ while not finished:
                         pygame.mixer.Sound.play(success)
                         print(TestoNome.string)
                         scrivendoNome = False
+
                         root = Tk()
                         root.filename =  filedialog.askopenfilename(initialdir = ".",title = "Scegli una foto",filetypes = (("foto",".png"),("foto",".jpg")))
                         path = root.filename
@@ -409,10 +443,11 @@ while not finished:
                         pygame.display.flip()
                         time.sleep(1)
                         TestoNome.string = ""
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
             upCasa = screen.blit(BottoneCasa.sprite, (BottoneCasa.x, BottoneCasa.y))
-            if upCasa.collidepoint(x, y) and Casa.livello == 0 and schei >= 1:
+            if upCasa.collidepoint(x, y):
                 Casa.upgrade()
                 
     # hitbox
@@ -570,6 +605,17 @@ while not finished:
     #muove la hitbox del camion
     Trasporto.hitbox = (Trasporto.x, Trasporto.y, Trasporto.larghezza, Trasporto.altezza)
     
+    if Casa.livello == 0 and caniInCasa >= 5: 
+        TestoCasa.color = red
+    if Casa.livello == 1 and caniInCasa >= 10: 
+        TestoCasa.color = red
+
+
+
+    else:
+        TestoCasa.color = black
+
+
     #muovi il testo del veicol
     TestoTrasporto.x = Trasporto.x
     TestoTrasporto.y = Trasporto.y - 30
