@@ -42,7 +42,19 @@ background = pygame.transform.scale(background, (600,600))
 
 jimmy = pygame.image.load(r"Immagini\/jimmyneutron.png")
 easteregg = pygame.image.load(r"Immagini\/easteregg.png")
-        
+
+
+casa_1 = pygame.image.load(r"Immagini\/casa_1.png")
+casa_2 = pygame.image.load(r"Immagini\/casa_2.png")
+casa_3 = pygame.image.load(r"Immagini\/casa_3.png")
+casa_4 = pygame.image.load(r"Immagini\/casa_4.png")
+casa_5 = pygame.image.load(r"Immagini\/casa_5.png")
+
+camion_1 = pygame.image.load(r"Immagini\/camion_1.png")
+camion_2 = pygame.image.load(r"Immagini\/camion_2.png")
+camion_3 = pygame.image.load(r"Immagini\/camion_3.png")
+camion_4 = pygame.image.load(r"Immagini\/camion_4.png")
+camion_5 = pygame.image.load(r"Immagini\/camion_5.png")
 
 
 
@@ -67,7 +79,7 @@ quantitaTrasporto = 2
 numeroRandom = 0
 starting = False
 primaVolta = True
-schei = 1
+schei = 100
 dogOverflow = 0
 possibilitaDiScrivere = False
 nome = ""
@@ -106,7 +118,16 @@ def blitBox(who):
         hitboxF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
         return hitboxF
         
-        
+def tooManyDogs(overflow):
+    global dogOverflow,caniInCasa,quantitaTrasporto
+
+    TestoCasa.color = red
+    dogOverflow = caniInCasa - overflow
+    print(dogOverflow)
+    caniInCasa = overflow
+    quantitaTrasporto += dogOverflow
+    TestoTrasporto.string = str(quantitaTrasporto)
+
     
         
 
@@ -136,23 +157,8 @@ def mostraProfilo():
         TestoNome.blitText()
         pygame.display.flip()
         time.sleep(1)
-        background = pygame.image.load(r"Immagini\/bsod.png")
+        TestoNome.string = "Scherzetto!!!!!"
         
-        TestoNome.string = "PREMI QUALCOSA PER USCIRE"
-        TestoNome.blitText()
-        pygame.display.flip()
-        if pressedKeys == [pygame.KEYDOWN]:
-            
-            TestoNome.string = "CIAO CIAO"
-            
-            background = pygame.image.load(r"Immagini\/bsod.png")
-            screen.blit(background, (0, 0))
-            pygame.display.flip()
-            TestoNome.blitText()
-            nome = TestoNome.string
-            pygame.display.flip()
-            time.sleep(5)
-            finished = True
         
         
     
@@ -247,33 +253,43 @@ class Sprite:
     def printaggio(self):
         print(self.x, self.y)
 
-    def upgrade(self):
+    def upgrade(self, costume):
         global schei, nome
         if self.livello == 0 and schei >=1:
             schei -= 1
             pygame.mixer.Sound.play(success)
             self.livello += 1
+            self.costume = costume
+            self.cambiaCostume()
         
         elif self.livello == 1 and schei >=2:
-            schei -= 1
+            schei -= 2
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 2")
+            self.costume = costume
+            self.cambiaCostume()
             self.livello += 1
         
         elif self.livello == 2 and schei >=3:
-            schei -= 1
+            schei -= 3
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 3")
+            self.costume = costume
+            self.cambiaCostume()
             self.livello += 1
         
         elif self.livello == 3 and schei >=5:
             pygame.mixer.Sound.play(success)
-            schei -= 1
+            schei -= 5
+            self.costume = costume
+            self.cambiaCostume()
             print("UPGRADE AL LV 4")
             self.livello += 1
 
         elif self.livello == 4 and schei >=10:
-            schei -= 1
+            schei -= 10
+            self.costume = costume
+            self.cambiaCostume()
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 5")
             self.livello += 1
@@ -397,6 +413,7 @@ TestoNome = Text(70,0,32,black,"")
 CopriTestoF = Rectangle(48, 408, 122, 35, white)
 
 BottoneCasa = Sprite(530,0,60,60,r"Immagini\/casa_base_upgrade.png")
+BottoneCamion = Sprite(460,0,60,60,r"Immagini\/camion_upgrade.png")
 
 
                                                  
@@ -447,17 +464,57 @@ while not finished:
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
             upCasa = screen.blit(BottoneCasa.sprite, (BottoneCasa.x, BottoneCasa.y))
+            upCamion = screen.blit(BottoneCamion.sprite,(BottoneCamion.x,BottoneCamion.y))
             if upCasa.collidepoint(x, y):
-                Casa.upgrade()
-                
+                if Casa.livello == 0:
+                    Casa.upgrade(casa_1)
+                    TestoCasa.color = black
+                elif Casa.livello == 1:
+                    Casa.upgrade(casa_2)
+                    TestoCasa.color = black
+                elif Casa.livello == 2:
+                    Casa.upgrade(casa_3)
+                    TestoCasa.color = black
+                elif Casa.livello == 3:
+                    Casa.upgrade(casa_4)
+                    TestoCasa.color = black
+                elif Casa.livello == 4:
+                    Casa.upgrade(casa_5)
+                    TestoCasa.color = black
+                else:
+                    pygame.mixer.Sound.play(error)
+
+            if upCamion.collidepoint(x,y):
+                if Trasporto.livello == 0:
+                    Trasporto.upgrade(camion_1)
+                    TestoCasa.color = black
+                elif Trasporto.livello == 1:
+                    Trasporto.upgrade(camion_2)
+                    TestoCasa.color = black
+                elif Trasporto.livello == 2:
+                    Trasporto.upgrade(camion_3)
+                    TestoCasa.color = black
+                elif Trasporto.livello == 3:
+                    Trasporto.upgrade(camion_4)
+                    TestoCasa.color = black
+                    Trasporto.larghezza = 80
+                    Trasporto.altezza = 65
+                    Trasporto.y -= 60
+                    Trasporto.cambiaCostume()
+                elif Trasporto.livello == 4:
+                    Trasporto.upgrade(camion_5)
+                    TestoCasa.color = black
+                    Trasporto.larghezza = 80
+                    Trasporto.altezza = 80
+                    Trasporto.cambiaCostume()
+                else:
+                    pygame.mixer.Sound.play(error)
+
+
     # hitbox
     hitboxCamion = blitBox("camion")
     hitboxCasa = blitBox("casa")
     hitboxFabbrica = blitBox("fabbrica")
-
-    
-
-
 
     # aggiungere gli sprite al gioco
     screen.blit(background, (0, 0))
@@ -466,6 +523,7 @@ while not finished:
     Trasporto.blittaggio()
 
     BottoneCasa.blittaggio()
+    BottoneCamion.blittaggio()
     
 
     # screen.blit(Trasporto.sprite, (Trasporto.x, Trasporto.y))
@@ -508,7 +566,18 @@ while not finished:
 
 
             if daDove == "casa":
-                Trasporto.x -= 1
+                if Trasporto.livello == 0:
+                    Trasporto.x -= .5
+                if Trasporto.livello == 1:
+                    Trasporto.x -= 1
+                elif Trasporto.livello == 2:
+                    Trasporto.x -= 1.5
+                elif Trasporto.livello == 3:
+                    Trasporto.x -= 2.5
+                elif Trasporto.livello == 4:
+                    Trasporto.x -= 4
+                elif Trasporto.livello == 5:
+                    Trasporto.x -= 10
 
 
                 # cambia il testo del trasporto
@@ -557,7 +626,18 @@ while not finished:
             
             # se sto arrivando dalla fabbrica
             elif daDove == "fabbrica":
-                Trasporto.x += 1
+                if Trasporto.livello == 0:
+                    Trasporto.x += .5
+                if Trasporto.livello == 1:
+                    Trasporto.x += 1
+                elif Trasporto.livello == 2:
+                    Trasporto.x += 1.5
+                elif Trasporto.livello == 3:
+                    Trasporto.x += 2.5
+                elif Trasporto.livello == 4:
+                    Trasporto.x += 4
+                elif Trasporto.livello == 5:
+                    Trasporto.x += 10
                 
                 if not hitboxCamion.colliderect(hitboxCasa) and not hitboxCamion.colliderect(hitboxCasa):
                     TestoFabbrica.string = "Fermo"
@@ -585,14 +665,20 @@ while not finished:
                         tutorialSlide = 9
 
                     if Casa.livello == 0 and caniInCasa >= 5: #basta copiare per i prossimi livelli
-                        TestoCasa.color = red
-                        dogOverflow = caniInCasa - 5
-                        print(dogOverflow)
-                        caniInCasa = 5
-                        quantitaTrasporto += dogOverflow
-                        TestoTrasporto.string = str(quantitaTrasporto)
-                    else:
-                        TestoCasa.color = black
+                        tooManyDogs(5)
+                       
+
+
+                    elif Casa.livello == 1 and caniInCasa >= 10: 
+                        tooManyDogs(10)
+                    elif Casa.livello == 2 and caniInCasa >= 25: 
+                        tooManyDogs(25)
+                    elif Casa.livello == 3 and caniInCasa >= 40: 
+                        tooManyDogs(40)
+                    elif Casa.livello == 4 and caniInCasa >= 50: 
+                        tooManyDogs(50)
+                    elif Casa.livello == 5 and caniInCasa >= 100: 
+                        tooManyDogs(100)
 
 
              
@@ -609,11 +695,15 @@ while not finished:
         TestoCasa.color = red
     if Casa.livello == 1 and caniInCasa >= 10: 
         TestoCasa.color = red
-
-
-
-    else:
-        TestoCasa.color = black
+    if Casa.livello == 2 and caniInCasa >= 25: 
+        TestoCasa.color = red
+    if Casa.livello == 3 and caniInCasa >= 40: 
+        TestoCasa.color = red
+    if Casa.livello == 4 and caniInCasa >= 50: 
+        TestoCasa.color = red
+    if Casa.livello == 5 and caniInCasa >= 100: 
+        TestoCasa.color = red
+        
 
 
     #muovi il testo del veicol
