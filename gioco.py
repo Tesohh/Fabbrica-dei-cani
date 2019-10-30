@@ -9,6 +9,8 @@ import random
 from genera_nome_cane import generaNome
 from tkinter import filedialog
 from tkinter import Tk
+import pickle
+
 
 #============================================================================================
 #PRELIMINARI
@@ -228,6 +230,23 @@ def mostraTutorial(boolean):
     return giocoIniziato
     
 
+def salva():
+    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path
+    pickle.dump(caniInCasa, open("caniInCasa.dat", "wb"))
+    pickle.dump(caniTrasportati,open("caniTrasportati.dat","wb"))
+    pickle.dump(nome,open("nome.dat","wb"))
+    pickle.dump(path,open("fotoprofilo.dat", "wb"))
+    pickle.dump(Casa.livello,open("CasaLivello.dat", "wb"))
+    pickle.dump(Trasporto.livello,open("TrasportoLivello.dat", "wb"))
+    pickle.dump(Fabbrica.livello,open("FabbricaLivello.dat", "wb"))
+    pickle.dump(schei, open("schei.dat", "wb"))
+
+def carica():
+    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei
+    caniInCasa = pickle.load(open("caniInCasa.dat", "rb")) 
+    print(caniInCasa)
+
+
 
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
@@ -422,6 +441,9 @@ BottoneCasa = Sprite(530,0,60,60,r"Immagini\/casa_base_upgrade.png")
 BottoneCamion = Sprite(460,0,60,60,r"Immagini\/camion_upgrade.png")
 BottoneFabbrica = Sprite(390,0,60,60,r"Immagini\/fabbrica_upgrade.png")
 
+BottoneSalva = Sprite(320,0,60,60,r"Immagini\/salva.png")
+BottoneCarica = Sprite(250,0,60,60,r"Immagini\/carica.png")
+
 
                                                  
 #==========================================================================================
@@ -473,6 +495,8 @@ while not finished:
             upCasa = screen.blit(BottoneCasa.sprite, (BottoneCasa.x, BottoneCasa.y))
             upCamion = screen.blit(BottoneCamion.sprite,(BottoneCamion.x,BottoneCamion.y))
             upFabbrica = screen.blit(BottoneFabbrica.sprite,(BottoneFabbrica.x,BottoneFabbrica.y))
+            salvataggiatore = screen.blit(BottoneSalva.sprite,(BottoneSalva.x,BottoneSalva.y))
+            caricatore = screen.blit(BottoneCarica.sprite,(BottoneCarica.x,BottoneCarica.y))
             if upCasa.collidepoint(x, y):
                 if Casa.livello == 0:
                     Casa.upgrade(casa_1)
@@ -529,6 +553,10 @@ while not finished:
                     Fabbrica.cambiaCostume()
                 else:
                     pygame.mixer.Sound.play(error)
+            if salvataggiatore.collidepoint(x,y):
+                salva()
+            if caricatore.collidepoint(x,y):
+                carica()
                     
 
 
@@ -549,6 +577,9 @@ while not finished:
         BottoneCamion.blittaggio()
     if Fabbrica.livello != 5:
         BottoneFabbrica.blittaggio()
+    
+    BottoneSalva.blittaggio()
+    BottoneCarica.blittaggio()
     
 
     # screen.blit(Trasporto.sprite, (Trasporto.x, Trasporto.y))
