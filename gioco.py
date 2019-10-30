@@ -56,6 +56,12 @@ camion_3 = pygame.image.load(r"Immagini\/camion_3.png")
 camion_4 = pygame.image.load(r"Immagini\/camion_4.png")
 camion_5 = pygame.image.load(r"Immagini\/camion_5.png")
 
+fabbrica_1 = pygame.image.load(r"Immagini\/fabbrica_1.png")
+fabbrica_2 = pygame.image.load(r"Immagini\/fabbrica_2.png")
+fabbrica_3 = pygame.image.load(r"Immagini\/fabbrica_3.png")
+fabbrica_4 = pygame.image.load(r"Immagini\/fabbrica_4.png")
+fabbrica_5 = pygame.image.load(r"Immagini\/fabbrica_5.png")
+
 
 
 # banana = pygame.image.load(r"banana.png")
@@ -414,6 +420,7 @@ CopriTestoF = Rectangle(48, 408, 122, 35, white)
 
 BottoneCasa = Sprite(530,0,60,60,r"Immagini\/casa_base_upgrade.png")
 BottoneCamion = Sprite(460,0,60,60,r"Immagini\/camion_upgrade.png")
+BottoneFabbrica = Sprite(390,0,60,60,r"Immagini\/fabbrica_upgrade.png")
 
 
                                                  
@@ -465,6 +472,7 @@ while not finished:
             x, y = event.pos
             upCasa = screen.blit(BottoneCasa.sprite, (BottoneCasa.x, BottoneCasa.y))
             upCamion = screen.blit(BottoneCamion.sprite,(BottoneCamion.x,BottoneCamion.y))
+            upFabbrica = screen.blit(BottoneFabbrica.sprite,(BottoneFabbrica.x,BottoneFabbrica.y))
             if upCasa.collidepoint(x, y):
                 if Casa.livello == 0:
                     Casa.upgrade(casa_1)
@@ -483,32 +491,45 @@ while not finished:
                     TestoCasa.color = black
                 else:
                     pygame.mixer.Sound.play(error)
-
-            if upCamion.collidepoint(x,y):
+            if upCamion.collidepoint(x, y):
                 if Trasporto.livello == 0:
                     Trasporto.upgrade(camion_1)
-                    TestoCasa.color = black
                 elif Trasporto.livello == 1:
                     Trasporto.upgrade(camion_2)
-                    TestoCasa.color = black
                 elif Trasporto.livello == 2:
                     Trasporto.upgrade(camion_3)
-                    TestoCasa.color = black
                 elif Trasporto.livello == 3:
                     Trasporto.upgrade(camion_4)
-                    TestoCasa.color = black
+                    Trasporto.y -= 60
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 65
-                    Trasporto.y -= 60
                     Trasporto.cambiaCostume()
                 elif Trasporto.livello == 4:
                     Trasporto.upgrade(camion_5)
-                    TestoCasa.color = black
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 80
                     Trasporto.cambiaCostume()
                 else:
                     pygame.mixer.Sound.play(error)
+
+            if upFabbrica.collidepoint(x,y):
+                if Fabbrica.livello == 0:
+                    Fabbrica.upgrade(fabbrica_1)
+                elif Fabbrica.livello == 1:
+                    Fabbrica.upgrade(fabbrica_2)
+                elif Fabbrica.livello == 2:
+                    Fabbrica.upgrade(fabbrica_3)
+                elif Fabbrica.livello == 3:
+                    Fabbrica.upgrade(fabbrica_4)
+                elif Fabbrica.livello == 4:
+                    Fabbrica.upgrade(fabbrica_5)
+                    Fabbrica.larghezza += 15
+                    Fabbrica.altezza += 15
+                    Fabbrica.x -= 10
+                    Fabbrica.cambiaCostume()
+                else:
+                    pygame.mixer.Sound.play(error)
+                    
 
 
     # hitbox
@@ -522,8 +543,12 @@ while not finished:
     Casa.blittaggio()
     Trasporto.blittaggio()
 
-    BottoneCasa.blittaggio()
-    BottoneCamion.blittaggio()
+    if Casa.livello != 5:
+        BottoneCasa.blittaggio()
+    if Trasporto.livello != 5:
+        BottoneCamion.blittaggio()
+    if Fabbrica.livello != 5:
+        BottoneFabbrica.blittaggio()
     
 
     # screen.blit(Trasporto.sprite, (Trasporto.x, Trasporto.y))
@@ -614,8 +639,21 @@ while not finished:
                     caniTrasportati = True
                     
                     # crea un numero random, assegnalo a quantita trasporto e cambia il testo di TestoTRasporto
-                    numeroRandom = random.randint(1,3)
-                    quantitaTrasporto += 2 + numeroRandom
+                    if Fabbrica.livello == 0:
+                        numeroRandom = 1
+                    if Fabbrica.livello == 1:
+                        numeroRandom = random.randint(1,2)
+                    if Fabbrica.livello == 2:
+                        numeroRandom = random.randint(1,3)
+                    if Fabbrica.livello == 3:
+                        numeroRandom = random.randint(2,3)
+                    if Fabbrica.livello == 4:
+                        numeroRandom = 3
+                    if Fabbrica.livello == 5:
+                        numeroRandom = random.randint(3,4)
+
+
+                    quantitaTrasporto += numeroRandom
                     TestoTrasporto.string = str(quantitaTrasporto)
 
                     if primaVolta:
@@ -666,9 +704,6 @@ while not finished:
 
                     if Casa.livello == 0 and caniInCasa >= 5: #basta copiare per i prossimi livelli
                         tooManyDogs(5)
-                       
-
-
                     elif Casa.livello == 1 and caniInCasa >= 10: 
                         tooManyDogs(10)
                     elif Casa.livello == 2 and caniInCasa >= 25: 
