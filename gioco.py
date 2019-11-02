@@ -509,8 +509,7 @@ BottoneCasa = Sprite(530,0,60,60,r"Immagini\/casa_base_upgrade.png")
 BottoneCamion = Sprite(460,0,60,60,r"Immagini\/camion_upgrade.png")
 BottoneFabbrica = Sprite(390,0,60,60,r"Immagini\/fabbrica_upgrade.png")
 
-BottoneSalva = Sprite(320,0,60,60,r"Immagini\/salva.png")
-BottoneCarica = Sprite(250,0,60,60,r"Immagini\/carica.png")
+
 
 
                                                  
@@ -519,13 +518,21 @@ BottoneCarica = Sprite(250,0,60,60,r"Immagini\/carica.png")
 
 finished = False
 
+if os.path.exists('caniInCasa.dat'):
+    carica()
+    print("Esiste, carico i salvataggi vecchi")
+else:
+    salva()
+    print("Non esiste, creo salvataggi nuovi")
+
 
 
 while not finished:
     for event in pygame.event.get():
         # print(event)
-        if event.type == pygame.QUIT: #quando si preme la X
-            finished = True           #chiudi
+        if event.type == pygame.QUIT: #quando si preme la X chiudi e salva
+            salva()
+            finished = True           
         if scrivendoNome:
             if event.type == pygame.KEYDOWN:
                 TestoNome.aggiungiCarattere(pygame.key.name(event.key)) 
@@ -563,8 +570,7 @@ while not finished:
             upCasa = screen.blit(BottoneCasa.sprite, (BottoneCasa.x, BottoneCasa.y))
             upCamion = screen.blit(BottoneCamion.sprite,(BottoneCamion.x,BottoneCamion.y))
             upFabbrica = screen.blit(BottoneFabbrica.sprite,(BottoneFabbrica.x,BottoneFabbrica.y))
-            salvataggiatore = screen.blit(BottoneSalva.sprite,(BottoneSalva.x,BottoneSalva.y))
-            caricatore = screen.blit(BottoneCarica.sprite,(BottoneCarica.x,BottoneCarica.y))
+            
             if upCasa.collidepoint(x, y):
                 if Casa.livello == 0:
                     Casa.upgrade(casa_1)
@@ -621,10 +627,6 @@ while not finished:
                     Fabbrica.cambiaCostume()
                 else:
                     pygame.mixer.Sound.play(error)
-            if salvataggiatore.collidepoint(x,y):
-                salva()
-            if caricatore.collidepoint(x,y):
-                carica()
                     
 
 
@@ -646,8 +648,7 @@ while not finished:
     if Fabbrica.livello != 5:
         BottoneFabbrica.blittaggio()
     
-    BottoneSalva.blittaggio()
-    BottoneCarica.blittaggio()
+    
     
 
     # screen.blit(Trasporto.sprite, (Trasporto.x, Trasporto.y))
