@@ -10,6 +10,9 @@ from genera_nome_cane import generaNome
 from tkinter import filedialog
 from tkinter import Tk
 import pickle
+import os.path
+
+
 
 
 #============================================================================================
@@ -29,6 +32,7 @@ pygame.display.set_icon(icona)
 screen = pygame.display.set_mode((600,600)) #impostiamo le dimensioni della finestra
 
 font = pygame.font.Font(r"Font\/noto.ttf", 28)
+
 
 
 
@@ -85,12 +89,13 @@ giocoIniziato = False
 caniTrasportati = False
 quantitaTrasporto = 2
 numeroRandom = 0
-starting = False
+starting = True
 primaVolta = True
 schei = 100
 dogOverflow = 0
 possibilitaDiScrivere = False
 nome = ""
+path = r"Immagini\/profilo.png"
 
 caratteri = "abcdefghijklmnopqrstuvwxyz1234567890"
 scrivendoNome = False
@@ -166,10 +171,6 @@ def mostraProfilo():
         pygame.display.flip()
         time.sleep(1)
         TestoNome.string = "Scherzetto!!!!!"
-        
-        
-        
-    
     Profilo.blittaggio()
     TestoSchei.blitText()
     TestoSchei.string = str(schei)
@@ -231,22 +232,84 @@ def mostraTutorial(boolean):
     
 
 def salva():
-    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path
+    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path,TestoNome
     pickle.dump(caniInCasa, open("caniInCasa.dat", "wb"))
     pickle.dump(caniTrasportati,open("caniTrasportati.dat","wb"))
-    pickle.dump(nome,open("nome.dat","wb"))
+
+    pickle.dump(TestoNome.string,open("nome.dat","wb"))
     pickle.dump(path,open("fotoprofilo.dat", "wb"))
+
     pickle.dump(Casa.livello,open("CasaLivello.dat", "wb"))
     pickle.dump(Trasporto.livello,open("TrasportoLivello.dat", "wb"))
     pickle.dump(Fabbrica.livello,open("FabbricaLivello.dat", "wb"))
+
     pickle.dump(schei, open("schei.dat", "wb"))
 
 def carica():
-    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei
+    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path
     caniInCasa = pickle.load(open("caniInCasa.dat", "rb")) 
-    print(caniInCasa)
+    caniTrasportati = pickle.load(open("caniTrasportati.dat","rb"))
+
+    TestoNome.string = pickle.load(open("nome.dat","rb"))
+    path = pickle.load(open("fotoprofilo.dat", "rb"))
+    jimmy = pygame.image.load(path)
+    Profilo.costume = jimmy
+    Profilo.cambiaCostume()
+
+    Casa.livello = pickle.load(open("CasaLivello.dat", "rb"))
+    Trasporto.livello = pickle.load(open("TrasportoLivello.dat", "rb"))
+    Fabbrica.livello = pickle.load(open("FabbricaLivello.dat", "rb"))
+
+    if Casa.livello == 1:
+        Casa.costume = casa_1
+        Casa.cambiaCostume()
+    if Casa.livello == 2:
+        Casa.costume = casa_2
+        Casa.cambiaCostume()
+    if Casa.livello == 3:
+        Casa.costume = casa_3
+        Casa.cambiaCostume()
+    if Casa.livello == 4:
+        Casa.costume = casa_4
+        Casa.cambiaCostume()
+    if Casa.livello == 5:
+        Casa.costume = casa_5
+        Casa.cambiaCostume()
+    
+    if Fabbrica.livello == 1:
+        Fabbrica.costume = fabbrica_1
+        Fabbrica.cambiaCostume()
+    if Fabbrica.livello == 2:
+        Fabbrica.costume = fabbrica_2
+        Fabbrica.cambiaCostume()
+    if Fabbrica.livello == 3:
+        Fabbrica.costume = fabbrica_3
+        Fabbrica.cambiaCostume()
+    if Fabbrica.livello == 4:
+        Fabbrica.costume = fabbrica_4
+        Fabbrica.cambiaCostume()
+    if Fabbrica.livello == 5:
+        Fabbrica.costume = fabbrica_5
+        Fabbrica.cambiaCostume()
+
+    if Trasporto.livello == 1:
+        Trasporto.costume = camion_1
+        Trasporto.cambiaCostume()
+    if Trasporto.livello == 2:
+        Trasporto.costume = camion_2
+        Trasporto.cambiaCostume()
+    if Trasporto.livello == 3:
+        Trasporto.costume = camion_3
+        Trasporto.cambiaCostume()
+    if Trasporto.livello == 4:
+        Trasporto.costume = camion_4
+        Trasporto.cambiaCostume()
+    if Trasporto.livello == 5:
+        Trasporto.costume = camion_5
+        Trasporto.cambiaCostume()
 
 
+    schei = pickle.load(open("schei.dat", "rb"))
 
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
@@ -320,6 +383,11 @@ class Sprite:
             self.livello += 1
         else:
             pygame.mixer.Sound.play(error)
+
+    def ricaricaCostume(self,costume):
+        self.costume = costume
+        self.cambiaCostume()
+        
             
 
         
