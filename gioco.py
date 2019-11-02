@@ -80,6 +80,7 @@ orange = (255,165,0)
 yellow = (255,255,0)
 
 frame = pygame.time.Clock()
+staScrivendo = True
 fabbricaRaggiunta = False
 casaRaggiunta = False
 daDove = "casa"
@@ -232,7 +233,7 @@ def mostraTutorial(boolean):
     
 
 def salva():
-    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path,TestoNome
+    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path,TestoNome,scrivendoNome
     pickle.dump(caniInCasa, open("caniInCasa.dat", "wb"))
     pickle.dump(caniTrasportati,open("caniTrasportati.dat","wb"))
 
@@ -245,8 +246,10 @@ def salva():
 
     pickle.dump(schei, open("schei.dat", "wb"))
 
+    pickle.dump(scrivendoNome,open("possibilitaDiScrivere.dat", "wb"))
+
 def carica():
-    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path
+    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path, scrivendoNome
     caniInCasa = pickle.load(open("caniInCasa.dat", "rb")) 
     caniTrasportati = pickle.load(open("caniTrasportati.dat","rb"))
 
@@ -259,6 +262,7 @@ def carica():
     Casa.livello = pickle.load(open("CasaLivello.dat", "rb"))
     Trasporto.livello = pickle.load(open("TrasportoLivello.dat", "rb"))
     Fabbrica.livello = pickle.load(open("FabbricaLivello.dat", "rb"))
+    scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
 
     if Casa.livello == 1:
         Casa.costume = casa_1
@@ -308,6 +312,14 @@ def carica():
         Trasporto.costume = camion_5
         Trasporto.cambiaCostume()
 
+
+    nome = TestoNome.string
+
+    if len(nome) > 0: #questo blocco di codice non viene leto
+        scrivendoNome = False
+        print(nome)
+    else:
+        print("siu")
 
     schei = pickle.load(open("schei.dat", "rb"))
 
