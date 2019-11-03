@@ -304,6 +304,9 @@ def carica():
         Fabbrica.costume = fabbrica_4
         Fabbrica.cambiaCostume()
     if Fabbrica.livello == 5:
+        Fabbrica.larghezza += 15
+        Fabbrica.altezza += 15
+        Fabbrica.x -= 10
         Fabbrica.costume = fabbrica_5
         Fabbrica.cambiaCostume()
 
@@ -318,10 +321,19 @@ def carica():
         Trasporto.cambiaCostume()
     if Trasporto.livello == 4:
         Trasporto.costume = camion_4
+        Trasporto.y -= 60
+        Trasporto.larghezza = 80
+        Trasporto.altezza = 65
         Trasporto.cambiaCostume()
+
     if Trasporto.livello == 5:
         Trasporto.costume = camion_5
+        Trasporto.y -= 60
+        Trasporto.larghezza = 80
+        Trasporto.altezza = 80
         Trasporto.cambiaCostume()
+        
+               
 
 
     nome = TestoNome.string
