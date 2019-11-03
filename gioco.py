@@ -87,6 +87,7 @@ daDove = "casa"
 tutorialSlide = 0
 caniInCasa = 0
 giocoIniziato = False
+tutorialFinito = False  
 caniTrasportati = False
 quantitaTrasporto = 2
 numeroRandom = 0
@@ -99,7 +100,7 @@ nome = ""
 path = r"Immagini\/profilo.png"
 
 caratteri = "abcdefghijklmnopqrstuvwxyz1234567890"
-scrivendoNome = False
+scrivendoNome = True
 
 woof = pygame.mixer.Sound(r"Suoni\/woof.wav")
 microWoof = pygame.mixer.Sound(r"Suoni\/woofHigh.wav")
@@ -147,7 +148,7 @@ def tooManyDogs(overflow):
 
 
 def mostraProfilo():
-    global primaVolta, schei, finished, nome
+    global primaVolta, schei, finished, nome, Casa, Fabbrica, Trasporto
 
     if TestoNome.string == "filviegg":
         Profilo.costume = easteregg 
@@ -176,64 +177,73 @@ def mostraProfilo():
     TestoSchei.blitText()
     TestoSchei.string = str(schei)
     Coin.blittaggio()
+    if Casa.livello != 5:
+        BottoneCasa.blittaggio()
+    if Trasporto.livello != 5:
+        BottoneCamion.blittaggio()
+    if Fabbrica.livello != 5:
+        BottoneFabbrica.blittaggio()
     return finished
 
 def mostraTutorial(boolean):
     """ Valori accettati (0,1) """
-    global tutorialSlide, giocoIniziato, scrivendoNome, possibilitaDiScrivere
-    if boolean:
-        if tutorialSlide != 10:
-            if pressedKeys[pygame.K_k] == 1:
-                if tutorialSlide != 7 and tutorialSlide != 8:
-                    print("prossimo")
-                    tutorialSlide += 1
-                    time.sleep(0.3)
-                    # cambia il testo del tutorial
-        if tutorialSlide == 1:
-            TestoTutorial.string = "In questo gioco dovrai ottenere"
-        elif tutorialSlide == 2:
-            TestoTutorial.string = "100 cani di cui 5 perfetti,"
-        elif tutorialSlide == 3:
-            TestoTutorial.string = "quindi con tutti gli stat"
-        elif tutorialSlide == 4:
-            TestoTutorial.string = "maggiori di 8."
-        elif tutorialSlide == 5:
-            TestoTutorial.string = "Iniziamo!!!"
-        elif tutorialSlide == 6:
-            TestoCasa.string = "2"
-            TestoTutorial.string = "Adesso hai due cani."
-        elif tutorialSlide == 7:
-            TestoTutorial.string = "Portali alla fabbrica con [SPAZIO]" 
-            giocoIniziato = True  
-        elif tutorialSlide == 8:
-            TestoTutorial.string = "Portali in casa con [SPAZIO]"
-        elif tutorialSlide == 9:
-            TestoTutorial.string = "Bravo! Adesso ti lascio. CIAO! [k]"
-        elif tutorialSlide == 10:
-            mostraProfilo()
-            if not possibilitaDiScrivere:
-                scrivendoNome = True
-                possibilitaDiScrivere = True
+    global tutorialSlide, giocoIniziato, scrivendoNome, possibilitaDiScrivere, tutorialFinito
+    if not tutorialFinito:
+        if boolean:
+            if tutorialSlide != 10:
+                if pressedKeys[pygame.K_k] == 1:
+                    if tutorialSlide != 7 and tutorialSlide != 8:
+                        print("prossimo")
+                        tutorialSlide += 1
+                        time.sleep(0.3)
+                        # cambia il testo del tutorial
+            if tutorialSlide == 1:
+                TestoTutorial.string = "In questo gioco dovrai ottenere"
+            elif tutorialSlide == 2:
+                TestoTutorial.string = "100 cani di cui 5 perfetti,"
+            elif tutorialSlide == 3:
+                TestoTutorial.string = "quindi con tutti gli stat"
+            elif tutorialSlide == 4:
+                TestoTutorial.string = "maggiori di 8."
+            elif tutorialSlide == 5:
+                TestoTutorial.string = "Iniziamo!!!"
+            elif tutorialSlide == 6:
+                TestoCasa.string = "2"
+                TestoTutorial.string = "Adesso hai due cani."
+            elif tutorialSlide == 7:
+                TestoTutorial.string = "Portali alla fabbrica con [SPAZIO]" 
+                giocoIniziato = True  
+            elif tutorialSlide == 8:
+                TestoTutorial.string = "Portali in casa con [SPAZIO]"
+            elif tutorialSlide == 9:
+                TestoTutorial.string = "Bravo! Adesso ti lascio. CIAO! [k]"
+            elif tutorialSlide == 10:
+                mostraProfilo()
+                tutorialFinito = True 
+                if not possibilitaDiScrivere:
+                    scrivendoNome = True
+                    possibilitaDiScrivere = True
+                    TestoNome.string = ""
+                
             
-        
-        if tutorialSlide < 6:
-            if pressedKeys[pygame.K_p] == 1:
-                if tutorialSlide != 7:
-                    tutorialSlide = 6
-                    print("Premi K per completare il saltamento")
-                    time.sleep(0.1)  
+            if tutorialSlide < 6:
+                if pressedKeys[pygame.K_p] == 1:
+                    if tutorialSlide != 7:
+                        tutorialSlide = 6
+                        print("Premi K per completare il saltamento")
+                        time.sleep(0.1)  
     else:
         giocoIniziato = True
         tutorialSlide = 10
         mostraProfilo()
         if not possibilitaDiScrivere:
-            scrivendoNome = True
+            scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
             possibilitaDiScrivere = True
     return giocoIniziato
     
 
 def salva():
-    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path,TestoNome,scrivendoNome
+    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path,TestoNome,scrivendoNome, tutorialFinito
     pickle.dump(caniInCasa, open("caniInCasa.dat", "wb"))
     pickle.dump(caniTrasportati,open("caniTrasportati.dat","wb"))
 
@@ -247,9 +257,10 @@ def salva():
     pickle.dump(schei, open("schei.dat", "wb"))
 
     pickle.dump(scrivendoNome,open("possibilitaDiScrivere.dat", "wb"))
+    pickle.dump(tutorialFinito, open("tutorialFinito.dat", "wb"))
 
 def carica():
-    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path, scrivendoNome
+    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path, scrivendoNome, tutorialFinito
     caniInCasa = pickle.load(open("caniInCasa.dat", "rb")) 
     caniTrasportati = pickle.load(open("caniTrasportati.dat","rb"))
 
@@ -314,14 +325,8 @@ def carica():
 
 
     nome = TestoNome.string
-
-    if len(nome) > 0: #questo blocco di codice non viene leto
-        scrivendoNome = False
-        print(nome)
-    else:
-        print("siu")
-
     schei = pickle.load(open("schei.dat", "rb"))
+    tutorialFinito = pickle.load(open("tutorialFinito.dat", "rb"))
 
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
@@ -653,12 +658,7 @@ while not finished:
     Casa.blittaggio()
     Trasporto.blittaggio()
 
-    if Casa.livello != 5:
-        BottoneCasa.blittaggio()
-    if Trasporto.livello != 5:
-        BottoneCamion.blittaggio()
-    if Fabbrica.livello != 5:
-        BottoneFabbrica.blittaggio()
+    
     
     
     
@@ -674,7 +674,7 @@ while not finished:
     # mouseHitbox = blitBox("mouse")
 
     # decidi se mostrare o no il tutorial bool 0 / 1
-    mostraTutorial(0)
+    mostraTutorial(1)
     
     
     
