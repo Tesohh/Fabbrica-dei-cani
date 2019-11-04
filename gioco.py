@@ -56,17 +56,38 @@ casa_3 = pygame.image.load(r"Immagini\/casa_3.png")
 casa_4 = pygame.image.load(r"Immagini\/casa_4.png")
 casa_5 = pygame.image.load(r"Immagini\/casa_5.png")
 
+casa_upgrade_1 = pygame.image.load(r"Immagini\/casa_upgrade_1.png") 
+casa_upgrade_2 = pygame.image.load(r"Immagini\/casa_upgrade_2.png") 
+casa_upgrade_3 = pygame.image.load(r"Immagini\/casa_upgrade_3.png") 
+casa_upgrade_4 = pygame.image.load(r"Immagini\/casa_upgrade_4.png") 
+casa_upgrade_5 = pygame.image.load(r"Immagini\/casa_upgrade_5.png") 
+casa_upgrade_max = pygame.image.load(r"Immagini\/casa_upgrade_max.png") 
+
 camion_1 = pygame.image.load(r"Immagini\/camion_1.png")
 camion_2 = pygame.image.load(r"Immagini\/camion_2.png")
 camion_3 = pygame.image.load(r"Immagini\/camion_3.png")
 camion_4 = pygame.image.load(r"Immagini\/camion_4.png")
 camion_5 = pygame.image.load(r"Immagini\/camion_5.png")
 
+camion_upgrade_1 = pygame.image.load(r"Immagini\/camion_upgrade_1.png") 
+camion_upgrade_2 = pygame.image.load(r"Immagini\/camion_upgrade_2.png") 
+camion_upgrade_3 = pygame.image.load(r"Immagini\/camion_upgrade_3.png") 
+camion_upgrade_4 = pygame.image.load(r"Immagini\/camion_upgrade_4.png") 
+camion_upgrade_5 = pygame.image.load(r"Immagini\/camion_upgrade_5.png") 
+camion_upgrade_max = pygame.image.load(r"Immagini\/camion_upgrade_max.png") 
+
 fabbrica_1 = pygame.image.load(r"Immagini\/fabbrica_1.png")
 fabbrica_2 = pygame.image.load(r"Immagini\/fabbrica_2.png")
 fabbrica_3 = pygame.image.load(r"Immagini\/fabbrica_3.png")
 fabbrica_4 = pygame.image.load(r"Immagini\/fabbrica_4.png")
 fabbrica_5 = pygame.image.load(r"Immagini\/fabbrica_5.png")
+
+fabbrica_upgrade_1 = pygame.image.load(r"Immagini\/fabbrica_upgrade_1.png") 
+fabbrica_upgrade_2 = pygame.image.load(r"Immagini\/fabbrica_upgrade_2.png") 
+fabbrica_upgrade_3 = pygame.image.load(r"Immagini\/fabbrica_upgrade_3.png") 
+fabbrica_upgrade_4 = pygame.image.load(r"Immagini\/fabbrica_upgrade_4.png") 
+fabbrica_upgrade_5 = pygame.image.load(r"Immagini\/fabbrica_upgrade_5.png") 
+fabbrica_upgrade_max = pygame.image.load(r"Immagini\/fabbrica_upgrade_max.png") 
 
 
 
@@ -93,7 +114,7 @@ quantitaTrasporto = 2
 numeroRandom = 0
 starting = True
 primaVolta = True
-schei = 100
+schei = 1
 dogOverflow = 0
 possibilitaDiScrivere = False
 nome = ""
@@ -177,12 +198,10 @@ def mostraProfilo():
     TestoSchei.blitText()
     TestoSchei.string = str(schei)
     Coin.blittaggio()
-    if Casa.livello != 5:
-        BottoneCasa.blittaggio()
-    if Trasporto.livello != 5:
-        BottoneCamion.blittaggio()
-    if Fabbrica.livello != 5:
-        BottoneFabbrica.blittaggio()
+
+    BottoneCasa.blittaggio()
+    BottoneCamion.blittaggio()
+    BottoneFabbrica.blittaggio()
     return finished
 
 def mostraTutorial(boolean):
@@ -229,7 +248,7 @@ def mostraTutorial(boolean):
             if tutorialSlide < 6:
                 if pressedKeys[pygame.K_p] == 1:
                     if tutorialSlide != 7:
-                        tutorialSlide = 6
+                        tutorialSlide = 10
                         print("Premi K per completare il saltamento")
                         time.sleep(0.1)  
     else:
@@ -258,6 +277,7 @@ def salva():
 
     pickle.dump(scrivendoNome,open("possibilitaDiScrivere.dat", "wb"))
     pickle.dump(tutorialFinito, open("tutorialFinito.dat", "wb"))
+    
 
 def carica():
     global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path, scrivendoNome, tutorialFinito
@@ -273,37 +293,48 @@ def carica():
     Casa.livello = pickle.load(open("CasaLivello.dat", "rb"))
     Trasporto.livello = pickle.load(open("TrasportoLivello.dat", "rb"))
     Fabbrica.livello = pickle.load(open("FabbricaLivello.dat", "rb"))
+
     scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
 
     if Casa.livello == 1:
         Casa.costume = casa_1
+        BottoneCasa.upgradeBottone(casa_upgrade_2)
         Casa.cambiaCostume()
     if Casa.livello == 2:
         Casa.costume = casa_2
+        BottoneCasa.upgradeBottone(casa_upgrade_3)
         Casa.cambiaCostume()
     if Casa.livello == 3:
         Casa.costume = casa_3
+        BottoneCasa.upgradeBottone(casa_upgrade_4)
         Casa.cambiaCostume()
     if Casa.livello == 4:
         Casa.costume = casa_4
+        BottoneCasa.upgradeBottone(casa_upgrade_5)
         Casa.cambiaCostume()
     if Casa.livello == 5:
         Casa.costume = casa_5
+        BottoneCasa.upgradeBottone(casa_upgrade_max)
         Casa.cambiaCostume()
     
     if Fabbrica.livello == 1:
+        BottoneFabbrica.upgradeBottone(fabbrica_upgrade_2)
         Fabbrica.costume = fabbrica_1
         Fabbrica.cambiaCostume()
     if Fabbrica.livello == 2:
+        BottoneFabbrica.upgradeBottone(fabbrica_upgrade_3)
         Fabbrica.costume = fabbrica_2
         Fabbrica.cambiaCostume()
     if Fabbrica.livello == 3:
+        BottoneFabbrica.upgradeBottone(fabbrica_upgrade_4)
         Fabbrica.costume = fabbrica_3
         Fabbrica.cambiaCostume()
     if Fabbrica.livello == 4:
+        BottoneFabbrica.upgradeBottone(fabbrica_upgrade_5)
         Fabbrica.costume = fabbrica_4
         Fabbrica.cambiaCostume()
     if Fabbrica.livello == 5:
+        BottoneFabbrica.upgradeBottone(fabbrica_upgrade_max)
         Fabbrica.larghezza += 15
         Fabbrica.altezza += 15
         Fabbrica.x -= 10
@@ -313,25 +344,32 @@ def carica():
     if Trasporto.livello == 1:
         Trasporto.costume = camion_1
         Trasporto.cambiaCostume()
+        BottoneCamion.upgradeBottone(camion_upgrade_2)
     if Trasporto.livello == 2:
         Trasporto.costume = camion_2
+        BottoneCamion.upgradeBottone(camion_upgrade_3)
         Trasporto.cambiaCostume()
     if Trasporto.livello == 3:
         Trasporto.costume = camion_3
+        BottoneCamion.upgradeBottone(camion_upgrade_4)
         Trasporto.cambiaCostume()
     if Trasporto.livello == 4:
         Trasporto.costume = camion_4
+        BottoneCamion.upgradeBottone(camion_upgrade_5)
         Trasporto.y -= 60
         Trasporto.larghezza = 80
         Trasporto.altezza = 65
         Trasporto.cambiaCostume()
 
     if Trasporto.livello == 5:
+        BottoneCamion.upgradeBottone(camion_upgrade_max)
         Trasporto.costume = camion_5
         Trasporto.y -= 60
         Trasporto.larghezza = 80
         Trasporto.altezza = 80
         Trasporto.cambiaCostume()
+
+    
         
                
 
@@ -370,7 +408,7 @@ class Sprite:
     def printaggio(self):
         print(self.x, self.y)
 
-    def upgrade(self, costume):
+    def upgrade(self, costume,costumeBottone):
         global schei, nome
         if self.livello == 0 and schei >=1:
             schei -= 1
@@ -378,6 +416,7 @@ class Sprite:
             self.livello += 1
             self.costume = costume
             self.cambiaCostume()
+            self.upgradeBottone(costumeBottone)#@todo sistemare!!!!
         
         elif self.livello == 1 and schei >=2:
             schei -= 2
@@ -386,6 +425,7 @@ class Sprite:
             self.costume = costume
             self.cambiaCostume()
             self.livello += 1
+            self.upgradeBottone(costumeBottone)
         
         elif self.livello == 2 and schei >=3:
             schei -= 3
@@ -394,6 +434,7 @@ class Sprite:
             self.costume = costume
             self.cambiaCostume()
             self.livello += 1
+            self.upgradeBottone(costumeBottone)
         
         elif self.livello == 3 and schei >=5:
             pygame.mixer.Sound.play(success)
@@ -402,6 +443,7 @@ class Sprite:
             self.cambiaCostume()
             print("UPGRADE AL LV 4")
             self.livello += 1
+            self.upgradeBottone(costumeBottone)
 
         elif self.livello == 4 and schei >=10:
             schei -= 10
@@ -410,10 +452,15 @@ class Sprite:
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 5")
             self.livello += 1
+            self.upgradeBottone(costumeBottone)
         else:
             pygame.mixer.Sound.play(error)
 
     def ricaricaCostume(self,costume):
+        self.costume = costume
+        self.cambiaCostume()
+    
+    def upgradeBottone(self,costume):
         self.costume = costume
         self.cambiaCostume()
         
@@ -534,9 +581,9 @@ TestoNome = Text(70,0,32,black,"")
 
 CopriTestoF = Rectangle(48, 408, 122, 35, white)
 
-BottoneCasa = Sprite(530,0,60,60,r"Immagini\/casa_base_upgrade.png")
-BottoneCamion = Sprite(460,0,60,60,r"Immagini\/camion_upgrade.png")
-BottoneFabbrica = Sprite(390,0,60,60,r"Immagini\/fabbrica_upgrade.png")
+BottoneCasa = Sprite(530,0,60,60,r"Immagini\/casa_upgrade_1.png")
+BottoneCamion = Sprite(460,0,60,60,r"Immagini\/camion_upgrade_1.png")
+BottoneFabbrica = Sprite(390,0,60,60,r"Immagini\/fabbrica_upgrade_1.png")
 
 
 
@@ -602,31 +649,35 @@ while not finished:
             
             if upCasa.collidepoint(x, y):
                 if Casa.livello == 0:
-                    Casa.upgrade(casa_1)
+                    Casa.upgrade(casa_1, casa_upgrade_2)
                     TestoCasa.color = black
                 elif Casa.livello == 1:
-                    Casa.upgrade(casa_2)
+                    Casa.upgrade(casa_2, casa_upgrade_3)
                     TestoCasa.color = black
                 elif Casa.livello == 2:
-                    Casa.upgrade(casa_3)
+                    Casa.upgrade(casa_3, casa_upgrade_4)
                     TestoCasa.color = black
                 elif Casa.livello == 3:
-                    Casa.upgrade(casa_4)
+                    Casa.upgrade(casa_4, casa_upgrade_5)
                     TestoCasa.color = black
                 elif Casa.livello == 4:
-                    Casa.upgrade(casa_5)
+                    Casa.upgrade(casa_5, casa_upgrade_max)
                     TestoCasa.color = black
                 else:
                     pygame.mixer.Sound.play(error)
             if upCamion.collidepoint(x, y):
                 if Trasporto.livello == 0:
                     Trasporto.upgrade(camion_1)
+                    BottoneCamion.upgradeBottone(camion_upgrade_2)
                 elif Trasporto.livello == 1:
                     Trasporto.upgrade(camion_2)
+                    BottoneCamion.upgradeBottone(camion_upgrade_3)
                 elif Trasporto.livello == 2:
                     Trasporto.upgrade(camion_3)
+                    BottoneCamion.upgradeBottone(camion_upgrade_4)
                 elif Trasporto.livello == 3:
                     Trasporto.upgrade(camion_4)
+                    BottoneCamion.upgradeBottone(camion_upgrade_5)
                     Trasporto.y -= 60
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 65
@@ -636,20 +687,27 @@ while not finished:
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 80
                     Trasporto.cambiaCostume()
+                    BottoneCamion.upgradeBottone(camion_upgrade_max)
                 else:
                     pygame.mixer.Sound.play(error)
 
             if upFabbrica.collidepoint(x,y):
                 if Fabbrica.livello == 0:
                     Fabbrica.upgrade(fabbrica_1)
+                    
                 elif Fabbrica.livello == 1:
                     Fabbrica.upgrade(fabbrica_2)
+                    
                 elif Fabbrica.livello == 2:
                     Fabbrica.upgrade(fabbrica_3)
+                    
+                        
                 elif Fabbrica.livello == 3:
                     Fabbrica.upgrade(fabbrica_4)
+                    BottoneFabbrica.upgradeBottone(fabbrica_upgrade_5)
                 elif Fabbrica.livello == 4:
                     Fabbrica.upgrade(fabbrica_5)
+                    BottoneFabbrica.upgradeBottone(fabbrica_upgrade_max)
                     Fabbrica.larghezza += 15
                     Fabbrica.altezza += 15
                     Fabbrica.x -= 10
@@ -777,6 +835,12 @@ while not finished:
                         numeroRandom = random.randint(3,4)
 
 
+
+
+                    caneBlu = random.randint(1,1000)
+                    if caneBlu == 1000:
+                        schei += 20
+                        # TestoFabbrica.string = ""
                     quantitaTrasporto += numeroRandom
                     TestoTrasporto.string = str(quantitaTrasporto)
 
