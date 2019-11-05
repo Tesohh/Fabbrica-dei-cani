@@ -22,7 +22,7 @@ pygame.init() #inizializziamo pygame
 
 musica = pygame.mixer.music.load(r"Suoni\/flauteggiamento.wav")
 pygame.mixer.music.set_volume(0.1)
-pygame.mixer.music.play(-1)
+
 
 icona = pygame.image.load(r"Immagini\/icona.ico")
 
@@ -42,7 +42,7 @@ font = pygame.font.Font(r"Font\/noto.ttf", 28)
 rosso = (255,0,0) #R, G, B
 colore2 = (120,50,100)
 
-background = pygame.image.load(r"Immagini\/prova sfondo 1.png")
+background = pygame.image.load(r"Loghi\/splashscreen.png")
 background = pygame.transform.scale(background, (600,600))
 
 
@@ -408,7 +408,7 @@ class Sprite:
     def printaggio(self):
         print(self.x, self.y)
 
-    def upgrade(self, costume,costumeBottone):
+    def upgrade(self, costume,costumeBottone,target):
         global schei, nome
         if self.livello == 0 and schei >=1:
             schei -= 1
@@ -416,7 +416,7 @@ class Sprite:
             self.livello += 1
             self.costume = costume
             self.cambiaCostume()
-            self.upgradeBottone(costumeBottone)#@todo sistemare!!!!
+            target.upgradeBottone(costumeBottone)#@todo sistemare!!!!
         
         elif self.livello == 1 and schei >=2:
             schei -= 2
@@ -425,7 +425,7 @@ class Sprite:
             self.costume = costume
             self.cambiaCostume()
             self.livello += 1
-            self.upgradeBottone(costumeBottone)
+            target.upgradeBottone(costumeBottone)
         
         elif self.livello == 2 and schei >=3:
             schei -= 3
@@ -434,7 +434,7 @@ class Sprite:
             self.costume = costume
             self.cambiaCostume()
             self.livello += 1
-            self.upgradeBottone(costumeBottone)
+            target.upgradeBottone(costumeBottone)
         
         elif self.livello == 3 and schei >=5:
             pygame.mixer.Sound.play(success)
@@ -443,7 +443,7 @@ class Sprite:
             self.cambiaCostume()
             print("UPGRADE AL LV 4")
             self.livello += 1
-            self.upgradeBottone(costumeBottone)
+            target.upgradeBottone(costumeBottone)
 
         elif self.livello == 4 and schei >=10:
             schei -= 10
@@ -452,7 +452,7 @@ class Sprite:
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 5")
             self.livello += 1
-            self.upgradeBottone(costumeBottone)
+            target.upgradeBottone(costumeBottone)
         else:
             pygame.mixer.Sound.play(error)
 
@@ -596,10 +596,15 @@ finished = False
 
 if os.path.exists('caniInCasa.dat'):
     carica()
-    print("Esiste, carico i salvataggi vecchi")
 else:
     salva()
-    print("Non esiste, creo salvataggi nuovi")
+print("Gioco di Simone Tesini / Tesohh.\nCollaborazione di Filippo Vicari / Filvi.")
+screen.blit(background, (0,0))
+pygame.display.flip()
+time.sleep(3)
+background = pygame.image.load(r"Immagini\/sfondo.png")
+pygame.mixer.music.play(-1)
+
 
 
 
@@ -649,65 +654,61 @@ while not finished:
             
             if upCasa.collidepoint(x, y):
                 if Casa.livello == 0:
-                    Casa.upgrade(casa_1, casa_upgrade_2)
+                    Casa.upgrade(casa_1, casa_upgrade_2, BottoneCasa)
                     TestoCasa.color = black
                 elif Casa.livello == 1:
-                    Casa.upgrade(casa_2, casa_upgrade_3)
+                    Casa.upgrade(casa_2, casa_upgrade_3, BottoneCasa)
                     TestoCasa.color = black
                 elif Casa.livello == 2:
-                    Casa.upgrade(casa_3, casa_upgrade_4)
+                    Casa.upgrade(casa_3, casa_upgrade_4, BottoneCasa)
                     TestoCasa.color = black
                 elif Casa.livello == 3:
-                    Casa.upgrade(casa_4, casa_upgrade_5)
+                    Casa.upgrade(casa_4, casa_upgrade_5, BottoneCasa)
                     TestoCasa.color = black
                 elif Casa.livello == 4:
-                    Casa.upgrade(casa_5, casa_upgrade_max)
+                    Casa.upgrade(casa_5, casa_upgrade_max, BottoneCasa)
                     TestoCasa.color = black
                 else:
                     pygame.mixer.Sound.play(error)
             if upCamion.collidepoint(x, y):
                 if Trasporto.livello == 0:
-                    Trasporto.upgrade(camion_1)
-                    BottoneCamion.upgradeBottone(camion_upgrade_2)
+                    Trasporto.upgrade(camion_1, camion_upgrade_2, BottoneCamion)
                 elif Trasporto.livello == 1:
-                    Trasporto.upgrade(camion_2)
-                    BottoneCamion.upgradeBottone(camion_upgrade_3)
+                    Trasporto.upgrade(camion_2, camion_upgrade_3, BottoneCamion)
                 elif Trasporto.livello == 2:
-                    Trasporto.upgrade(camion_3)
-                    BottoneCamion.upgradeBottone(camion_upgrade_4)
+                    Trasporto.upgrade(camion_3, camion_upgrade_4, BottoneCamion)
                 elif Trasporto.livello == 3:
-                    Trasporto.upgrade(camion_4)
-                    BottoneCamion.upgradeBottone(camion_upgrade_5)
+                    Trasporto.upgrade(camion_4, camion_upgrade_5, BottoneCamion)
                     Trasporto.y -= 60
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 65
                     Trasporto.cambiaCostume()
                 elif Trasporto.livello == 4:
-                    Trasporto.upgrade(camion_5)
+                    Trasporto.upgrade(camion_5, camion_upgrade_max, BottoneCamion)
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 80
                     Trasporto.cambiaCostume()
-                    BottoneCamion.upgradeBottone(camion_upgrade_max)
+                    
                 else:
                     pygame.mixer.Sound.play(error)
 
             if upFabbrica.collidepoint(x,y):
                 if Fabbrica.livello == 0:
-                    Fabbrica.upgrade(fabbrica_1)
+                    Fabbrica.upgrade(fabbrica_1, fabbrica_upgrade_2, BottoneFabbrica)
                     
                 elif Fabbrica.livello == 1:
-                    Fabbrica.upgrade(fabbrica_2)
+                    Fabbrica.upgrade(fabbrica_2,fabbrica_upgrade_3, BottoneFabbrica)
                     
                 elif Fabbrica.livello == 2:
-                    Fabbrica.upgrade(fabbrica_3)
+                    Fabbrica.upgrade(fabbrica_3,fabbrica_upgrade_4, BottoneFabbrica)
                     
                         
                 elif Fabbrica.livello == 3:
-                    Fabbrica.upgrade(fabbrica_4)
-                    BottoneFabbrica.upgradeBottone(fabbrica_upgrade_5)
+                    Fabbrica.upgrade(fabbrica_4, fabbrica_upgrade_5, BottoneFabbrica)
+                    
                 elif Fabbrica.livello == 4:
-                    Fabbrica.upgrade(fabbrica_5)
-                    BottoneFabbrica.upgradeBottone(fabbrica_upgrade_max)
+                    Fabbrica.upgrade(fabbrica_5, fabbrica_upgrade_max, BottoneFabbrica)
+                    
                     Fabbrica.larghezza += 15
                     Fabbrica.altezza += 15
                     Fabbrica.x -= 10
