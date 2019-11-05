@@ -129,6 +129,7 @@ camionStart = pygame.mixer.Sound(r"Suoni\/camionStart.wav")
 camionGo = pygame.mixer.Sound(r"Suoni\/camion.wav")
 success = pygame.mixer.Sound(r"Suoni\/success.wav")
 error = pygame.mixer.Sound(r"Suoni\/error.wav")
+splashscreen = pygame.mixer.Sound(r"Suoni\/splashscreen.wav")
 
 pygame.mixer.Sound.set_volume(camionStart, 0.2)
 pygame.mixer.Sound.set_volume(success, 0.4)
@@ -601,7 +602,8 @@ else:
 print("Gioco di Simone Tesini / Tesohh.\nCollaborazione di Filippo Vicari / Filvi.")
 screen.blit(background, (0,0))
 pygame.display.flip()
-time.sleep(3)
+pygame.mixer.Sound.play(splashscreen)
+time.sleep(6)
 background = pygame.image.load(r"Immagini\/sfondo.png")
 pygame.mixer.music.play(-1)
 
