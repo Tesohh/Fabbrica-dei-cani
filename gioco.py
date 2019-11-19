@@ -11,6 +11,7 @@ from tkinter import filedialog
 from tkinter import Tk
 import pickle
 import os.path
+from costumi import Casaa,Fabbricaa,Camionn,Bottonii
 
 
 
@@ -50,48 +51,6 @@ jimmy = pygame.image.load(r"Immagini\/jimmyneutron.png")
 easteregg = pygame.image.load(r"Immagini\/easteregg.png")
 
 
-casa_1 = pygame.image.load(r"Immagini\/casa_1.png")
-casa_2 = pygame.image.load(r"Immagini\/casa_2.png")
-casa_3 = pygame.image.load(r"Immagini\/casa_3.png")
-casa_4 = pygame.image.load(r"Immagini\/casa_4.png")
-casa_5 = pygame.image.load(r"Immagini\/casa_5.png")
-
-casa_upgrade_1 = pygame.image.load(r"Immagini\/casa_upgrade_1.png") 
-casa_upgrade_2 = pygame.image.load(r"Immagini\/casa_upgrade_2.png") 
-casa_upgrade_3 = pygame.image.load(r"Immagini\/casa_upgrade_3.png") 
-casa_upgrade_4 = pygame.image.load(r"Immagini\/casa_upgrade_4.png") 
-casa_upgrade_5 = pygame.image.load(r"Immagini\/casa_upgrade_5.png") 
-casa_upgrade_max = pygame.image.load(r"Immagini\/casa_upgrade_max.png") 
-
-camion_1 = pygame.image.load(r"Immagini\/camion_1.png")
-camion_2 = pygame.image.load(r"Immagini\/camion_2.png")
-camion_3 = pygame.image.load(r"Immagini\/camion_3.png")
-camion_4 = pygame.image.load(r"Immagini\/camion_4.png")
-camion_5 = pygame.image.load(r"Immagini\/camion_5.png")
-
-camion_upgrade_1 = pygame.image.load(r"Immagini\/camion_upgrade_1.png") 
-camion_upgrade_2 = pygame.image.load(r"Immagini\/camion_upgrade_2.png") 
-camion_upgrade_3 = pygame.image.load(r"Immagini\/camion_upgrade_3.png") 
-camion_upgrade_4 = pygame.image.load(r"Immagini\/camion_upgrade_4.png") 
-camion_upgrade_5 = pygame.image.load(r"Immagini\/camion_upgrade_5.png") 
-camion_upgrade_max = pygame.image.load(r"Immagini\/camion_upgrade_max.png") 
-
-fabbrica_1 = pygame.image.load(r"Immagini\/fabbrica_1.png")
-fabbrica_2 = pygame.image.load(r"Immagini\/fabbrica_2.png")
-fabbrica_3 = pygame.image.load(r"Immagini\/fabbrica_3.png")
-fabbrica_4 = pygame.image.load(r"Immagini\/fabbrica_4.png")
-fabbrica_5 = pygame.image.load(r"Immagini\/fabbrica_5.png")
-
-fabbrica_upgrade_1 = pygame.image.load(r"Immagini\/fabbrica_upgrade_1.png") 
-fabbrica_upgrade_2 = pygame.image.load(r"Immagini\/fabbrica_upgrade_2.png") 
-fabbrica_upgrade_3 = pygame.image.load(r"Immagini\/fabbrica_upgrade_3.png") 
-fabbrica_upgrade_4 = pygame.image.load(r"Immagini\/fabbrica_upgrade_4.png") 
-fabbrica_upgrade_5 = pygame.image.load(r"Immagini\/fabbrica_upgrade_5.png") 
-fabbrica_upgrade_max = pygame.image.load(r"Immagini\/fabbrica_upgrade_max.png") 
-
-
-
-# banana = pygame.image.load(r"banana.png")
 
 black = (0,0,0)
 white = (255,255,255)
@@ -122,6 +81,8 @@ path = r"Immagini\/profilo.png"
 
 caratteri = "abcdefghijklmnopqrstuvwxyz1234567890"
 scrivendoNome = True
+
+selezionandoNumero = False 
 
 woof = pygame.mixer.Sound(r"Suoni\/woof.wav")
 microWoof = pygame.mixer.Sound(r"Suoni\/woofHigh.wav")
@@ -170,7 +131,7 @@ def tooManyDogs(overflow):
 
 
 def mostraProfilo():
-    global primaVolta, schei, finished, nome, Casa, Fabbrica, Trasporto
+    global primaVolta, schei, finished, nome, Casa, Fabbrica, Trasporto, selezionandoNumero
 
     if TestoNome.string == "filviegg":
         Profilo.costume = easteregg 
@@ -203,6 +164,20 @@ def mostraProfilo():
     BottoneCasa.blittaggio()
     BottoneCamion.blittaggio()
     BottoneFabbrica.blittaggio()
+
+    if caniInCasa < 5:
+        BottoneVendi.costume = Bottonii.vendigrigio
+        BottoneVendi.cambiaCostume()
+    else:
+        BottoneVendi.costume = Bottonii.vendi
+        BottoneVendi.cambiaCostume()
+
+    if not selezionandoNumero:
+        BottoneVendi.blittaggio()
+    else:
+        BottoneMenoCani.blittaggio()
+        BottonePiuCani.blittaggio()
+        TestoSelettore.blitText()
     return finished
 
 def mostraTutorial(boolean):
@@ -298,73 +273,73 @@ def carica():
     scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
 
     if Casa.livello == 1:
-        Casa.costume = casa_1
-        BottoneCasa.upgradeBottone(casa_upgrade_2)
+        Casa.costume = Casaa.casa_1
+        BottoneCasa.upgradeBottone(Casaa.casa_upgrade_2)
         Casa.cambiaCostume()
     if Casa.livello == 2:
-        Casa.costume = casa_2
-        BottoneCasa.upgradeBottone(casa_upgrade_3)
+        Casa.costume = Casaa.casa_2
+        BottoneCasa.upgradeBottone(Casaa.casa_upgrade_3)
         Casa.cambiaCostume()
     if Casa.livello == 3:
-        Casa.costume = casa_3
-        BottoneCasa.upgradeBottone(casa_upgrade_4)
+        Casa.costume = Casaa.casa_3
+        BottoneCasa.upgradeBottone(Casaa.casa_upgrade_4)
         Casa.cambiaCostume()
     if Casa.livello == 4:
-        Casa.costume = casa_4
-        BottoneCasa.upgradeBottone(casa_upgrade_5)
+        Casa.costume = Casaa.casa_4
+        BottoneCasa.upgradeBottone(Casaa.casa_upgrade_5)
         Casa.cambiaCostume()
     if Casa.livello == 5:
-        Casa.costume = casa_5
-        BottoneCasa.upgradeBottone(casa_upgrade_max)
+        Casa.costume = Casaa.casa_5
+        BottoneCasa.upgradeBottone(Casaa.casa_upgrade_max)
         Casa.cambiaCostume()
     
     if Fabbrica.livello == 1:
-        BottoneFabbrica.upgradeBottone(fabbrica_upgrade_2)
-        Fabbrica.costume = fabbrica_1
+        BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_2)
+        Fabbrica.costume = Fabbricaa.fabbrica_1
         Fabbrica.cambiaCostume()
     if Fabbrica.livello == 2:
-        BottoneFabbrica.upgradeBottone(fabbrica_upgrade_3)
-        Fabbrica.costume = fabbrica_2
+        BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_3)
+        Fabbrica.costume = Fabbricaa.fabbrica_2
         Fabbrica.cambiaCostume()
     if Fabbrica.livello == 3:
-        BottoneFabbrica.upgradeBottone(fabbrica_upgrade_4)
-        Fabbrica.costume = fabbrica_3
+        BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_4)
+        Fabbrica.costume = Fabbricaa.fabbrica_3
         Fabbrica.cambiaCostume()
     if Fabbrica.livello == 4:
-        BottoneFabbrica.upgradeBottone(fabbrica_upgrade_5)
-        Fabbrica.costume = fabbrica_4
+        BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_5)
+        Fabbrica.costume = Fabbricaa.fabbrica_4
         Fabbrica.cambiaCostume()
     if Fabbrica.livello == 5:
-        BottoneFabbrica.upgradeBottone(fabbrica_upgrade_max)
+        BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_max)
         Fabbrica.larghezza += 15
         Fabbrica.altezza += 15
         Fabbrica.x -= 10
-        Fabbrica.costume = fabbrica_5
+        Fabbrica.costume = Fabbricaa.fabbrica_5
         Fabbrica.cambiaCostume()
 
     if Trasporto.livello == 1:
-        Trasporto.costume = camion_1
+        Trasporto.costume = Camionn.camion_1
         Trasporto.cambiaCostume()
-        BottoneCamion.upgradeBottone(camion_upgrade_2)
+        BottoneCamion.upgradeBottone(Camionn.camion_upgrade_2)
     if Trasporto.livello == 2:
-        Trasporto.costume = camion_2
-        BottoneCamion.upgradeBottone(camion_upgrade_3)
+        Trasporto.costume = Camionn.camion_2
+        BottoneCamion.upgradeBottone(Camionn.camion_upgrade_3)
         Trasporto.cambiaCostume()
     if Trasporto.livello == 3:
-        Trasporto.costume = camion_3
-        BottoneCamion.upgradeBottone(camion_upgrade_4)
+        Trasporto.costume = Camionn.camion_3
+        BottoneCamion.upgradeBottone(Camionn.camion_upgrade_4)
         Trasporto.cambiaCostume()
     if Trasporto.livello == 4:
-        Trasporto.costume = camion_4
-        BottoneCamion.upgradeBottone(camion_upgrade_5)
+        Trasporto.costume = Camionn.camion_4
+        BottoneCamion.upgradeBottone(Camionn.camion_upgrade_5)
         Trasporto.y -= 60
         Trasporto.larghezza = 80
         Trasporto.altezza = 65
         Trasporto.cambiaCostume()
 
     if Trasporto.livello == 5:
-        BottoneCamion.upgradeBottone(camion_upgrade_max)
-        Trasporto.costume = camion_5
+        BottoneCamion.upgradeBottone(Camionn.camion_upgrade_max)
+        Trasporto.costume = Camionn.camion_5
         Trasporto.y -= 60
         Trasporto.larghezza = 80
         Trasporto.altezza = 80
@@ -505,6 +480,11 @@ class Text:
     def aggiungiCarattere(self, char):
         if char in caratteri:
             self.string += char
+    
+    def returnSize(self):
+        self.text_width, self.text_height = font.size(self.string)
+        print(f"Text width:{self.text_width} Text height:{self.text_height}")
+        return self.text_width #@todo
 
 class Rectangle:
     def __init__(self, x,y,larghezza,altezza,color):
@@ -580,11 +560,43 @@ TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,32,green,"")
 TestoSchei = Text(70,30,32,black,schei)
 TestoNome = Text(70,0,32,black,"")
 
+
+
 CopriTestoF = Rectangle(48, 408, 122, 35, white)
 
 BottoneCasa = Sprite(530,0,60,60,r"Immagini\/casa_upgrade_1.png")
 BottoneCamion = Sprite(460,0,60,60,r"Immagini\/camion_upgrade_1.png")
 BottoneFabbrica = Sprite(390,0,60,60,r"Immagini\/fabbrica_upgrade_1.png")
+
+posx_btn = 441
+posy_btn = 454
+width_btn = 92
+height_btn = 33
+# definisco la posizione e la dimensione della freccetta SINISTRA per decrementare il valore dei cani venduti
+width_menoCaniVendita = 23
+height_menoCaniVendita = 28
+posx_menoCaniVendita = posx_btn
+posy_menoCaniVendita = posy_btn 
+
+# definisco la posizione e la dimensione della freccetta DESTRA per decrementare il valore dei cani venduti
+
+width_piuCaniVendita = 23
+height_piuCaniVendita = 28
+posx_piuCaniVendita = posx_btn + width_btn - width_piuCaniVendita
+posy_piuCaniVendita = posy_btn
+
+BottoneVendi = Sprite(posx_btn,posy_btn,width_btn,height_btn,r"Immagini\/vendigrigio.png")
+
+BottoneMenoCani = Sprite(posx_menoCaniVendita,posy_menoCaniVendita,width_menoCaniVendita,height_menoCaniVendita,r"Immagini\/menoCani.png")
+BottonePiuCani = Sprite(posx_piuCaniVendita,posy_piuCaniVendita,width_piuCaniVendita,height_piuCaniVendita,r"Immagini\/piuCani.png")
+
+posx_testo = posx_btn + width_btn/2
+TestoSelettore = Text(posx_testo, posy_btn, 28, black, 5)
+
+posx_testo = posx_btn + width_btn/2 -  TestoSelettore.returnSize()/2
+TestoSelettore.x = posx_testo
+
+
 
 
 
@@ -600,8 +612,17 @@ if os.path.exists('caniInCasa.dat'):
 else:
     salva()
 print("Gioco di Simone Tesini / Tesohh.\nCollaborazione di Filippo Vicari / Filvi.")
+if nome == "leo":
+    background = pygame.image.load(r"Loghi\/leo.png")
+if nome == "matteo":
+    background = pygame.image.load(r"Loghi\/matte.png")
+if nome == "tesohh":
+    background = pygame.image.load(r"Loghi\/tesohh.png")
 screen.blit(background, (0,0))
 pygame.display.flip()
+
+
+
 pygame.mixer.Sound.play(splashscreen)
 time.sleep(6)
 background = pygame.image.load(r"Immagini\/sfondo.png")
@@ -653,40 +674,41 @@ while not finished:
             upCasa = screen.blit(BottoneCasa.sprite, (BottoneCasa.x, BottoneCasa.y))
             upCamion = screen.blit(BottoneCamion.sprite,(BottoneCamion.x,BottoneCamion.y))
             upFabbrica = screen.blit(BottoneFabbrica.sprite,(BottoneFabbrica.x,BottoneFabbrica.y))
+            botVendi = screen.blit(BottoneVendi.sprite,(BottoneVendi.x,BottoneVendi.y))
             
             if upCasa.collidepoint(x, y):
                 if Casa.livello == 0:
-                    Casa.upgrade(casa_1, casa_upgrade_2, BottoneCasa)
+                    Casa.upgrade(Casaa.casa_1, Casaa.casa_upgrade_2, BottoneCasa)
                     TestoCasa.color = black
                 elif Casa.livello == 1:
-                    Casa.upgrade(casa_2, casa_upgrade_3, BottoneCasa)
+                    Casa.upgrade(Casaa.casa_2, Casaa.casa_upgrade_3, BottoneCasa)
                     TestoCasa.color = black
                 elif Casa.livello == 2:
-                    Casa.upgrade(casa_3, casa_upgrade_4, BottoneCasa)
+                    Casa.upgrade(Casaa.casa_3, Casaa.casa_upgrade_4, BottoneCasa)
                     TestoCasa.color = black
                 elif Casa.livello == 3:
-                    Casa.upgrade(casa_4, casa_upgrade_5, BottoneCasa)
+                    Casa.upgrade(Casaa.casa_4, Casaa.casa_upgrade_5, BottoneCasa)
                     TestoCasa.color = black
                 elif Casa.livello == 4:
-                    Casa.upgrade(casa_5, casa_upgrade_max, BottoneCasa)
+                    Casa.upgrade(Casaa.casa_5, Casaa.casa_upgrade_max, BottoneCasa)
                     TestoCasa.color = black
                 else:
                     pygame.mixer.Sound.play(error)
             if upCamion.collidepoint(x, y):
                 if Trasporto.livello == 0:
-                    Trasporto.upgrade(camion_1, camion_upgrade_2, BottoneCamion)
+                    Trasporto.upgrade(Camionn.camion_1, Camionn.camion_upgrade_2, BottoneCamion)
                 elif Trasporto.livello == 1:
-                    Trasporto.upgrade(camion_2, camion_upgrade_3, BottoneCamion)
+                    Trasporto.upgrade(Camionn.camion_2, Camionn.camion_upgrade_3, BottoneCamion)
                 elif Trasporto.livello == 2:
-                    Trasporto.upgrade(camion_3, camion_upgrade_4, BottoneCamion)
+                    Trasporto.upgrade(Camionn.camion_3, Camionn.camion_upgrade_4, BottoneCamion)
                 elif Trasporto.livello == 3:
-                    Trasporto.upgrade(camion_4, camion_upgrade_5, BottoneCamion)
+                    Trasporto.upgrade(Camionn.camion_4, Camionn.camion_upgrade_5, BottoneCamion)
                     Trasporto.y -= 60
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 65
                     Trasporto.cambiaCostume()
                 elif Trasporto.livello == 4:
-                    Trasporto.upgrade(camion_5, camion_upgrade_max, BottoneCamion)
+                    Trasporto.upgrade(Camionn.camion_5, Camionn.camion_upgrade_max, BottoneCamion)
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 80
                     Trasporto.cambiaCostume()
@@ -696,25 +718,31 @@ while not finished:
 
             if upFabbrica.collidepoint(x,y):
                 if Fabbrica.livello == 0:
-                    Fabbrica.upgrade(fabbrica_1, fabbrica_upgrade_2, BottoneFabbrica)
+                    Fabbrica.upgrade(Fabbricaa.fabbrica_1, Fabbricaa.fabbrica_upgrade_2, BottoneFabbrica)
                     
                 elif Fabbrica.livello == 1:
-                    Fabbrica.upgrade(fabbrica_2,fabbrica_upgrade_3, BottoneFabbrica)
+                    Fabbrica.upgrade(Fabbricaa.fabbrica_2,Fabbricaa.fabbrica_upgrade_3, BottoneFabbrica)
                     
                 elif Fabbrica.livello == 2:
-                    Fabbrica.upgrade(fabbrica_3,fabbrica_upgrade_4, BottoneFabbrica)
+                    Fabbrica.upgrade(Fabbricaa.fabbrica_3,Fabbricaa.fabbrica_upgrade_4, BottoneFabbrica)
                     
                         
                 elif Fabbrica.livello == 3:
-                    Fabbrica.upgrade(fabbrica_4, fabbrica_upgrade_5, BottoneFabbrica)
+                    Fabbrica.upgrade(Fabbricaa.fabbrica_4, Fabbricaa.fabbrica_upgrade_5, BottoneFabbrica)
                     
                 elif Fabbrica.livello == 4:
-                    Fabbrica.upgrade(fabbrica_5, fabbrica_upgrade_max, BottoneFabbrica)
+                    Fabbrica.upgrade(Fabbricaa.fabbrica_5, Fabbricaa.fabbrica_upgrade_max, BottoneFabbrica)
                     
                     Fabbrica.larghezza += 15
                     Fabbrica.altezza += 15
                     Fabbrica.x -= 10
                     Fabbrica.cambiaCostume()
+                else:
+                    pygame.mixer.Sound.play(error)
+                
+            if botVendi.collidepoint(x,y):
+                if caniInCasa >= 5:
+                    selezionandoNumero = True
                 else:
                     pygame.mixer.Sound.play(error)
                     
