@@ -78,6 +78,8 @@ dogOverflow = 0
 possibilitaDiScrivere = False
 nome = ""
 path = r"Immagini\/profilo.png"
+caniSelezionati = 5
+caniMassimiInCasa = 5
 
 caratteri = "abcdefghijklmnopqrstuvwxyz1234567890"
 scrivendoNome = True
@@ -178,6 +180,8 @@ def mostraProfilo():
         BottoneMenoCani.blittaggio()
         BottonePiuCani.blittaggio()
         TestoSelettore.blitText()
+        BottoneConferma.blittaggio()
+        BottoneConferma.x = posx_btn + width_btn/2 -  BottoneConferma.larghezza/2
     return finished
 
 def mostraTutorial(boolean):
@@ -238,7 +242,7 @@ def mostraTutorial(boolean):
     
 
 def salva():
-    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path,TestoNome,scrivendoNome, tutorialFinito
+    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path,TestoNome,scrivendoNome, tutorialFinito, caniMassimiInCasa
     pickle.dump(caniInCasa, open("caniInCasa.dat", "wb"))
     pickle.dump(caniTrasportati,open("caniTrasportati.dat","wb"))
 
@@ -253,10 +257,11 @@ def salva():
 
     pickle.dump(scrivendoNome,open("possibilitaDiScrivere.dat", "wb"))
     pickle.dump(tutorialFinito, open("tutorialFinito.dat", "wb"))
+    pickle.dump(caniMassimiInCasa, open("caniMassimiInCasa.dat","wb"))
     
 
 def carica():
-    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path, scrivendoNome, tutorialFinito
+    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path, scrivendoNome, tutorialFinito,caniMassimiInCasa
     caniInCasa = pickle.load(open("caniInCasa.dat", "rb")) 
     caniTrasportati = pickle.load(open("caniTrasportati.dat","rb"))
 
@@ -353,6 +358,7 @@ def carica():
     nome = TestoNome.string
     schei = pickle.load(open("schei.dat", "rb"))
     tutorialFinito = pickle.load(open("tutorialFinito.dat", "rb"))
+    caniMassimiInCasa = pickle.load(open("caniMassimiInCasa.dat", "rb"))
 
 #============================================================================================
 #SPRITE E FANTA -----------------------------------------------------------------------------
@@ -483,8 +489,9 @@ class Text:
     
     def returnSize(self):
         self.text_width, self.text_height = font.size(self.string)
-        print(f"Text width:{self.text_width} Text height:{self.text_height}")
-        return self.text_width #@todo
+        size = (self.text_width, self.text_height)
+        #print(f"Text width:{self.text_width} Text height:{self.text_height}")
+        return size 
 
 class Rectangle:
     def __init__(self, x,y,larghezza,altezza,color):
@@ -590,11 +597,14 @@ BottoneVendi = Sprite(posx_btn,posy_btn,width_btn,height_btn,r"Immagini\/vendigr
 BottoneMenoCani = Sprite(posx_menoCaniVendita,posy_menoCaniVendita,width_menoCaniVendita,height_menoCaniVendita,r"Immagini\/menoCani.png")
 BottonePiuCani = Sprite(posx_piuCaniVendita,posy_piuCaniVendita,width_piuCaniVendita,height_piuCaniVendita,r"Immagini\/piuCani.png")
 
-posx_testo = posx_btn + width_btn/2
-TestoSelettore = Text(posx_testo, posy_btn, 28, black, 5)
+posx_testoSel = posx_btn + width_btn/2
+TestoSelettore = Text(posx_testoSel, posy_btn-5, 28, black,caniSelezionati)
 
-posx_testo = posx_btn + width_btn/2 -  TestoSelettore.returnSize()/2
-TestoSelettore.x = posx_testo
+posx_testoSel = posx_btn + width_btn/2 -  TestoSelettore.returnSize()[0]/2
+TestoSelettore.x = posx_testoSel
+
+BottoneConferma = Sprite(posx_btn, posy_menoCaniVendita+BottoneMenoCani.altezza+7, 93, 27, r"Immagini\/conferma.png")
+
 
 
 
@@ -675,23 +685,29 @@ while not finished:
             upCamion = screen.blit(BottoneCamion.sprite,(BottoneCamion.x,BottoneCamion.y))
             upFabbrica = screen.blit(BottoneFabbrica.sprite,(BottoneFabbrica.x,BottoneFabbrica.y))
             botVendi = screen.blit(BottoneVendi.sprite,(BottoneVendi.x,BottoneVendi.y))
-            
+            botPiuCani = screen.blit(BottonePiuCani.sprite,(BottonePiuCani.x,BottonePiuCani.y))
+            botMenoCani = screen.blit(BottoneMenoCani.sprite,(BottoneMenoCani.x,BottoneMenoCani.y))         
             if upCasa.collidepoint(x, y):
                 if Casa.livello == 0:
                     Casa.upgrade(Casaa.casa_1, Casaa.casa_upgrade_2, BottoneCasa)
+                    caniMassimiInCasa = 10
                     TestoCasa.color = black
                 elif Casa.livello == 1:
                     Casa.upgrade(Casaa.casa_2, Casaa.casa_upgrade_3, BottoneCasa)
                     TestoCasa.color = black
+                    caniMassimiInCasa = 25
                 elif Casa.livello == 2:
                     Casa.upgrade(Casaa.casa_3, Casaa.casa_upgrade_4, BottoneCasa)
                     TestoCasa.color = black
+                    caniMassimiInCasa = 40
                 elif Casa.livello == 3:
                     Casa.upgrade(Casaa.casa_4, Casaa.casa_upgrade_5, BottoneCasa)
                     TestoCasa.color = black
+                    caniMassimiInCasa = 50
                 elif Casa.livello == 4:
                     Casa.upgrade(Casaa.casa_5, Casaa.casa_upgrade_max, BottoneCasa)
                     TestoCasa.color = black
+                    caniMassimiInCasa = 100
                 else:
                     pygame.mixer.Sound.play(error)
             if upCamion.collidepoint(x, y):
@@ -739,12 +755,43 @@ while not finished:
                     Fabbrica.cambiaCostume()
                 else:
                     pygame.mixer.Sound.play(error)
-                
-            if botVendi.collidepoint(x,y):
-                if caniInCasa >= 5:
-                    selezionandoNumero = True
-                else:
-                    pygame.mixer.Sound.play(error)
+            if not selezionandoNumero:
+                if botVendi.collidepoint(x,y):
+                    if caniInCasa >= 5:
+                        selezionandoNumero = True
+                    else:
+                        pygame.mixer.Sound.play(error)
+            else:
+                if botPiuCani.collidepoint(x,y):
+                    if (caniSelezionati != caniMassimiInCasa) and caniSelezionati != caniInCasa:
+                        caniSelezionati += 5
+                        if (caniSelezionati > caniInCasa):
+                            caniSelezionati = caniInCasa
+                            TestoSelettore.color = red
+                        else:
+                            TestoSelettore.color = black
+                        TestoSelettore.string = str(caniSelezionati)
+                        TestoSelettore.x = posx_btn + width_btn/2 -  TestoSelettore.returnSize()[0]/2
+                    else:
+                        pygame.mixer.Sound.play(error)
+                elif botMenoCani.collidepoint(x,y):
+                    if caniSelezionati > 0:
+                        TestoSelettore.color = black
+                        caniSelezionati -= 5
+                        if caniSelezionati < 0:
+                            caniSelezionati = 0
+                        if caniSelezionati == 0:
+                            TestoSelettore.color = red
+                        else:
+                            TestoSelettore.color = black
+                        TestoSelettore.string = str(caniSelezionati)
+                        TestoSelettore.x = posx_btn + width_btn/2 -  TestoSelettore.returnSize()[0]/2
+                    else:
+                        pygame.mixer.Sound.play(error)
+                        
+
+
+
                     
 
 
@@ -787,6 +834,9 @@ while not finished:
     TestoTrasporto.blitText()
     TestoFabbrica.blitText()
     TestoCasa.blitText()
+    
+    TestoCasa.x = Casa.x + Casa.larghezza/2 -  TestoCasa.returnSize()[0]/2
+    TestoFabbrica.x = Fabbrica.x + Fabbrica.larghezza/2 -  TestoFabbrica.returnSize()[0]/2
 
     if tutorialSlide != 10:
         TestoTutorial.blitText()
@@ -921,18 +971,9 @@ while not finished:
                     if primaVolta:
                         tutorialSlide = 9
 
-                    if Casa.livello == 0 and caniInCasa >= 5: #basta copiare per i prossimi livelli
-                        tooManyDogs(5)
-                    elif Casa.livello == 1 and caniInCasa >= 10: 
-                        tooManyDogs(10)
-                    elif Casa.livello == 2 and caniInCasa >= 25: 
-                        tooManyDogs(25)
-                    elif Casa.livello == 3 and caniInCasa >= 40: 
-                        tooManyDogs(40)
-                    elif Casa.livello == 4 and caniInCasa >= 50: 
-                        tooManyDogs(50)
-                    elif Casa.livello == 5 and caniInCasa >= 100: 
-                        tooManyDogs(100)
+                    if caniInCasa >= caniMassimiInCasa: #basta copiare per i prossimi livelli
+                        tooManyDogs(caniMassimiInCasa)
+                    
 
 
              

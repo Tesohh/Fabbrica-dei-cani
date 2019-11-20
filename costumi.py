@@ -44,3 +44,4 @@ class Fabbricaa:
 class Bottonii:
     vendigrigio = pygame.image.load(r"Immagini\/vendigrigio.png")
     vendi = pygame.image.load(r"Immagini\/vendi.png")
+    conferma = pygame.image.load(r"Immagini\/conferma.png")
