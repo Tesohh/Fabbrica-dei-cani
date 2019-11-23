@@ -98,10 +98,17 @@ pygame.mixer.Sound.set_volume(camionStart, 0.2)
 pygame.mixer.Sound.set_volume(success, 0.4)
 pygame.mixer.Sound.set_volume(error, 5)
 
+scena = "home"
+
 
 #============================================================================================
 #funzioni
 #============================================================================================
+def caricamento(cosaDopo):
+    global scena, background
+    scena = "caricamento"
+    background = pygame.image.load(r"Immagini\/caricamento.png")
+
 
 
 def blitBox(who):
@@ -158,30 +165,34 @@ def mostraProfilo():
         pygame.display.flip()
         time.sleep(1)
         TestoNome.string = "Scherzetto!!!!!"
-    Profilo.blittaggio()
-    TestoSchei.blitText()
-    TestoSchei.string = str(schei)
-    Coin.blittaggio()
+    
+    if scena == "home":
+        Profilo.blittaggio()
+        TestoSchei.blitText()
+        TestoSchei.string = str(schei)
+        Coin.blittaggio()
 
-    BottoneCasa.blittaggio()
-    BottoneCamion.blittaggio()
-    BottoneFabbrica.blittaggio()
+        BottoneCasa.blittaggio()
+        BottoneCamion.blittaggio()
+        BottoneFabbrica.blittaggio()
 
-    if caniInCasa < 5:
-        BottoneVendi.costume = Bottonii.vendigrigio
-        BottoneVendi.cambiaCostume()
-    else:
-        BottoneVendi.costume = Bottonii.vendi
-        BottoneVendi.cambiaCostume()
+        if caniInCasa < 5:
+            BottoneVendi.costume = Bottonii.vendigrigio
+            BottoneVendi.cambiaCostume()
+        else:
+            BottoneVendi.costume = Bottonii.vendi
+            BottoneVendi.cambiaCostume()
 
-    if not selezionandoNumero:
-        BottoneVendi.blittaggio()
-    else:
-        BottoneMenoCani.blittaggio()
-        BottonePiuCani.blittaggio()
-        TestoSelettore.blitText()
-        BottoneConferma.blittaggio()
-        BottoneConferma.x = posx_btn + width_btn/2 -  BottoneConferma.larghezza/2
+        if not selezionandoNumero:
+            BottoneVendi.blittaggio()
+        else:
+            BottoneMenoCani.blittaggio()
+            BottonePiuCani.blittaggio()
+            TestoSelettore.blitText()
+            BottoneConferma.blittaggio()
+            BottoneAnnulla.blittaggio()
+            BottoneConferma.x = posx_btn + width_btn/2 -  BottoneConferma.larghezza/2
+            BottoneAnnulla.x = posx_btn + width_btn/2 -  BottoneAnnulla.larghezza/2
     return finished
 
 def mostraTutorial(boolean):
@@ -575,10 +586,10 @@ BottoneCasa = Sprite(530,0,60,60,r"Immagini\/casa_upgrade_1.png")
 BottoneCamion = Sprite(460,0,60,60,r"Immagini\/camion_upgrade_1.png")
 BottoneFabbrica = Sprite(390,0,60,60,r"Immagini\/fabbrica_upgrade_1.png")
 
-posx_btn = 441
-posy_btn = 454
 width_btn = 92
 height_btn = 33
+posx_btn = Casa.x + Casa.larghezza/2 -  width_btn/2
+posy_btn = 454
 # definisco la posizione e la dimensione della freccetta SINISTRA per decrementare il valore dei cani venduti
 width_menoCaniVendita = 23
 height_menoCaniVendita = 28
@@ -604,7 +615,15 @@ posx_testoSel = posx_btn + width_btn/2 -  TestoSelettore.returnSize()[0]/2
 TestoSelettore.x = posx_testoSel
 
 BottoneConferma = Sprite(posx_btn, posy_menoCaniVendita+BottoneMenoCani.altezza+7, 93, 27, r"Immagini\/conferma.png")
+BottoneAnnulla = Sprite(posx_btn, BottoneConferma.y+BottoneConferma.altezza+7, 93, 27, r"Immagini\/annulla.png")
 
+Barretta = Sprite(198, 492, 5, 49, r"Immagini\/barretta.png")
+
+BottoneFacile = Sprite(64,229, 144,141,r"Immagini\/facile.png")
+BottoneMedioLock = Sprite(222,209, 155,161,r"Immagini\/medio_lock.png")
+BottoneMedio = Sprite(228,229, 144,141,r"Immagini\/medio.png")
+BottoneDifficileLock = Sprite(391,209, 155,161,r"Immagini\/difficile_lock.png")
+BottoneDifficile = Sprite(392,229, 144,141,r"Immagini\/difficile.png")
 
 
 
@@ -628,15 +647,19 @@ if nome == "matteo":
     background = pygame.image.load(r"Loghi\/matte.png")
 if nome == "tesohh":
     background = pygame.image.load(r"Loghi\/tesohh.png")
-screen.blit(background, (0,0))
+
 pygame.display.flip()
 
 
 
+
+background = pygame.image.load(r"Immagini\/caricamento.png")
+scena = "caricamento"
 pygame.mixer.Sound.play(splashscreen)
-time.sleep(6)
-background = pygame.image.load(r"Immagini\/sfondo.png")
+
+
 pygame.mixer.music.play(-1)
+
 
 
 
@@ -686,7 +709,12 @@ while not finished:
             upFabbrica = screen.blit(BottoneFabbrica.sprite,(BottoneFabbrica.x,BottoneFabbrica.y))
             botVendi = screen.blit(BottoneVendi.sprite,(BottoneVendi.x,BottoneVendi.y))
             botPiuCani = screen.blit(BottonePiuCani.sprite,(BottonePiuCani.x,BottonePiuCani.y))
-            botMenoCani = screen.blit(BottoneMenoCani.sprite,(BottoneMenoCani.x,BottoneMenoCani.y))         
+            botMenoCani = screen.blit(BottoneMenoCani.sprite,(BottoneMenoCani.x,BottoneMenoCani.y))   
+            botAnnulla = screen.blit(BottoneAnnulla.sprite,(BottoneAnnulla.x,BottoneAnnulla.y))   
+            botConferma = screen.blit(BottoneConferma.sprite,(BottoneConferma.x,BottoneConferma.y))
+            botFacile = screen.blit(BottoneFacile.sprite, (BottoneFacile.x,BottoneFacile.y))         
+            botMedio = screen.blit(BottoneMedio.sprite, (BottoneMedio.x,BottoneMedio.y))         
+            botDifficile = screen.blit(BottoneDifficile.sprite, (BottoneDifficile.x,BottoneDifficile.y))         
             if upCasa.collidepoint(x, y):
                 if Casa.livello == 0:
                     Casa.upgrade(Casaa.casa_1, Casaa.casa_upgrade_2, BottoneCasa)
@@ -765,7 +793,7 @@ while not finished:
                 if botPiuCani.collidepoint(x,y):
                     if (caniSelezionati != caniMassimiInCasa) and caniSelezionati != caniInCasa:
                         caniSelezionati += 5
-                        if (caniSelezionati > caniInCasa):
+                        if (caniSelezionati >= caniInCasa):
                             caniSelezionati = caniInCasa
                             TestoSelettore.color = red
                         else:
@@ -774,7 +802,9 @@ while not finished:
                         TestoSelettore.x = posx_btn + width_btn/2 -  TestoSelettore.returnSize()[0]/2
                     else:
                         pygame.mixer.Sound.play(error)
+                        TestoSelettore.color = red
                 elif botMenoCani.collidepoint(x,y):
+                    #@IDEA quando è a zero il bottone menocani e la conferma diventa grigia
                     if caniSelezionati > 0:
                         TestoSelettore.color = black
                         caniSelezionati -= 5
@@ -788,52 +818,79 @@ while not finished:
                         TestoSelettore.x = posx_btn + width_btn/2 -  TestoSelettore.returnSize()[0]/2
                     else:
                         pygame.mixer.Sound.play(error)
-                        
-
-
-
                     
+                elif botAnnulla.collidepoint(x,y):
+                    selezionandoNumero = False
+                elif botConferma.collidepoint(x,y):
+                    scena = "difficolta"
+            if botFacile.collidepoint(x,y):
+                scena = "facile"
+            if botMedio.collidepoint(x,y):
+                if Trasporto.livello >= 3:
+                    scena = "medio"
+                else:
+                    pygame.mixer.Sound.play(error)
 
-
-    # hitbox
-    hitboxCamion = blitBox("camion")
-    hitboxCasa = blitBox("casa")
-    hitboxFabbrica = blitBox("fabbrica")
-
-    # aggiungere gli sprite al gioco
-    screen.blit(background, (0, 0))
-    Fabbrica.blittaggio()
-    Casa.blittaggio()
-    Trasporto.blittaggio()
-
+            if botDifficile.collidepoint(x,y):
+                if Trasporto.livello >= 4:
+                    scena = "difficile"
+                else:
+                    pygame.mixer.Sound.play(error)
+                
     
     
-    
-    
+    if scena == "home":
+        hitboxCamion = blitBox("camion")
+        hitboxCasa = blitBox("casa")
+        hitboxFabbrica = blitBox("fabbrica")
+    screen.blit(background, (0,0))
+    if scena == "home":
+        Fabbrica.blittaggio()
+        Casa.blittaggio()
+        Trasporto.blittaggio()
+    elif scena == "caricamento":
+        Barretta.blittaggio()
+        if Barretta.larghezza != 210:
+            Barretta.larghezza += 1
+            Barretta.cambiaCostume()
+        else:
+            time.sleep(1.5)
+            scena = "home"
+            selezionandoNumero = False
+            background = pygame.image.load(r"Immagini\/sfondo.png")
+            Barretta.larghezza = 5
+    elif scena == "difficolta":
+        background = pygame.image.load(r"Immagini\/black.png")
+        BottoneFacile.blittaggio()
+        if Trasporto.livello >= 3:
+            BottoneMedio.blittaggio()
+        else:
+            BottoneMedioLock.blittaggio()
+        if Trasporto.livello >= 4:
+            BottoneDifficile.blittaggio()
+        else:
+            BottoneDifficileLock.blittaggio()
 
-    # screen.blit(Trasporto.sprite, (Trasporto.x, Trasporto.y))
-    # screen.blit(Casa.sprite, (Casa.x, Casa.y))#aggiungiamo l'immagine allo schermo (x, y)
-    # screen.blit(Fabbrica.sprite, (Fabbrica.x, Fabbrica.y)) #aggiungiamo l'immagine allo schermo (x, y)
+        
+        
+        
+
+        
+
+
 
     pressedKeys = pygame.key.get_pressed()
 
-    # mousePos = pygame.mouse.get_pos()
-    # mousePointer = (mousePos, 1,1)
-    # mouseHitbox = blitBox("mouse")
-
     # decidi se mostrare o no il tutorial bool 0 / 1
     mostraTutorial(1)
-    
-    
-    
 
     #tiene testocasa.string sempre alla quantita dei cani
     TestoCasa.string = str(caniInCasa)
     
-    
-    TestoTrasporto.blitText()
-    TestoFabbrica.blitText()
-    TestoCasa.blitText()
+    if scena == "home":
+        TestoTrasporto.blitText()
+        TestoFabbrica.blitText()
+        TestoCasa.blitText()
     
     TestoCasa.x = Casa.x + Casa.larghezza/2 -  TestoCasa.returnSize()[0]/2
     TestoFabbrica.x = Fabbrica.x + Fabbrica.larghezza/2 -  TestoFabbrica.returnSize()[0]/2
@@ -841,7 +898,10 @@ while not finished:
     if tutorialSlide != 10:
         TestoTutorial.blitText()
     else:
-        TestoNome.blitText()
+        if scena == "home":
+            TestoNome.blitText()
+
+        
 
     
 
@@ -1006,5 +1066,7 @@ while not finished:
     TestoTrasporto.y = Trasporto.y - 30
 
     pygame.display.flip() #aggiorna lo schermo
+
     
     frame.tick(1000)
+
