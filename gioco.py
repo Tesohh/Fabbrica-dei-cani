@@ -149,7 +149,7 @@ def mostraProfilo():
 
     if TestoNome.string == "filviegg":
         Profilo.costume = easteregg 
-        Profilo.cambiaCostume()
+        Profilo.aggiornaCostume()
         TestoSchei.string = f"{schei}      flex"
     if TestoNome.string == "filvieggbanana":
         schei += 1
@@ -184,10 +184,10 @@ def mostraProfilo():
 
         if caniInCasa < 5:
             BottoneVendi.costume = Bottonii.vendigrigio
-            BottoneVendi.cambiaCostume()
+            BottoneVendi.aggiornaCostume()
         else:
             BottoneVendi.costume = Bottonii.vendi
-            BottoneVendi.cambiaCostume()
+            BottoneVendi.aggiornaCostume()
 
         if not selezionandoNumero:
             BottoneVendi.blittaggio()
@@ -232,10 +232,18 @@ def mostraTutorial(boolean):
                 mostraProfilo()
                 background = pygame.image.load(r"Immagini/sfondo.png")
                 tutorialFinito = True 
-                if not possibilitaDiScrivere:
-                    scrivendoNome = True
-                    possibilitaDiScrivere = True
-                    TestoNome.string = ""
+                # if not possibilitaDiScrivere:
+                #     scrivendoNome = True
+                #     possibilitaDiScrivere = True
+                #     TestoNome.string = ""
+                print("bellas")
+                Profilo.x = 5
+                Profilo.y = 0
+                Profilo.larghezza = 60
+                Profilo.altezza = 60
+                Profilo.aggiornaCostume()
+                TestoNome.x = 70
+                TestoNome.y = 0
         tutorial1.blittaggio()
         tutorial2.blittaggio()
         tutorial3.blittaggio()
@@ -265,9 +273,9 @@ def mostraTutorial(boolean):
         mostraProfilo()
         
         #Profilo = Sprite(70,0,60,60,r"Immagini/profilo.png")
-        if not possibilitaDiScrivere:
-            scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
-            possibilitaDiScrivere = True
+        # if not possibilitaDiScrivere:
+        #     scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
+        #     possibilitaDiScrivere = True
         
         
     return giocoIniziato
@@ -302,7 +310,7 @@ def carica():
     path = pickle.load(open("fotoprofilo.dat", "rb"))
     jimmy = pygame.image.load(path)
     Profilo.costume = jimmy
-    Profilo.cambiaCostume()
+    Profilo.aggiornaCostume()
 
     Casa.livello = pickle.load(open("CasaLivello.dat", "rb"))
     Trasporto.livello = pickle.load(open("TrasportoLivello.dat", "rb"))
@@ -314,67 +322,67 @@ def carica():
     if Casa.livello == 1:
         Casa.costume = Casaa.casa_1
         BottoneCasa.upgradeBottone(Casaa.casa_upgrade_2)
-        Casa.cambiaCostume()
+        Casa.aggiornaCostume()
     if Casa.livello == 2:
         Casa.costume = Casaa.casa_2
         BottoneCasa.upgradeBottone(Casaa.casa_upgrade_3)
-        Casa.cambiaCostume()
+        Casa.aggiornaCostume()
     if Casa.livello == 3:
         Casa.costume = Casaa.casa_3
         BottoneCasa.upgradeBottone(Casaa.casa_upgrade_4)
-        Casa.cambiaCostume()
+        Casa.aggiornaCostume()
     if Casa.livello == 4:
         Casa.costume = Casaa.casa_4
         BottoneCasa.upgradeBottone(Casaa.casa_upgrade_5)
-        Casa.cambiaCostume()
+        Casa.aggiornaCostume()
     if Casa.livello == 5:
         Casa.costume = Casaa.casa_5
         BottoneCasa.upgradeBottone(Casaa.casa_upgrade_max)
-        Casa.cambiaCostume()
+        Casa.aggiornaCostume()
     
     if Fabbrica.livello == 1:
         BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_2)
         Fabbrica.costume = Fabbricaa.fabbrica_1
-        Fabbrica.cambiaCostume()
+        Fabbrica.aggiornaCostume()
     if Fabbrica.livello == 2:
         BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_3)
         Fabbrica.costume = Fabbricaa.fabbrica_2
-        Fabbrica.cambiaCostume()
+        Fabbrica.aggiornaCostume()
     if Fabbrica.livello == 3:
         BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_4)
         Fabbrica.costume = Fabbricaa.fabbrica_3
-        Fabbrica.cambiaCostume()
+        Fabbrica.aggiornaCostume()
     if Fabbrica.livello == 4:
         BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_5)
         Fabbrica.costume = Fabbricaa.fabbrica_4
-        Fabbrica.cambiaCostume()
+        Fabbrica.aggiornaCostume()
     if Fabbrica.livello == 5:
         BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_max)
         Fabbrica.larghezza += 15
         Fabbrica.altezza += 15
         Fabbrica.x -= 10
         Fabbrica.costume = Fabbricaa.fabbrica_5
-        Fabbrica.cambiaCostume()
+        Fabbrica.aggiornaCostume()
 
     if Trasporto.livello == 1:
         Trasporto.costume = Camionn.camion_1
-        Trasporto.cambiaCostume()
+        Trasporto.aggiornaCostume()
         BottoneCamion.upgradeBottone(Camionn.camion_upgrade_2)
     if Trasporto.livello == 2:
         Trasporto.costume = Camionn.camion_2
         BottoneCamion.upgradeBottone(Camionn.camion_upgrade_3)
-        Trasporto.cambiaCostume()
+        Trasporto.aggiornaCostume()
     if Trasporto.livello == 3:
         Trasporto.costume = Camionn.camion_3
         BottoneCamion.upgradeBottone(Camionn.camion_upgrade_4)
-        Trasporto.cambiaCostume()
+        Trasporto.aggiornaCostume()
     if Trasporto.livello == 4:
         Trasporto.costume = Camionn.camion_4
         BottoneCamion.upgradeBottone(Camionn.camion_upgrade_5)
         Trasporto.y -= 60
         Trasporto.larghezza = 80
         Trasporto.altezza = 65
-        Trasporto.cambiaCostume()
+        Trasporto.aggiornaCostume()
 
     if Trasporto.livello == 5:
         BottoneCamion.upgradeBottone(Camionn.camion_upgrade_max)
@@ -382,7 +390,7 @@ def carica():
         Trasporto.y -= 60
         Trasporto.larghezza = 80
         Trasporto.altezza = 80
-        Trasporto.cambiaCostume()
+        Trasporto.aggiornaCostume()
 
     
         
@@ -419,7 +427,7 @@ class Sprite:
     def blittaggio(self):
         screen.blit(self.sprite, (self.x,self.y))
 
-    def cambiaCostume(self):
+    def aggiornaCostume(self):
         self.sprite = pygame.transform.scale(self.costume, (self.larghezza, self.altezza))
 
     def printaggio(self):
@@ -432,7 +440,7 @@ class Sprite:
             pygame.mixer.Sound.play(success)
             self.livello += 1
             self.costume = costume
-            self.cambiaCostume()
+            self.aggiornaCostume()
             target.upgradeBottone(costumeBottone)#@todo sistemare!!!!
         
         elif self.livello == 1 and schei >=2:
@@ -440,7 +448,7 @@ class Sprite:
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 2")
             self.costume = costume
-            self.cambiaCostume()
+            self.aggiornaCostume()
             self.livello += 1
             target.upgradeBottone(costumeBottone)
         
@@ -449,7 +457,7 @@ class Sprite:
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 3")
             self.costume = costume
-            self.cambiaCostume()
+            self.aggiornaCostume()
             self.livello += 1
             target.upgradeBottone(costumeBottone)
         
@@ -457,7 +465,7 @@ class Sprite:
             pygame.mixer.Sound.play(success)
             schei -= 5
             self.costume = costume
-            self.cambiaCostume()
+            self.aggiornaCostume()
             print("UPGRADE AL LV 4")
             self.livello += 1
             target.upgradeBottone(costumeBottone)
@@ -465,7 +473,7 @@ class Sprite:
         elif self.livello == 4 and schei >=10:
             schei -= 10
             self.costume = costume
-            self.cambiaCostume()
+            self.aggiornaCostume()
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 5")
             self.livello += 1
@@ -475,11 +483,11 @@ class Sprite:
 
     def ricaricaCostume(self,costume):
         self.costume = costume
-        self.cambiaCostume()
+        self.aggiornaCostume()
     
     def upgradeBottone(self,costume):
         self.costume = costume
-        self.cambiaCostume()
+        self.aggiornaCostume()
     def downgrade(self):
         if self.livello: #controlla se livello non è 0
             self.livello -= 1 
@@ -720,14 +728,13 @@ elif tutorialSlide == 0:
     pygame.mixer.Sound.play(splashscreen)
     pygame.mixer.music.play(-1)
     print("bellas")
-    Profilo.x = 70
+    Profilo.x = 5
     Profilo.y = 0
     Profilo.larghezza = 60
     Profilo.altezza = 60
-    Profilo.cambiaCostume()
-    TestoNome.x = 20
-    TestoNome.y = 10
-    
+    Profilo.aggiornaCostume()
+    TestoNome.x = 70
+    TestoNome.y = 0
 
 
 
@@ -763,7 +770,7 @@ while not finished:
                             pygame.mixer.Sound.play(error)
                         jimmy = pygame.image.load(path)
                         Profilo.costume = jimmy
-                        Profilo.cambiaCostume()
+                        Profilo.aggiornaCostume()
                         root.destroy()
                         if path != r"Immagini/profilo.png":
                             pygame.mixer.Sound.play(success)
@@ -845,12 +852,12 @@ while not finished:
                     Trasporto.y -= 60
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 65
-                    Trasporto.cambiaCostume()
+                    Trasporto.aggiornaCostume()
                 elif Trasporto.livello == 4:
                     Trasporto.upgrade(Camionn.camion_5, Camionn.camion_upgrade_max, BottoneCamion)
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 80
-                    Trasporto.cambiaCostume()
+                    Trasporto.aggiornaCostume()
                     
                 else:
                     pygame.mixer.Sound.play(error)
@@ -875,7 +882,7 @@ while not finished:
                     Fabbrica.larghezza += 15
                     Fabbrica.altezza += 15
                     Fabbrica.x -= 10
-                    Fabbrica.cambiaCostume()
+                    Fabbrica.aggiornaCostume()
                 else:
                     pygame.mixer.Sound.play(error)
             if not selezionandoNumero:
@@ -973,7 +980,7 @@ while not finished:
         Barretta.blittaggio()
         if Barretta.larghezza != 210:
             Barretta.larghezza += 1
-            Barretta.cambiaCostume()
+            Barretta.aggiornaCostume()
         else:
             time.sleep(1.5)
             scena = "home"
