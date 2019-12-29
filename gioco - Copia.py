@@ -1,4 +1,6 @@
 #INIZIO
+
+
 #============================================================================================
 #MODULI
 #============================================================================================
@@ -13,6 +15,7 @@ from tkinter import Tk
 import pickle
 import os.path
 from costumi import Casaa,Fabbricaa,Camionn,Bottonii
+
 
 
 
@@ -37,12 +40,12 @@ font = pygame.font.Font(r"Font/noto.ttf", 28)
 
 
 
-
 #============================================================================================
 #VARIABILI
 #============================================================================================
 rosso = (255,0,0) #R, G, B
 colore2 = (120,50,100)
+
 
 background = pygame.image.load(r"Loghi/splashscreen.png")
 background = pygame.transform.scale(background, (600,600))
@@ -50,6 +53,14 @@ background = pygame.transform.scale(background, (600,600))
 
 jimmy = pygame.image.load(r"Immagini/jimmyneutron.png")
 easteregg = pygame.image.load(r"Immagini/easteregg.png")
+
+background = pygame.image.load(r"Loghi\/splashscreen.png")
+background = pygame.transform.scale(background, (600,600))
+
+
+jimmy = pygame.image.load(r"Immagini\/jimmyneutron.png")
+easteregg = pygame.image.load(r"Immagini\/easteregg.png")
+
 
 
 
@@ -78,15 +89,22 @@ schei = 1
 dogOverflow = 0
 possibilitaDiScrivere = False
 nome = ""
+
 path = r"Immagini/profilo.png"
 caniSelezionati = 5
 caniMassimiInCasa = 5
 haGuardatoIntro = False
 
+path = r"Immagini\/profilo.png"
+caniSelezionati = 5
+caniMassimiInCasa = 5
+
+
 caratteri = "abcdefghijklmnopqrstuvwxyz1234567890"
 scrivendoNome = True
 
 selezionandoNumero = False 
+
 
 
 woof = pygame.mixer.Sound(r"Suoni/woof.wav")
@@ -98,6 +116,15 @@ error = pygame.mixer.Sound(r"Suoni/error.wav")
 splashscreen = pygame.mixer.Sound(r"Suoni/splashscreen.wav")
 kaching = pygame.mixer.Sound(r"Suoni/kaching.wav")
 intro = pygame.mixer.Sound(r"Suoni/narrazione.wav")
+
+woof = pygame.mixer.Sound(r"Suoni\/woof.wav")
+microWoof = pygame.mixer.Sound(r"Suoni\/woofHigh.wav")
+camionStart = pygame.mixer.Sound(r"Suoni\/camionStart.wav")
+camionGo = pygame.mixer.Sound(r"Suoni\/camion.wav")
+success = pygame.mixer.Sound(r"Suoni\/success.wav")
+error = pygame.mixer.Sound(r"Suoni\/error.wav")
+splashscreen = pygame.mixer.Sound(r"Suoni\/splashscreen.wav")
+
 
 pygame.mixer.Sound.set_volume(camionStart, 0.2)
 pygame.mixer.Sound.set_volume(success, 0.4)
@@ -112,7 +139,10 @@ scena = "home"
 def caricamento(cosaDopo):
     global scena, background
     scena = "caricamento"
+
     background = pygame.image.load(r"Immagini/caricamento.png")
+
+
 
 
 
@@ -149,7 +179,15 @@ def mostraProfilo():
 
     if TestoNome.string == "filviegg":
         Profilo.costume = easteregg 
+
+
         Profilo.aggiornaCostume()
+
+        Profilo.aggiornaCostume()
+
+=======
+        Profilo.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
         TestoSchei.string = f"{schei}      flex"
     if TestoNome.string == "filvieggbanana":
         schei += 1
@@ -175,7 +213,10 @@ def mostraProfilo():
         Profilo.blittaggio()
         TestoSchei.blitText()
         TestoSchei.string = str(schei)
+
         Coin.x = TestoSchei.x + int(TestoSchei.returnSize()[0]) + 5
+
+
         Coin.blittaggio()
 
         BottoneCasa.blittaggio()
@@ -184,10 +225,16 @@ def mostraProfilo():
 
         if caniInCasa < 5:
             BottoneVendi.costume = Bottonii.vendigrigio
+
+
             BottoneVendi.aggiornaCostume()
+=======
+            BottoneVendi.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
         else:
             BottoneVendi.costume = Bottonii.vendi
-            BottoneVendi.aggiornaCostume()
+            BottoneVendi.cambiaCostume()
+
 
         if not selezionandoNumero:
             BottoneVendi.blittaggio()
@@ -200,6 +247,7 @@ def mostraProfilo():
             BottoneConferma.x = posx_btn + width_btn/2 -  BottoneConferma.larghezza/2
             BottoneAnnulla.x = posx_btn + width_btn/2 -  BottoneAnnulla.larghezza/2
     return finished
+
 def spostaTutorialAvanti():
     tutorial1.spostaAvanti()
     tutorial2.spostaAvanti()
@@ -223,27 +271,23 @@ def spostaTutorialIndietro():
     tutorial9.spostaIndietro()
     tutorial10.spostaIndietro()
     
+
+
+
 def mostraTutorial(boolean):
     """ Valori accettati (0,1) """
-    global tutorialSlide, giocoIniziato, scrivendoNome, possibilitaDiScrivere, tutorialFinito
+    global tutorialSlide, giocoIniziato, scrivendoNome, possibilitaDiScrivere, tutorialFinito,background
     if not tutorialFinito:
         if boolean:
+
             if tutorialSlide == 10:
                 mostraProfilo()
                 background = pygame.image.load(r"Immagini/sfondo.png")
                 tutorialFinito = True 
-                # if not possibilitaDiScrivere:
-                #     scrivendoNome = True
-                #     possibilitaDiScrivere = True
-                #     TestoNome.string = ""
-                print("bellas")
-                Profilo.x = 5
-                Profilo.y = 0
-                Profilo.larghezza = 60
-                Profilo.altezza = 60
-                Profilo.aggiornaCostume()
-                TestoNome.x = 70
-                TestoNome.y = 0
+                if not possibilitaDiScrivere:
+                    scrivendoNome = True
+                    possibilitaDiScrivere = True
+                    TestoNome.string = ""
         tutorial1.blittaggio()
         tutorial2.blittaggio()
         tutorial3.blittaggio()
@@ -267,22 +311,76 @@ def mostraTutorial(boolean):
             #@TODO fare che quando si arriva alla home il profilo e il testonome siano al posto giusto
 
         
+
+            if tutorialSlide != 10:
+                if pressedKeys[pygame.K_k] == 1:
+                    if tutorialSlide != 7 and tutorialSlide != 8:
+                        print("prossimo")
+                        tutorialSlide += 1
+                        time.sleep(0.3)
+                        # cambia il testo del tutorial
+            if tutorialSlide == 1:
+                TestoTutorial.string = "In questo gioco dovrai ottenere"
+            elif tutorialSlide == 2:
+                TestoTutorial.string = "100 cani di cui 5 perfetti,"
+            elif tutorialSlide == 3:
+                TestoTutorial.string = "quindi con tutti gli stat"
+            elif tutorialSlide == 4:
+                TestoTutorial.string = "maggiori di 8."
+            elif tutorialSlide == 5:
+                TestoTutorial.string = "Iniziamo!!!"
+            elif tutorialSlide == 6:
+                TestoCasa.string = "2"
+                TestoTutorial.string = "Adesso hai due cani."
+            elif tutorialSlide == 7:
+                TestoTutorial.string = "Portali alla fabbrica con [SPAZIO]" 
+                giocoIniziato = True  
+            elif tutorialSlide == 8:
+                TestoTutorial.string = "Portali in casa con [SPAZIO]"
+            elif tutorialSlide == 9:
+                TestoTutorial.string = "Bravo! Adesso ti lascio. CIAO! [k]"
+            elif tutorialSlide == 10:
+                mostraProfilo()
+                tutorialFinito = True 
+                if not possibilitaDiScrivere:
+                    scrivendoNome = True
+                    possibilitaDiScrivere = True
+                    TestoNome.string = ""
+                
+            
+            if tutorialSlide < 6:
+                if pressedKeys[pygame.K_p] == 1:
+                    if tutorialSlide != 7:
+                        tutorialSlide = 10
+                        print("Premi K per completare il saltamento")
+                        time.sleep(0.1)  
+
     else:
         giocoIniziato = True
         tutorialSlide = 10
         mostraProfilo()
+
         
         #Profilo = Sprite(70,0,60,60,r"Immagini/profilo.png")
-        # if not possibilitaDiScrivere:
-        #     scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
-        #     possibilitaDiScrivere = True
+        if not possibilitaDiScrivere:
+            scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
+            possibilitaDiScrivere = True
         
         
+
+        if not possibilitaDiScrivere:
+            scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
+            possibilitaDiScrivere = True
+
     return giocoIniziato
     
 
 def salva():
+
     global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path,TestoNome,scrivendoNome, tutorialFinito, caniMassimiInCasa, haGuardatoIntro
+
+    
+
     pickle.dump(caniInCasa, open("caniInCasa.dat", "wb"))
     pickle.dump(caniTrasportati,open("caniTrasportati.dat","wb"))
 
@@ -298,11 +396,17 @@ def salva():
     pickle.dump(scrivendoNome,open("possibilitaDiScrivere.dat", "wb"))
     pickle.dump(tutorialFinito, open("tutorialFinito.dat", "wb"))
     pickle.dump(caniMassimiInCasa, open("caniMassimiInCasa.dat","wb"))
+
     pickle.dump(haGuardatoIntro, open("haGuardatoIntro.dat","wb"))
+    
+
+
+
     
 
 def carica():
     global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path, scrivendoNome, tutorialFinito,caniMassimiInCasa, haGuardatoIntro
+
     caniInCasa = pickle.load(open("caniInCasa.dat", "rb")) 
     caniTrasportati = pickle.load(open("caniTrasportati.dat","rb"))
 
@@ -310,18 +414,31 @@ def carica():
     path = pickle.load(open("fotoprofilo.dat", "rb"))
     jimmy = pygame.image.load(path)
     Profilo.costume = jimmy
+
+
     Profilo.aggiornaCostume()
+
+    Profilo.aggiornaCostume()
+=======
+    Profilo.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
+
 
     Casa.livello = pickle.load(open("CasaLivello.dat", "rb"))
     Trasporto.livello = pickle.load(open("TrasportoLivello.dat", "rb"))
     Fabbrica.livello = pickle.load(open("FabbricaLivello.dat", "rb"))
 
     scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
+
     haGuardatoIntro = pickle.load(open("haGuardatoIntro.dat", "rb"))
+
+
 
     if Casa.livello == 1:
         Casa.costume = Casaa.casa_1
         BottoneCasa.upgradeBottone(Casaa.casa_upgrade_2)
+
+
         Casa.aggiornaCostume()
     if Casa.livello == 2:
         Casa.costume = Casaa.casa_2
@@ -339,10 +456,38 @@ def carica():
         Casa.costume = Casaa.casa_5
         BottoneCasa.upgradeBottone(Casaa.casa_upgrade_max)
         Casa.aggiornaCostume()
+
+        Casa.aggiornaCostume()
+=======
+        Casa.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
+    if Casa.livello == 2:
+        Casa.costume = Casaa.casa_2
+        BottoneCasa.upgradeBottone(Casaa.casa_upgrade_3)
+        Casa.cambiaCostume()
+    if Casa.livello == 3:
+        Casa.costume = Casaa.casa_3
+        BottoneCasa.upgradeBottone(Casaa.casa_upgrade_4)
+        Casa.cambiaCostume()
+    if Casa.livello == 4:
+        Casa.costume = Casaa.casa_4
+        BottoneCasa.upgradeBottone(Casaa.casa_upgrade_5)
+        Casa.cambiaCostume()
+    if Casa.livello == 5:
+        Casa.costume = Casaa.casa_5
+        BottoneCasa.upgradeBottone(Casaa.casa_upgrade_max)
+
+        Casa.aggiornaCostume()
+
+=======
+        Casa.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
     
     if Fabbrica.livello == 1:
         BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_2)
         Fabbrica.costume = Fabbricaa.fabbrica_1
+
+
         Fabbrica.aggiornaCostume()
     if Fabbrica.livello == 2:
         BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_3)
@@ -356,33 +501,95 @@ def carica():
         BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_5)
         Fabbrica.costume = Fabbricaa.fabbrica_4
         Fabbrica.aggiornaCostume()
+
+        Fabbrica.aggiornaCostume()
+=======
+        Fabbrica.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
+    if Fabbrica.livello == 2:
+        BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_3)
+        Fabbrica.costume = Fabbricaa.fabbrica_2
+        Fabbrica.cambiaCostume()
+    if Fabbrica.livello == 3:
+        BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_4)
+        Fabbrica.costume = Fabbricaa.fabbrica_3
+        Fabbrica.cambiaCostume()
+    if Fabbrica.livello == 4:
+        BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_5)
+        Fabbrica.costume = Fabbricaa.fabbrica_4
+
+        Fabbrica.aggiornaCostume()
+
+=======
+        Fabbrica.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
     if Fabbrica.livello == 5:
         BottoneFabbrica.upgradeBottone(Fabbricaa.fabbrica_upgrade_max)
         Fabbrica.larghezza += 15
         Fabbrica.altezza += 15
         Fabbrica.x -= 10
         Fabbrica.costume = Fabbricaa.fabbrica_5
+
+
         Fabbrica.aggiornaCostume()
 
     if Trasporto.livello == 1:
         Trasporto.costume = Camionn.camion_1
         Trasporto.aggiornaCostume()
+
+        Fabbrica.aggiornaCostume()
+
+    if Trasporto.livello == 1:
+        Trasporto.costume = Camionn.camion_1
+        Trasporto.aggiornaCostume()
+
+=======
+        Fabbrica.cambiaCostume()
+
+    if Trasporto.livello == 1:
+        Trasporto.costume = Camionn.camion_1
+        Trasporto.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
         BottoneCamion.upgradeBottone(Camionn.camion_upgrade_2)
     if Trasporto.livello == 2:
         Trasporto.costume = Camionn.camion_2
         BottoneCamion.upgradeBottone(Camionn.camion_upgrade_3)
+
+
         Trasporto.aggiornaCostume()
     if Trasporto.livello == 3:
         Trasporto.costume = Camionn.camion_3
         BottoneCamion.upgradeBottone(Camionn.camion_upgrade_4)
         Trasporto.aggiornaCostume()
+
+        Trasporto.aggiornaCostume()
+    if Trasporto.livello == 3:
+        Trasporto.costume = Camionn.camion_3
+        BottoneCamion.upgradeBottone(Camionn.camion_upgrade_4)
+        Trasporto.aggiornaCostume()
+
+=======
+        Trasporto.cambiaCostume()
+    if Trasporto.livello == 3:
+        Trasporto.costume = Camionn.camion_3
+        BottoneCamion.upgradeBottone(Camionn.camion_upgrade_4)
+        Trasporto.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
     if Trasporto.livello == 4:
         Trasporto.costume = Camionn.camion_4
         BottoneCamion.upgradeBottone(Camionn.camion_upgrade_5)
         Trasporto.y -= 60
         Trasporto.larghezza = 80
         Trasporto.altezza = 65
+
+
         Trasporto.aggiornaCostume()
+
+        Trasporto.aggiornaCostume()
+=======
+        Trasporto.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
+
 
     if Trasporto.livello == 5:
         BottoneCamion.upgradeBottone(Camionn.camion_upgrade_max)
@@ -390,7 +597,15 @@ def carica():
         Trasporto.y -= 60
         Trasporto.larghezza = 80
         Trasporto.altezza = 80
+
+
         Trasporto.aggiornaCostume()
+
+        Trasporto.aggiornaCostume()
+=======
+        Trasporto.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
+
 
     
         
@@ -403,7 +618,13 @@ def carica():
     caniMassimiInCasa = pickle.load(open("caniMassimiInCasa.dat", "rb"))
 
 #============================================================================================
+
 #CLASSI 
+#============================================================================================
+
+
+
+#SPRITE E FANTA -----------------------------------------------------------------------------
 #============================================================================================
 
 
@@ -427,7 +648,14 @@ class Sprite:
     def blittaggio(self):
         screen.blit(self.sprite, (self.x,self.y))
 
+
+
     def aggiornaCostume(self):
+
+
+=======
+    def cambiaCostume(self):
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
         self.sprite = pygame.transform.scale(self.costume, (self.larghezza, self.altezza))
 
     def printaggio(self):
@@ -440,7 +668,15 @@ class Sprite:
             pygame.mixer.Sound.play(success)
             self.livello += 1
             self.costume = costume
+
+
             self.aggiornaCostume()
+
+            self.aggiornaCostume()
+
+=======
+            self.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
             target.upgradeBottone(costumeBottone)#@todo sistemare!!!!
         
         elif self.livello == 1 and schei >=2:
@@ -448,7 +684,15 @@ class Sprite:
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 2")
             self.costume = costume
+
+
             self.aggiornaCostume()
+
+            self.aggiornaCostume()
+
+
+            self.cambiaCostume()
+
             self.livello += 1
             target.upgradeBottone(costumeBottone)
         
@@ -457,7 +701,15 @@ class Sprite:
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 3")
             self.costume = costume
+
+
             self.aggiornaCostume()
+
+            self.aggiornaCostume()
+
+
+            self.cambiaCostume()
+
             self.livello += 1
             target.upgradeBottone(costumeBottone)
         
@@ -465,7 +717,15 @@ class Sprite:
             pygame.mixer.Sound.play(success)
             schei -= 5
             self.costume = costume
+
+
             self.aggiornaCostume()
+
+            self.aggiornaCostume()
+
+
+            self.cambiaCostume()
+
             print("UPGRADE AL LV 4")
             self.livello += 1
             target.upgradeBottone(costumeBottone)
@@ -473,7 +733,11 @@ class Sprite:
         elif self.livello == 4 and schei >=10:
             schei -= 10
             self.costume = costume
+
+
             self.aggiornaCostume()
+
+
             pygame.mixer.Sound.play(success)
             print("UPGRADE AL LV 5")
             self.livello += 1
@@ -483,11 +747,16 @@ class Sprite:
 
     def ricaricaCostume(self,costume):
         self.costume = costume
+
+
         self.aggiornaCostume()
+=======
+        self.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
     
     def upgradeBottone(self,costume):
         self.costume = costume
-        self.aggiornaCostume()
+        self.cambiaCostume()
     def downgrade(self):
         if self.livello: #controlla se livello non è 0
             self.livello -= 1 
@@ -496,9 +765,8 @@ class Sprite:
             # time.sleep(0.01)
     def spostaIndietro(self):
         self.x += 600
-    
-    
 
+        self.aggiornaCostume()
 class Veicolo(Sprite):
     def impostaVelocità(self, velocità=1):
         self.velocità = abs(velocità)
@@ -590,11 +858,6 @@ class Cane:
 #ISTANZE
 #==========================================================================================
 
-Fabbrica = Edificio(50, 290, 120, 120, r"Immagini/fabbrica.png")
-Casa = Edificio(430, 290, 120, 120, r"Immagini/casa_base.png")
-
-Trasporto = Veicolo(360, 370, 70, 34, r"Immagini/veicolo_base.png")
-
 
 
 Profilo = Sprite(225,123,150,150,r"Immagini/profilo.png")
@@ -608,6 +871,16 @@ TestoNome = Text(70,0,32,black,"")
 
 Coin = Sprite(100,34,30,30,r"Immagini/dogecoin.png")
 
+# ISPANZE ---------------------------------------------------------------------------------
+#==========================================================================================
+
+Fabbrica = Edificio(50, 290, 120, 120, r"Immagini\/fabbrica.png")
+Casa = Edificio(430, 290, 120, 120, r"Immagini\/casa_base.png")
+
+Trasporto = Veicolo(360, 370, 70, 34, r"Immagini\/veicolo_base.png")
+
+Profilo = Sprite(0,0,60,60,r"Immagini\/profilo.png")
+Coin = Sprite(100,34,30,30,r"Immagini\/dogecoin.png")
 
 
 
@@ -616,7 +889,11 @@ TestoCasa = Text(480,410,32,black,"")
 TestoFabbrica = Text(70,410,32,red,"Fermo")
 TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,32,green,"")
 TestoSchei = Text(70,30,32,black,schei)
+
 TestoSottoSchei = Text(TestoSchei.x,TestoSchei.y+10,32,black, "")
+
+
+
 
 
 
@@ -624,9 +901,14 @@ TestoSottoSchei = Text(TestoSchei.x,TestoSchei.y+10,32,black, "")
 
 CopriTestoF = Rectangle(48, 408, 122, 35, white)
 
+
 BottoneCasa = Sprite(530,0,60,60,r"Immagini/casa_upgrade_1.png")
 BottoneCamion = Sprite(460,0,60,60,r"Immagini/camion_upgrade_1.png")
 BottoneFabbrica = Sprite(390,0,60,60,r"Immagini/fabbrica_upgrade_1.png")
+
+
+
+
 
 width_btn = 92
 height_btn = 33
@@ -644,6 +926,7 @@ width_piuCaniVendita = 23
 height_piuCaniVendita = 28
 posx_piuCaniVendita = posx_btn + width_btn - width_piuCaniVendita
 posy_piuCaniVendita = posy_btn
+
 
 BottoneVendi = Sprite(posx_btn,posy_btn,width_btn,height_btn,r"Immagini/vendigrigio.png")
 
@@ -685,6 +968,18 @@ tutorial10 = Sprite(5400,0,600,600, r"Immagini/background 10.png")
 BottoneAvanti = Sprite(600-64, 237, 44, 44, r"Immagini/freccia destra.png")
 BottoneIndietro = Sprite(24, 237, 44, 44, r"Immagini/freccia sinistra.png")
 
+BottoneConferma = Sprite(posx_btn, posy_menoCaniVendita+BottoneMenoCani.altezza+7, 93, 27, r"Immagini\/conferma.png")
+BottoneAnnulla = Sprite(posx_btn, BottoneConferma.y+BottoneConferma.altezza+7, 93, 27, r"Immagini\/annulla.png")
+
+Barretta = Sprite(198, 492, 5, 49, r"Immagini\/barretta.png")
+
+BottoneFacile = Sprite(64,229, 144,141,r"Immagini\/facile.png")
+BottoneMedioLock = Sprite(222,209, 155,161,r"Immagini\/medio_lock.png")
+BottoneMedio = Sprite(228,229, 144,141,r"Immagini\/medio.png")
+BottoneDifficileLock = Sprite(391,209, 155,161,r"Immagini\/difficile_lock.png")
+BottoneDifficile = Sprite(392,229, 144,141,r"Immagini\/difficile.png")
+
+
 
 
 
@@ -692,8 +987,14 @@ BottoneIndietro = Sprite(24, 237, 44, 44, r"Immagini/freccia sinistra.png")
 
                                                  
 #==========================================================================================
+
 #LOGIN
 #==========================================================================================
+
+finished = False
+
+
+
 
 finished = False
 
@@ -702,6 +1003,7 @@ if os.path.exists('caniInCasa.dat'):
     carica()
 else:
     salva()
+
 
 
 print("Gioco di Simone Tesini / Tesohh.\nCollaborazione di Filippo Vicari / Filvi.")
@@ -714,10 +1016,6 @@ if nome == "tesohh":
 
 pygame.display.flip()
 
-
-
-
-
 if not haGuardatoIntro:
     time.sleep(3)
     scena = "intro"
@@ -728,21 +1026,26 @@ elif tutorialSlide == 0:
     pygame.mixer.Sound.play(splashscreen)
     pygame.mixer.music.play(-1)
     print("bellas")
-    Profilo.x = 5
+    Profilo.x = 70
     Profilo.y = 0
     Profilo.larghezza = 60
     Profilo.altezza = 60
-    Profilo.aggiornaCostume()
-    TestoNome.x = 70
-    TestoNome.y = 0
+    Profilo.cambiaCostume()
+    TestoNome.x = 20
+    TestoNome.y = 10
+    
+
+background = pygame.image.load(r"Immagini\/caricamento.png")
+scena = "caricamento"
+pygame.mixer.Sound.play(splashscreen)
 
 
-
-
+pygame.mixer.music.play(-1)
 
 #==========================================================================================
 #EVENTI
 #==========================================================================================
+
 while not finished:
     for event in pygame.event.get():
         # print(event)
@@ -760,22 +1063,35 @@ while not finished:
                         pygame.mixer.Sound.play(success)
                         print(TestoNome.string)
                         scrivendoNome = False
+
                         tutorialSlide += 1
                         spostaTutorialAvanti()
+
                         root = Tk()
                         root.filename =  filedialog.askopenfilename(initialdir = ".",title = "Scegli una foto",filetypes = (("foto",".png"),("foto",".jpg")))
                         path = root.filename
                         if len(path) == 0:
+
                             path = r"Immagini/profilo.png"
                             pygame.mixer.Sound.play(error)
                         jimmy = pygame.image.load(path)
                         Profilo.costume = jimmy
-                        Profilo.aggiornaCostume()
+                        Profilo.cambiaCostume()
                         root.destroy()
                         if path != r"Immagini/profilo.png":
                             pygame.mixer.Sound.play(success)
                             tutorialSlide += 1
                             spostaTutorialAvanti()
+
+
+                            path = r"Immagini\/profilo.png"
+                            pygame.mixer.Sound.play(error)
+                        jimmy = pygame.image.load(path)
+                        Profilo.costume = jimmy
+                        Profilo.aggiornaCostume()
+                        root.destroy()
+                        if path != r"Immagini\/profilo.png":
+                            pygame.mixer.Sound.play(success)
 
                     else:
                         TestoNome.string = "metti qualcosa"
@@ -784,14 +1100,22 @@ while not finished:
                         pygame.display.flip()
                         time.sleep(1)
                         TestoNome.string = ""
+
 #==========================================================================================
 #CLICK
 #==========================================================================================
+
+
+
         if event.type == pygame.MOUSEBUTTONDOWN:
             x, y = event.pos
             upCasa = screen.blit(BottoneCasa.sprite, (BottoneCasa.x, BottoneCasa.y))
             upCamion = screen.blit(BottoneCamion.sprite,(BottoneCamion.x,BottoneCamion.y))
             upFabbrica = screen.blit(BottoneFabbrica.sprite,(BottoneFabbrica.x,BottoneFabbrica.y))
+
+
+            botVendi = screen.blit(BottoneVendi.sprite,(BottoneVendi.x,BottoneVendi.y))
+
 
             botVendi = screen.blit(BottoneVendi.sprite,(BottoneVendi.x,BottoneVendi.y))
 
@@ -799,6 +1123,7 @@ while not finished:
             botMenoCani = screen.blit(BottoneMenoCani.sprite,(BottoneMenoCani.x,BottoneMenoCani.y))   
             botAnnulla = screen.blit(BottoneAnnulla.sprite,(BottoneAnnulla.x,BottoneAnnulla.y))   
             botConferma = screen.blit(BottoneConferma.sprite,(BottoneConferma.x,BottoneConferma.y))
+
 
             botFacile = screen.blit(BottoneFacile.sprite, (BottoneFacile.x,BottoneFacile.y))         
             botMedio = screen.blit(BottoneMedio.sprite, (BottoneMedio.x,BottoneMedio.y))         
@@ -815,6 +1140,11 @@ while not finished:
                 if tutorialSlide != 0 and tutorialSlide != 6 and tutorialSlide != 7 and tutorialSlide != 8:
                     tutorialSlide -= 1   
                     spostaTutorialIndietro()
+
+
+            botFacile = screen.blit(BottoneFacile.sprite, (BottoneFacile.x,BottoneFacile.y))         
+            botMedio = screen.blit(BottoneMedio.sprite, (BottoneMedio.x,BottoneMedio.y))         
+            botDifficile = screen.blit(BottoneDifficile.sprite, (BottoneDifficile.x,BottoneDifficile.y))         
 
             if upCasa.collidepoint(x, y):
                 if Casa.livello == 0:
@@ -852,12 +1182,28 @@ while not finished:
                     Trasporto.y -= 60
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 65
+
+
                     Trasporto.aggiornaCostume()
+
+                    Trasporto.aggiornaCostume()
+
+=======
+                    Trasporto.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
                 elif Trasporto.livello == 4:
                     Trasporto.upgrade(Camionn.camion_5, Camionn.camion_upgrade_max, BottoneCamion)
                     Trasporto.larghezza = 80
                     Trasporto.altezza = 80
+
+
                     Trasporto.aggiornaCostume()
+
+                    Trasporto.aggiornaCostume()
+
+=======
+                    Trasporto.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
                     
                 else:
                     pygame.mixer.Sound.play(error)
@@ -882,7 +1228,15 @@ while not finished:
                     Fabbrica.larghezza += 15
                     Fabbrica.altezza += 15
                     Fabbrica.x -= 10
+
+
                     Fabbrica.aggiornaCostume()
+
+                    Fabbrica.aggiornaCostume()
+
+=======
+                    Fabbrica.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
                 else:
                     pygame.mixer.Sound.play(error)
             if not selezionandoNumero:
@@ -924,6 +1278,7 @@ while not finished:
                 elif botAnnulla.collidepoint(x,y):
                     selezionandoNumero = False
                 elif botConferma.collidepoint(x,y):
+
                     if caniSelezionati != 0:
                         scena = "difficolta"
                     else:
@@ -963,33 +1318,49 @@ while not finished:
         pygame.mixer.music.play(-1)
 
 
-    
+
+        
+
     if scena == "home":
         hitboxCamion = blitBox("camion")
         hitboxCasa = blitBox("casa")
         hitboxFabbrica = blitBox("fabbrica")
 
+
     screen.blit(background, (0,0))
+
 
     if scena == "home":
         Fabbrica.blittaggio()
         Casa.blittaggio()
         Trasporto.blittaggio()
 
+
+
     elif scena == "caricamento":
         Barretta.blittaggio()
         if Barretta.larghezza != 210:
             Barretta.larghezza += 1
+
+
             Barretta.aggiornaCostume()
+
+            Barretta.aggiornaCostume()
+
+=======
+            Barretta.cambiaCostume()
+>>>>>>> parent of 7767e6c... Fixato bug che finito il tutorial faceva riscrivere il nome
         else:
             time.sleep(1.5)
             scena = "home"
             selezionandoNumero = False
+
             background = pygame.image.load(r"Immagini/sfondo.png")
             Barretta.larghezza = 5
 
     elif scena == "difficolta":
-        background = pygame.image.load(r"Immagini/black.png")
+        background = pygame.image.load(r"Immagini\/black.png")
+
         BottoneFacile.blittaggio()
         if Trasporto.livello >= 3:
             BottoneMedio.blittaggio()
@@ -999,6 +1370,7 @@ while not finished:
             BottoneDifficile.blittaggio()
         else:
             BottoneDifficileLock.blittaggio()
+
 
 
         botFacile = screen.blit(BottoneFacile.sprite, (BottoneFacile.x,BottoneFacile.y))    
@@ -1018,6 +1390,20 @@ while not finished:
 
     # decidi se mostrare o no il tutorial bool 0 / 1
 
+        
+        
+        
+
+        
+
+
+
+    pressedKeys = pygame.key.get_pressed()
+
+    # decidi se mostrare o no il tutorial bool 0 / 1
+    mostraTutorial(1)
+
+
     #tiene testocasa.string sempre alla quantita dei cani
     TestoCasa.string = str(caniInCasa)
     
@@ -1034,6 +1420,7 @@ while not finished:
     else:
         if scena == "home":
             TestoNome.blitText()
+
         
         
         
@@ -1047,6 +1434,13 @@ while not finished:
     pressedKeys = pygame.key.get_pressed()
 
     mostraTutorial(1)
+
+
+        
+
+    
+
+
     if pressedKeys[pygame.K_SPACE] == 1:
         if giocoIniziato:
 
@@ -1209,5 +1603,11 @@ while not finished:
 
     pygame.display.flip() #aggiorna lo schermo
 
+
 #FINE
     frame.tick(1000)
+
+    
+    frame.tick(1000)
+
+
