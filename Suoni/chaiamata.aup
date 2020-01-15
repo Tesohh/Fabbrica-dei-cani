@@ -1,0 +1,78 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="chaiamata_data" version="1.3.0" audacityversion="2.3.2" sel0="0.3143022774" sel1="0.3143022774" vpos="288" h="0.0000000000" zoom="44.5431070826" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags>
+		<tag name="ARTIST" value="tesohh"/>
+		<tag name="TITLE" value="CHIAMATA"/>
+	</tags>
+	<wavetrack name="Traccia audio" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0" colorindex="0"/>
+	<wavetrack name="PRONTO BUONGIORNO" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="48000" gain="1.0" pan="0.0" colorindex="0"/>
+	<wavetrack name="gugol duo" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="310518">
+				<waveblock start="0">
+					<simpleblockfile filename="e08084ef.au" len="155259" min="-0.785629" max="0.82303" rms="0.100035"/>
+				</waveblock>
+				<waveblock start="155259">
+					<simpleblockfile filename="e0808f98.au" len="155259" min="-0.768699" max="0.809859" rms="0.098139"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="7.04122449" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="772632">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808634.au" len="179865" min="-0.918843" max="0.868406" rms="0.204847"/>
+				</waveblock>
+				<waveblock start="179865">
+					<simpleblockfile filename="e0808778.au" len="179869" min="-0.92609" max="0.814785" rms="0.150369"/>
+				</waveblock>
+				<waveblock start="359734">
+					<simpleblockfile filename="e08087c1.au" len="181475" min="-0.727428" max="0.764917" rms="0.156445"/>
+				</waveblock>
+				<waveblock start="541209">
+					<simpleblockfile filename="e0808140.au" len="179870" min="-0.942158" max="0.853988" rms="0.1146"/>
+				</waveblock>
+				<waveblock start="721079">
+					<simpleblockfile filename="e0808faa.au" len="51553" min="-0.751015" max="0.809242" rms="0.169722"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="gugol duo" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="310518">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808ffa.au" len="155259" min="-0.720161" max="0.716629" rms="0.085918"/>
+				</waveblock>
+				<waveblock start="155259">
+					<simpleblockfile filename="e0808a99.au" len="155259" min="-0.700352" max="0.734865" rms="0.083146"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="7.04122449" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="772632">
+				<waveblock start="0">
+					<simpleblockfile filename="e08082dd.au" len="179865" min="-0.918843" max="0.868406" rms="0.204847"/>
+				</waveblock>
+				<waveblock start="179865">
+					<simpleblockfile filename="e080845b.au" len="179869" min="-0.92609" max="0.814785" rms="0.150369"/>
+				</waveblock>
+				<waveblock start="359734">
+					<simpleblockfile filename="e08080d3.au" len="181475" min="-0.727428" max="0.764917" rms="0.156445"/>
+				</waveblock>
+				<waveblock start="541209">
+					<simpleblockfile filename="e0808756.au" len="179870" min="-0.942158" max="0.853988" rms="0.1146"/>
+				</waveblock>
+				<waveblock start="721079">
+					<simpleblockfile filename="e08080e3.au" len="51553" min="-0.751015" max="0.809242" rms="0.169722"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="PRONTO BUONGIORNO" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="48000" gain="1.0" pan="0.0" colorindex="0"/>
+	<wavetrack name="va bene" channel="2" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0" colorindex="0"/>
+</project>

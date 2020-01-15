@@ -6,7 +6,6 @@ import pygame
 import time
 import random
 import pandas
-import random
 from genera_nome_cane import generaNome
 from tkinter import filedialog
 from tkinter import Tk
@@ -51,6 +50,8 @@ background = pygame.transform.scale(background, (600,600))
 jimmy = pygame.image.load(r"Immagini/jimmyneutron.png")
 easteregg = pygame.image.load(r"Immagini/easteregg.png")
 
+bloccaspazio = False
+
 
 
 black = (0,0,0)
@@ -94,7 +95,7 @@ microWoof = pygame.mixer.Sound(r"Suoni/woofHigh.wav")
 camionStart = pygame.mixer.Sound(r"Suoni/camionStart.wav")
 camionGo = pygame.mixer.Sound(r"Suoni/camion.wav")
 success = pygame.mixer.Sound(r"Suoni/success.wav")
-error = pygame.mixer.Sound(r"Suoni/error.wav")
+error = pygame.mixer.Sound(r"Suoni/error.wav") 
 splashscreen = pygame.mixer.Sound(r"Suoni/splashscreen.wav")
 kaching = pygame.mixer.Sound(r"Suoni/kaching.wav")
 intro = pygame.mixer.Sound(r"Suoni/narrazione.wav")
@@ -129,6 +130,9 @@ def blitBox(who):
     elif who == "fabbrica":
         hitboxF = pygame.draw.rect(screen, (255,0,0), Fabbrica.hitbox,1)
         return hitboxF
+    elif who == "acquirente":
+        hitboxA = pygame.draw.rect(screen, (255,0,0), CasaAcquirente.hitbox,1)
+        return hitboxA
         
 def tooManyDogs(overflow):
     global dogOverflow,caniInCasa,quantitaTrasporto
@@ -591,7 +595,8 @@ class Cane:
 
 Fabbrica = Edificio(50, 290, 120, 120, r"Immagini/fabbrica.png")
 Casa = Edificio(430, 290, 120, 120, r"Immagini/casa_base.png")
-
+CasaAcquirente = Edificio(50, 290, 120, 120, r"Immagini/casa_base_invertita.png")
+hitboxAcquirente = blitBox("acquirente")
 Trasporto = Veicolo(360, 370, 70, 34, r"Immagini/veicolo_base.png")
 
 
@@ -684,6 +689,9 @@ tutorial10 = Sprite(5400,0,600,600, r"Immagini/background 10.png")
 
 BottoneAvanti = Sprite(600-64, 237, 44, 44, r"Immagini/freccia destra.png")
 BottoneIndietro = Sprite(24, 237, 44, 44, r"Immagini/freccia sinistra.png")
+
+Telefono = Sprite(34,433,94,195,r"Immagini/telefono 1.png")
+
 
 
 
@@ -944,6 +952,10 @@ while not finished:
                 if botMedio.collidepoint(x,y):
                     if Trasporto.livello >= 3:
                         scena = "medio"
+                        Trasporto.x = 360
+                        if daDove == "fabbrica":
+                            Trasporto.sprite = pygame.transform.flip(Trasporto.sprite, True, False)
+                            daDove = "casa"
                     else:
                         pygame.mixer.Sound.play(error)
 
@@ -963,16 +975,20 @@ while not finished:
         pygame.mixer.Sound.play(intro)
         time.sleep(29)
         haGuardatoIntro = True
+        bloccaspazio = True
         scena = "home"
         background = pygame.image.load(r"Immagini/sfondo.png")
         pygame.mixer.music.play(-1)
 
-
     
     if scena == "home":
+        bloccaspazio = False
         hitboxCamion = blitBox("camion")
         hitboxCasa = blitBox("casa")
         hitboxFabbrica = blitBox("fabbrica")
+    elif scena == "medio":
+        hitboxAcquirente = blitBox("acquirente")
+        hitboxCamion = blitBox("camion")
 
     screen.blit(background, (0,0))
 
@@ -1006,9 +1022,9 @@ while not finished:
             BottoneDifficileLock.blittaggio()
 
 
-        botFacile = screen.blit(BottoneFacile.sprite, (BottoneFacile.x,BottoneFacile.y))    
-        botMedio = screen.blit(BottoneMedio.sprite, (BottoneMedio.x,BottoneMedio.y))    
-        botDifficile = screen.blit(BottoneDifficile.sprite, (BottoneDifficile.x,BottoneDifficile.y))
+        # botFacile = screen.blit(BottoneFacile.sprite, (BottoneFacile.x,BottoneFacile.y))    
+        # botMedio = screen.blit(BottoneMedio.sprite, (BottoneMedio.x,BottoneMedio.y))    
+        # botDifficile = screen.blit(BottoneDifficile.sprite, (BottoneDifficile.x,BottoneDifficile.y))
         
         if botFacile.collidepoint(pygame.mouse.get_pos()):
             DettagliFacile.blittaggio()
@@ -1018,7 +1034,20 @@ while not finished:
             DettagliDifficile.blittaggio()
 
     elif scena == "medio":
-        pass
+        background = pygame.image.load(r"Immagini/portacantina.png")
+        Casa.blittaggio()
+        Trasporto.blittaggio()
+        CasaAcquirente.blittaggio()
+        # CasaAcquirenteBox = blitBox("fabbrica")
+        
+        if Trasporto.x == 320:
+            chiamata = pygame.mixer.Sound(r"Suoni/chiamata.wav")
+            pygame.mixer.Sound.play(chiamata)
+            Telefono.blittaggio()
+            pygame.display.flip()
+            time.sleep(25)
+        
+            
 
 
     # decidi se mostrare o no il tutorial bool 0 / 1
@@ -1030,6 +1059,7 @@ while not finished:
         TestoTrasporto.blitText()
         TestoFabbrica.blitText()
         TestoCasa.blitText()
+        bloccaspazio = False
     
     TestoCasa.x = Casa.x + Casa.larghezza/2 -  TestoCasa.returnSize()[0]/2
     TestoFabbrica.x = Fabbrica.x + Fabbrica.larghezza/2 -  TestoFabbrica.returnSize()[0]/2
@@ -1053,13 +1083,8 @@ while not finished:
 
     mostraTutorial(1)
     if pressedKeys[pygame.K_SPACE] == 1:
-        if giocoIniziato:
-
-            if starting == False:
-                pygame.mixer.Sound.play(camionStart) 
-                starting = True
-
-
+        if giocoIniziato and not bloccaspazio:
+ 
             if daDove == "casa":
                 if Trasporto.livello == 0:
                     Trasporto.x -= .5
@@ -1079,7 +1104,7 @@ while not finished:
                 TestoTrasporto.string = str(quantitaTrasporto)
 
                 #se la hitbox del camion tocca quello della fabbrica
-                if hitboxCamion.colliderect(hitboxFabbrica): 
+                if hitboxCamion.colliderect(hitboxFabbrica) and scena == "home": 
                     TestoFabbrica.color = orange
                     TestoFabbrica.string = "   . . ."
                     CopriTestoF.blittaggio()
@@ -1126,7 +1151,7 @@ while not finished:
 
 
                     caneBlu = random.randint(1,1000)
-                    if caneBlu == 1000:
+                    if caneBlu == 4:
                         schei += 20
                         # TestoFabbrica.string = ""
                     quantitaTrasporto += numeroRandom
@@ -1134,6 +1159,8 @@ while not finished:
 
                     if primaVolta:
                         tutorialSlide = 8
+                if hitboxCamion.colliderect(hitboxAcquirente) and scena == "medio": 
+                    print("arrivato")
                         
                 
 
@@ -1180,6 +1207,8 @@ while not finished:
 
                     if caniInCasa >= caniMassimiInCasa: #basta copiare per i prossimi livelli
                         tooManyDogs(caniMassimiInCasa)
+
+                
                     
 
 
