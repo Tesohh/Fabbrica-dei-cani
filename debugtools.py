@@ -1,5 +1,5 @@
 import pickle
-import gioco
+# import gioco
 
 richiesta = input("schei / livellocasa / livellocamion / livellofabbrica / caniincasa\n")
 

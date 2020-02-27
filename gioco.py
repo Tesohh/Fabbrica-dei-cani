@@ -32,7 +32,7 @@ screen = pygame.display.set_mode((600,600)) #impostiamo le dimensioni della fine
 pygame.display.set_caption("La Fabbrica dei Cybercani")
 
 pygame.font.init()
-font = pygame.font.Font(r"Font/noto.ttf", 28)
+font = pygame.font.Font(r"Font/open.ttf", 28)
 
 
 
@@ -40,8 +40,18 @@ font = pygame.font.Font(r"Font/noto.ttf", 28)
 #============================================================================================
 #VARIABILI
 #============================================================================================
+
+contenutoMessaggio = "ASGARRA"
 rosso = (255,0,0) #R, G, B
 colore2 = (120,50,100)
+
+impostazioni = {
+    "abilitaMusica":True,
+    "volume":1,
+    "limitaFPS":False
+}
+
+menu = "nessuno"
 
 background = pygame.image.load(r"Loghi/splashscreen.png")
 background = pygame.transform.scale(background, (600,600))
@@ -71,7 +81,7 @@ caniInCasa = 0
 giocoIniziato = False
 tutorialFinito = False  
 caniTrasportati = False
-quantitaTrasporto = 2
+quantitaTrasporto = 0
 numeroRandom = 0
 starting = True
 primaVolta = True
@@ -114,6 +124,25 @@ def caricamento(cosaDopo):
     global scena, background
     scena = "caricamento"
     background = pygame.image.load(r"Immagini/caricamento.png")
+
+def chiudi():
+    global menu
+    menu = "nessuno"
+    print("chiuso il menu")
+
+def cambiaValoreSlider(sliderbar, sliderball, slider):
+    mouseX, mouseY = pygame.mouse.get_pos()
+
+    sliderball.x = mouseX + sliderball.larghezza 
+
+    #calcolamento del valore
+    minBarX = sliderbar.x
+    maxBarX = sliderbar.x + sliderbar.larghezza
+    maxBallX = sliderball.x + sliderball.larghezza
+    valoreSlider = maxBarX - maxBallX
+    valoreSlider = valoreSlider / 2
+
+    slider.variabile = valoreSlider
 
 
 
@@ -175,34 +204,8 @@ def mostraProfilo():
         time.sleep(1)
         TestoNome.string = "Scherzetto!!!!!"
     
-    if scena == "home":
-        Profilo.blittaggio()
-        TestoSchei.blitText()
-        TestoSchei.string = str(schei)
-        Coin.x = TestoSchei.x + int(TestoSchei.returnSize()[0]) + 5
-        Coin.blittaggio()
-
-        BottoneCasa.blittaggio()
-        BottoneCamion.blittaggio()
-        BottoneFabbrica.blittaggio()
-
-        if caniInCasa < 5:
-            BottoneVendi.costume = Bottonii.vendigrigio
-            BottoneVendi.aggiornaCostume()
-        else:
-            BottoneVendi.costume = Bottonii.vendi
-            BottoneVendi.aggiornaCostume()
-
-        if not selezionandoNumero:
-            BottoneVendi.blittaggio()
-        else:
-            BottoneMenoCani.blittaggio()
-            BottonePiuCani.blittaggio()
-            TestoSelettore.blitText()
-            BottoneConferma.blittaggio()
-            BottoneAnnulla.blittaggio()
-            BottoneConferma.x = posx_btn + width_btn/2 -  BottoneConferma.larghezza/2
-            BottoneAnnulla.x = posx_btn + width_btn/2 -  BottoneAnnulla.larghezza/2
+    
+        
     return finished
 def spostaTutorialAvanti():
     tutorial1.spostaAvanti()
@@ -271,7 +274,7 @@ def mostraTutorial(boolean):
             TestoNome.x = Profilo.x + Profilo.larghezza/2 - TestoNome.returnSize()[0]/2
             TestoNome.y = Profilo.y + Profilo.altezza + 20
             TestoNome.blitText()
-            #@TODO fare che quando si arriva alla home il profilo e il testonome siano al posto giusto
+            #TODO fare che quando si arriva alla home il profilo e il testonome siano al posto giusto
 
         
     else:
@@ -289,7 +292,7 @@ def mostraTutorial(boolean):
     
 
 def salva():
-    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path,TestoNome,scrivendoNome, tutorialFinito, caniMassimiInCasa, haGuardatoIntro
+    global impostazioni,caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path,TestoNome,scrivendoNome, tutorialFinito, caniMassimiInCasa, haGuardatoIntro
     pickle.dump(caniInCasa, open("caniInCasa.dat", "wb"))
     pickle.dump(caniTrasportati,open("caniTrasportati.dat","wb"))
 
@@ -306,10 +309,11 @@ def salva():
     pickle.dump(tutorialFinito, open("tutorialFinito.dat", "wb"))
     pickle.dump(caniMassimiInCasa, open("caniMassimiInCasa.dat","wb"))
     pickle.dump(haGuardatoIntro, open("haGuardatoIntro.dat","wb"))
+    pickle.dump(impostazioni, open("impostazioni.dat","wb"))
     
 
 def carica():
-    global caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path, scrivendoNome, tutorialFinito,caniMassimiInCasa, haGuardatoIntro
+    global impostazioni,caniInCasa,caniTrasportati,nome,jimmy,Casa,Trasporto,Fabbrica,schei,path, scrivendoNome, tutorialFinito,caniMassimiInCasa, haGuardatoIntro
     caniInCasa = pickle.load(open("caniInCasa.dat", "rb")) 
     caniTrasportati = pickle.load(open("caniTrasportati.dat","rb"))
 
@@ -325,6 +329,11 @@ def carica():
 
     scrivendoNome = pickle.load(open("possibilitaDiScrivere.dat", "rb"))
     haGuardatoIntro = pickle.load(open("haGuardatoIntro.dat", "rb"))
+    
+    try: #provo a caricare le impostazioni
+        impostazioni = pickle.load(open("impostazioni.dat", "rb"))
+    except: #se fallisce (da errore) crea il file
+        pickle.dump(impostazioni, open("impostazioni.dat","wb"))
 
     if Casa.livello == 1:
         Casa.costume = Casaa.casa_1
@@ -418,7 +427,7 @@ class Sprite:
     """NUOVO SPRITE ASGARRA
     argomenti: x, y, larghezza, altezza, costume, livello = 0"""
 
-    def __init__(self, x, y, larghezza, altezza, costume, livello = 0):
+    def __init__(self, x, y, larghezza, altezza, costume=r"Immagini/missing.png", livello = 0):
         self.x = x
         self.y = y
         self.costume = pygame.image.load(costume)
@@ -441,14 +450,16 @@ class Sprite:
         print(self.x, self.y)
 
     def upgrade(self, costume,costumeBottone,target):
-        global schei, nome
+        global schei, nome, contenutoMessaggio, menu
         if self.livello == 0 and schei >=1:
             schei -= 1
             pygame.mixer.Sound.play(success)
             self.livello += 1
             self.costume = costume
             self.aggiornaCostume()
-            target.upgradeBottone(costumeBottone)#@todo sistemare!!!!
+            target.upgradeBottone(costumeBottone)
+
+
         
         elif self.livello == 1 and schei >=2:
             schei -= 2
@@ -483,6 +494,8 @@ class Sprite:
             target.upgradeBottone(costumeBottone)
         else:
             pygame.mixer.Sound.play(error)
+            contenutoMessaggio = "Non hai abbastanza schei!"
+            menu = "messaggio"
 
     def ricaricaCostume(self,costume):
         self.costume = costume
@@ -514,15 +527,16 @@ class Edificio(Sprite):
 
 class Text:
     """CLASSE PER CREARE DEL TESTOH"""
-    def __init__(self, x, y, size, color, string):
+    def __init__(self, x, y, font, size, color, string=""):
         self.x = x
         self.y = y
         self.size = size
         self.color = color
         self.string = str(string)
+        self.font = pygame.font.Font(font, size)
         
     def blitText(self):
-        self.testoh = font.render(self.string, True, self.color)
+        self.testoh = self.font.render(self.string, True, self.color)
         screen.blit(self.testoh, (self.x,self.y))
 
     def aggiungiCarattere(self, char):
@@ -547,6 +561,80 @@ class Rectangle:
     def blittaggio(self):
         self.drawRect = pygame.draw.rect(screen, self.color, self.rect)
 
+
+class Button(Sprite):
+    def __init__(self,x, y, tipo, comando=None, variabile=None):
+        self.tipo = tipo
+        self.comando = comando
+        self.variabile = variabile
+        self.x = x
+        self.y = y
+        
+        if self.tipo == "sliderbar":
+            self.larghezza = 200
+            self.altezza = 4
+            self.costume = pygame.image.load(r"Immagini/menu/sliderbar.png")
+            #TODO sliderbar
+        if self.tipo == "sliderball":
+            self.larghezza = 30
+            self.altezza = 30
+            self.costume = pygame.image.load(r"Immagini/menu/sliderball.png")
+            #TODO sliderball (logica)
+        if self.tipo == "ok":
+            self.larghezza = 87
+            self.altezza = 28
+            self.costume = pygame.image.load(r"Immagini/menu/ok.png")
+        
+        if self.tipo == "toggle":
+            self.larghezza = 60
+            self.altezza = 29
+            if self.variabile == True:
+                self.costume = pygame.image.load(r"Immagini/menu/toggleon.png")
+            elif self.variabile == False:
+                self.costume = pygame.image.load(r"Immagini/menu/toggleoff.png")
+        if self.tipo == "annulla":
+            self.larghezza = 32
+            self.altezza = 32
+            self.costume = pygame.image.load(r"Immagini/menu/annulla.png")
+            
+        if self.tipo == "altro":
+            pass #TODO altro
+        self.sprite = pygame.transform.scale(self.costume, (self.larghezza, self.altezza))
+    def verificaClick(self):
+        self.cliccabile = screen.blit(self.costume, (self.x, self.y))
+        if pygame.mouse.get_pressed()[0] and self.cliccabile.collidepoint(pygame.mouse.get_pos()):
+            self.comando()
+
+class Messaggio:
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.larghezza = 600
+        self.altezza = 600
+        self.costume = pygame.image.load(r"Immagini/menu/messaggio.png")
+        self.sprite = pygame.transform.scale(self.costume, (self.larghezza, self.altezza))
+    def blittaTutto(self, testo):
+        screen.blit(self.sprite, (self.x,self.y))
+        self.testo = testo
+        MessaggioAnnulla.blittaggio() 
+        MessaggioAnnulla.verificaClick()
+        MessaggioOK.blittaggio()
+        MessaggioOK.verificaClick()
+        TestoMessaggio.string = self.testo
+        TestoMessaggio.blitText()
+
+class Impostazioni:
+    def __init__(self):
+        self.x = 0
+        self.y = 0
+        self.larghezza = 600
+        self.altezza = 600
+        self.costume = pygame.image.load(r"Immagini/menu/impostazionimenu.png")
+        self.sprite = pygame.transform.scale(self.costume, (self.larghezza, self.altezza))
+    def blittaTutto(self, testo):
+        screen.blit(self.sprite, (self.x,self.y))
+        #TODO blittatutto
+        
 
 
 class Cane:
@@ -593,10 +681,11 @@ class Cane:
 #ISTANZE
 #==========================================================================================
 
+
 Fabbrica = Edificio(50, 290, 120, 120, r"Immagini/fabbrica.png")
 Casa = Edificio(430, 290, 120, 120, r"Immagini/casa_base.png")
 CasaAcquirente = Edificio(50, 290, 120, 120, r"Immagini/casa_base_invertita.png")
-hitboxAcquirente = blitBox("acquirente")
+
 Trasporto = Veicolo(360, 370, 70, 34, r"Immagini/veicolo_base.png")
 
 
@@ -606,7 +695,7 @@ Profilo = Sprite(225,123,150,150,r"Immagini/profilo.png")
 
 
 
-TestoNome = Text(70,0,32,black,"")
+TestoNome = Text(70,0,"Font/open.ttf",28,black,"")
 
 
 
@@ -616,18 +705,19 @@ Coin = Sprite(100,34,30,30,r"Immagini/dogecoin.png")
 
 
 
-TestoTutorial = Text(0,0,32,black,"Benvenuto! Premi K per continuare")
-TestoCasa = Text(480,410,32,black,"")
-TestoFabbrica = Text(70,410,32,red,"Fermo")
-TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,32,green,"")
-TestoSchei = Text(70,30,32,black,schei)
-TestoSottoSchei = Text(TestoSchei.x,TestoSchei.y+10,32,black, "")
+# TestoTutorial = Text(0,0,"Font/open.ttf", 28,black,nome)
+TestoCasa = Text(480,410,"Font/open.ttf", 28,black,"")
+TestoFabbrica = Text(70,410,"Font/open.ttf", 28,red,"Fermo")
+TestoTrasporto = Text(Trasporto.x,Trasporto.y-10,"Font/open.ttf", 28,green,"")
+TestoSchei = Text(70,30,"Font/open.ttf", 28,black,schei)
+TestoSottoSchei = Text(TestoSchei.x,TestoSchei.y+10,"Font/open.ttf", 28,black, "")
 
 
 
 
 
 CopriTestoF = Rectangle(48, 408, 122, 35, white)
+Impostazioni = Sprite(530,0,60,60,r"Immagini/impostazioni.png")
 
 BottoneCasa = Sprite(530,0,60,60,r"Immagini/casa_upgrade_1.png")
 BottoneCamion = Sprite(460,0,60,60,r"Immagini/camion_upgrade_1.png")
@@ -656,7 +746,7 @@ BottoneMenoCani = Sprite(posx_menoCaniVendita,posy_menoCaniVendita,width_menoCan
 BottonePiuCani = Sprite(posx_piuCaniVendita,posy_piuCaniVendita,width_piuCaniVendita,height_piuCaniVendita,r"Immagini/piuCani.png")
 
 posx_testoSel = posx_btn + width_btn/2
-TestoSelettore = Text(posx_testoSel, posy_btn-5, 28, black,caniSelezionati)
+TestoSelettore = Text(posx_testoSel, posy_btn-5, "Font/open.ttf", 28, black,caniSelezionati)
 
 posx_testoSel = posx_btn + width_btn/2 -  TestoSelettore.returnSize()[0]/2
 TestoSelettore.x = posx_testoSel
@@ -695,6 +785,24 @@ Telefono = Sprite(34,433,94,195,r"Immagini/telefono 1.png")
 
 
 
+#Elementi Interfaccia
+    #Messaggio
+        #Bottoni
+MessaggioAnnulla = Button(525, 235, "annulla", chiudi)
+MessaggioAnnulla.aggiornaCostume()
+MessaggioOK = Button(468, 339, "ok", chiudi)
+        #Testo
+TestoMessaggio = Text(40, 280, r"Font/sharetech.ttf", 24, white)
+        #Sprite
+MessaggioSprite = Messaggio()
+    #Impostazioni
+        #Bottoni
+ImpostazioniAnnulla = Button(471, 96, "annulla", chiudi)
+#TODO TOGGLE
+ToggleMusica = Button(443,162, "toggle", togglemusica, musicaOSilenzio) #TODO togglemusica() e musicaOSilenzio
+SliderBarVolume = Button(303, 218, "sliderbar")
+SliderBallVolume = Button(396, 201, "sliderball", cambiaValoreSlider)
+ResettaSalvataggi = Button() #TODO
 
 
 
@@ -719,6 +827,8 @@ if nome == "matteo":
     background = pygame.image.load(r"Loghi/matte.png")
 if nome == "tesohh":
     background = pygame.image.load(r"Loghi/tesohh.png")
+if nome == "banana":
+    musica = pygame.mixer.music.load(r"Suoni/banana.wav")
 
 pygame.display.flip()
 
@@ -776,6 +886,8 @@ while not finished:
                         if len(path) == 0:
                             path = r"Immagini/profilo.png"
                             pygame.mixer.Sound.play(error)
+                            tutorialSlide += 1
+                            spostaTutorialAvanti()
                         jimmy = pygame.image.load(path)
                         Profilo.costume = jimmy
                         Profilo.aggiornaCostume()
@@ -850,6 +962,8 @@ while not finished:
                     caniMassimiInCasa = 100
                 else:
                     pygame.mixer.Sound.play(error)
+                    contenutoMessaggio = "Hai già potenziato al massimo!"
+                    menu = "messaggio"
 
             if upCamion.collidepoint(x, y):
                 if Trasporto.livello == 0:
@@ -872,6 +986,8 @@ while not finished:
                     
                 else:
                     pygame.mixer.Sound.play(error)
+                    contenutoMessaggio = "Hai già potenziato al massimo!"
+                    menu = "messaggio"
 
             if upFabbrica.collidepoint(x,y):
                 if Fabbrica.livello == 0:
@@ -896,12 +1012,15 @@ while not finished:
                     Fabbrica.aggiornaCostume()
                 else:
                     pygame.mixer.Sound.play(error)
+                    contenutoMessaggio = "Hai già potenziato al massimo!"
+                    menu = "messaggio"
             if not selezionandoNumero:
                 if botVendi.collidepoint(x,y):
                     if caniInCasa >= 5:
                         selezionandoNumero = True
                     else:
                         pygame.mixer.Sound.play(error)
+                        
             else:
                 if botPiuCani.collidepoint(x,y):
                     if (caniSelezionati != caniMassimiInCasa) and caniSelezionati != caniInCasa:
@@ -987,7 +1106,7 @@ while not finished:
         hitboxCasa = blitBox("casa")
         hitboxFabbrica = blitBox("fabbrica")
     elif scena == "medio":
-        hitboxAcquirente = blitBox("acquirente")
+        # hitboxAcquirente = blitBox("acquirente")
         hitboxCamion = blitBox("camion")
 
     screen.blit(background, (0,0))
@@ -996,6 +1115,36 @@ while not finished:
         Fabbrica.blittaggio()
         Casa.blittaggio()
         Trasporto.blittaggio()
+        Profilo.blittaggio()
+        TestoSchei.blitText()
+        TestoSchei.string = str(schei)
+        Coin.x = TestoSchei.x + int(TestoSchei.returnSize()[0]) + 5
+        Coin.blittaggio()
+        Impostazioni.blittaggio()
+        # BottoneCasa.blittaggio()
+        BottoneCamion.blittaggio()
+        BottoneFabbrica.blittaggio()
+
+        if caniInCasa < 5:
+            BottoneVendi.costume = Bottonii.vendigrigio
+            BottoneVendi.aggiornaCostume()
+        else:
+            BottoneVendi.costume = Bottonii.vendi
+            BottoneVendi.aggiornaCostume()
+
+        if not selezionandoNumero:
+            BottoneVendi.blittaggio()
+        else:
+            BottoneMenoCani.blittaggio()
+            BottonePiuCani.blittaggio()
+            TestoSelettore.blitText()
+            BottoneConferma.blittaggio()
+            BottoneAnnulla.blittaggio()
+            BottoneConferma.x = posx_btn + width_btn/2 -  BottoneConferma.larghezza/2
+            BottoneAnnulla.x = posx_btn + width_btn/2 -  BottoneAnnulla.larghezza/2
+        
+    if scena == "home" and menu == "messaggio":
+        MessaggioSprite.blittaTutto(contenutoMessaggio)
 
     elif scena == "caricamento":
         Barretta.blittaggio()
@@ -1046,7 +1195,8 @@ while not finished:
             Telefono.blittaggio()
             pygame.display.flip()
             time.sleep(25)
-        
+
+
             
 
 
@@ -1063,18 +1213,11 @@ while not finished:
     
     TestoCasa.x = Casa.x + Casa.larghezza/2 -  TestoCasa.returnSize()[0]/2
     TestoFabbrica.x = Fabbrica.x + Fabbrica.larghezza/2 -  TestoFabbrica.returnSize()[0]/2
-
-    if tutorialSlide != 10:
-        TestoTutorial.blitText()
-    else:
-        if scena == "home":
-            TestoNome.blitText()
+    if scena == "home":
+        TestoNome.blitText()
         
         
         
-
-        
-
 
 #==========================================================================================
 #TASTI
@@ -1159,8 +1302,8 @@ while not finished:
 
                     if primaVolta:
                         tutorialSlide = 8
-                if hitboxCamion.colliderect(hitboxAcquirente) and scena == "medio": 
-                    print("arrivato")
+                # if hitboxCamion.colliderect(hitboxAcquirente) and scena == "medio": 
+                #     print("arrivato")
                         
                 
 
@@ -1198,8 +1341,8 @@ while not finished:
                     time.sleep(1)
                     caniTrasportati = True
 
-                    caniInCasa += quantitaTrasporto - 2
-                    quantitaTrasporto = 2
+                    caniInCasa += quantitaTrasporto
+                    quantitaTrasporto = 0
                     TestoTrasporto.string = str(quantitaTrasporto)
 
                     if primaVolta:
